@@ -1,0 +1,10 @@
+# Number variables: 3
+# Max literals: 3
+# Cube number: 3
+.i 3
+.o 1
+.type esop
+1-1 1
+000 1
+110 1
+.e
