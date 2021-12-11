@@ -155,10 +155,10 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   int c;
   int fPrintParti;
-  int fPrintSatNum;
+  int fSynthesis;
 
   fPrintParti = 0;
-  fPrintSatNum = 0;
+  fSynthesis = 0;
   Extra_UtilGetoptReset();
   while ((c = Extra_UtilGetopt(argc, argv, "hps")) != EOF) {
     switch (c) {
@@ -168,7 +168,7 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
         fPrintParti ^= 1;
         break;
       case 's':
-        fPrintSatNum ^= 1;
+        fSynthesis ^= 1;
         break;
       default:
         goto usage;
@@ -178,13 +178,18 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
     Abc_Print(-1, "Empty network.\n");
     return 1;
   }
+
+  if(!Abc_NtkIsStrash(pNtk)){
+    pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
+  }
+
   if(!Abc_NtkIsStrash(pNtk)){
     Abc_Print(-1, "Current network is not an AIG.\n");
     return 1;
   }
 
-  NtkXorBidec(pNtk, fPrintParti, fPrintSatNum);
-
+  NtkXorBidec(pNtk, fPrintParti, fSynthesis);
+  Abc_NtkDelete(pNtk);
   return 0;
 
 usage:
@@ -192,7 +197,7 @@ usage:
   Abc_Print(-2, "\t        for each PO, print the xor bidecomposition result\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   Abc_Print(-2, "\t-p    : print the partition result\n");
-  Abc_Print(-2, "\t-s    : print the nunber of sat solving called\n");
+  Abc_Print(-2, "\t-s    : synthesis fA, fB and print the result\n");
   return 1;
   
 }
