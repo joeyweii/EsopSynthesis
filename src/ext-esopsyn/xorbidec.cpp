@@ -533,8 +533,19 @@ int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& bestParti){
             numXB++;
           }
           else{
+            if(numXA > numXB){
+              vParti.push_back(XB);
+              numXB++;
+            }
+            else{
+              vParti.push_back(XA);
+              numXA++;
+            }
+
+            /*
             vParti.push_back(XAB);
             numXAB++;
+            */
           }
         }
 

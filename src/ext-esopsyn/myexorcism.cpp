@@ -29,10 +29,15 @@ void My_Exorcism(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput){
         if( Abc_ObjFaninC0(pPo) )
             Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
+
+        abctime clk = Abc_Clock();
+
         Vec_Wec_t* vEsop;
         ExorcismSingleOutput(pSubNtk, vEsop);
 
         assert(Abc_NtkPoNum(pSubNtk) == 1);
         std::cout << "PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << " - nCubes:" << vEsop->nSize << std::endl;
+        
+        Abc_PrintTime( 1, "Starting Cover Compute Time", Abc_Clock() - clk );
     }
 }

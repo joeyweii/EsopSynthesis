@@ -1,0 +1,2 @@
+read benchmarks/bidecpaper/rot.blif
+myexorcism -o 13

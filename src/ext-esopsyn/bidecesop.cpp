@@ -13,7 +13,10 @@ void CleanUnusedPi(Abc_Ntk_t* pNtk){
 void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     std::vector<Abc_Ntk_t*> Q;
     std::vector<Abc_Ntk_t*> subNtks;
+
+    abctime clk = Abc_Clock();
     Q.push_back(pNtk);
+    std::cout << "#PI: " << Abc_NtkPiNum(pNtk) << std::endl;
 
     while(!Q.empty()){
         std::vector<enum Set> vParti;
@@ -37,6 +40,29 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     }
 
     std::cout << "#subNtks: " << subNtks.size() << std::endl;
+    Abc_PrintTime( 1, "Decompose Time", Abc_Clock() - clk );
+
+    for(int i = 0; i < subNtks.size(); i++){
+        std::cout << "subNtk[" << i << "] #PI: " << Abc_NtkPiNum(subNtks[i]) << std::endl;
+    }
+
+    clk = Abc_Clock();
+
+    int nCubes = 0;
+    for(int i = 0; i < subNtks.size(); i++){
+        std::cout << "i: " << i << std::endl;
+        Abc_Ntk_t* subNtk = subNtks[i];
+        Abc_Ntk_t* pStrash = Abc_NtkStrash( subNtk, 0, 1, 0 );
+        Aig_Man_t* pAig = Abc_NtkToDar( pStrash, 0, 0 );
+        Abc_NtkDelete( pStrash );
+        Gia_Man_t* pGia = Gia_ManFromAig( pAig );
+
+        Vec_Wec_t* vEsop;
+        Eso_ManCompute(pGia, 0, &vEsop);
+        nCubes += vEsop->nSize;
+    }
+    std::cout << "nCubes: " << nCubes << std::endl;
+    Abc_PrintTime( 1, "Starting Cover Compute Time", Abc_Clock() - clk );
 
     for(int i = 0; i < subNtks.size(); i++){
         Abc_NtkDelete(subNtks[i]);
