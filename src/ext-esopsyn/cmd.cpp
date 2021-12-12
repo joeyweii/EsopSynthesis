@@ -49,6 +49,8 @@ int EsopSyn_CommandMintEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
         return 1;
     }
 
+    assert(Abc_NtkPoNum(pNtk) == 1);
+
     if ( Abc_NtkIsStrash(pNtk) )
         pNtkBdd = Abc_NtkCollapse( pNtk, ABC_INFINITY, 0, 1, 0, 0, 0);
     else
@@ -87,9 +89,9 @@ usage:
 int EsopSyn_CommandMyExorCism(Abc_Frame_t* pAbc, int argc, char** argv) {
     Abc_Ntk_t * pNtk = NULL;
     int c, nCubesMax = 20000;
-
+    int fOutput = -1;
     Extra_UtilGetoptReset();
-    while ( ( c = Extra_UtilGetopt( argc, argv, "C" ) ) != EOF )
+    while ( ( c = Extra_UtilGetopt( argc, argv, "Co" ) ) != EOF )
     {
         switch ( c )
         {
@@ -102,6 +104,17 @@ int EsopSyn_CommandMyExorCism(Abc_Frame_t* pAbc, int argc, char** argv) {
             nCubesMax = atoi(argv[globalUtilOptind]);
             globalUtilOptind++;
             if ( nCubesMax < 0 )
+                goto usage;
+            break;
+        case 'o':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-C\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            fOutput = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( fOutput < 0 )
                 goto usage;
             break;
         case 'h':
@@ -126,14 +139,20 @@ int EsopSyn_CommandMyExorCism(Abc_Frame_t* pAbc, int argc, char** argv) {
     pNtk = pAbc->pNtkCur;
     assert(pNtk != NULL);
 
-    My_Exorcism(pNtk, nCubesMax);
+    if(fOutput != -1 && fOutput >= Abc_NtkPoNum(pNtk)){
+      Abc_Print( -1, "PO's idx out of range.\n" );
+      return 0;
+    }
+
+    My_Exorcism(pNtk, nCubesMax, fOutput);
 
     return 0;
 
 usage:
-    Abc_Print( -2, "usage: myexorcism [-C N] [file_in] \n" );
+    Abc_Print( -2, "usage: myexorcism [-C N] [-o ith] [file_in] \n" );
     Abc_Print( -2, "                     performs heuristic exclusive sum-of-project minimization\n" );
     Abc_Print( -2, "        -C N       : maximum number of cubes in starting cover [default = %d]\n", nCubesMax );
+    Abc_Print( -2, "        -o ith       : specify the PO to be processed\n");
     Abc_Print( -2, "        [file_in]  : optional input file in ESOP-PLA format (otherwise current AIG is used)\n");
     Abc_Print( -2, "\n" );
     return 1;
@@ -141,7 +160,7 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [XorBidec command function.]
+  Synopsis    [BidecEsop command function.]
 
   Description []
                
@@ -153,12 +172,24 @@ usage:
 int EsopSyn_CommandBidecEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   int c;
+  int fOutput = -1;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "ho")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
+      case 'o':
+        if ( globalUtilOptind >= argc )
+        {
+            Abc_Print( -1, "Command line switch \"-C\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fOutput = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fOutput < 0 )
+            goto usage;
+        break;
       default:
         goto usage;
     }
@@ -168,19 +199,25 @@ int EsopSyn_CommandBidecEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
+  if(fOutput != -1 && fOutput >= Abc_NtkPoNum(pNtk)){
+    Abc_Print( -1, "PO's idx out of range.\n" );
+    return 0;
+  }
+
   if(!Abc_NtkIsStrash(pNtk)){
     pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
   }
 
-  BidecEsopMain(pNtk);
+  BidecEsopMain(pNtk, fOutput);
 
   Abc_NtkDelete(pNtk);
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: bidecesop [-h] \n");
+  Abc_Print(-2, "usage: bidecesop [-h] [-o ith] \n");
   Abc_Print(-2, "\t        for each PO, recursively do xor bidecomposition and synthesis esop\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
+  Abc_Print(-2, "\t-o ith   : specify the PO to be processed \n");
   return 1;
   
 }
@@ -201,11 +238,13 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
   int c;
   int fPrintParti;
   int fSynthesis;
+  int fOutput;
 
   fPrintParti = 0;
   fSynthesis = 0;
+  fOutput = -1;
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hps")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hpso")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -214,6 +253,17 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
         break;
       case 's':
         fSynthesis ^= 1;
+        break;
+      case 'o':
+        if ( globalUtilOptind >= argc )
+        {
+            Abc_Print( -1, "Command line switch \"-C\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fOutput = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fOutput < 0 )
+            goto usage;
         break;
       default:
         goto usage;
@@ -224,6 +274,11 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
+  if(fOutput != -1 && fOutput >= Abc_NtkPoNum(pNtk)){
+      Abc_Print( -1, "PO's idx out of range.\n" );
+      return 0;
+    }
+
   if(!Abc_NtkIsStrash(pNtk)){
     pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
   }
@@ -233,16 +288,17 @@ int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
-  NtkXorBidec(pNtk, fPrintParti, fSynthesis);
+  NtkXorBidec(pNtk, fPrintParti, fSynthesis, fOutput);
   Abc_NtkDelete(pNtk);
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: xorbidec [-h] [-p] [-s]\n");
+  Abc_Print(-2, "usage: xorbidec [-h] [-p] [-s] [-o ith]\n");
   Abc_Print(-2, "\t        for each PO, print the xor bidecomposition result\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   Abc_Print(-2, "\t-p    : print the partition result\n");
   Abc_Print(-2, "\t-s    : synthesis fA, fB and print the result\n");
+  Abc_Print(-2, "\t-o    : specify the PO to be processed\n");
   return 1;
   
 }

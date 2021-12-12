@@ -692,7 +692,7 @@ int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk
   SeeAlso     []
 
 ***********************************************************************/
-int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
+int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput){
   Abc_Obj_t* pPo = NULL;
   int iPo = -1;
 
@@ -701,6 +701,8 @@ int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
   int nSuccess = 0;
   std::vector<enum Set> vParti;
   Abc_NtkForEachPo(pNtk, pPo, iPo){
+      if(fOutput != -1 && iPo != fOutput) continue;
+
       // create cone for the current PO
       Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
 
@@ -708,34 +710,43 @@ int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
         Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
       int result = NtkXorBidecSingleOutput(pSubNtk, vParti);
-      if(result) nSuccess++;
+      if(result){
+        nSuccess++;
+        if(fPrintParti){
+          printf("----%s----\n", Abc_ObjName(pPo));
+              for(int i = 0; i < Abc_NtkPiNum(pSubNtk); i++){
+              if(vParti[i] == XC) printf("PI %d: XC\n", i);
+              else if(vParti[i] == XA) printf("PI %d: XA\n", i);
+              else if(vParti[i] == XB) printf("PI %d: XB\n", i);
+              else printf("PI %d: XAB\n", i);
+          }
+        }
+
+        if(fSynthesis){
+          Abc_Ntk_t *fA = NULL, *fB = NULL;
+          NtkXorBidecSynthesis(pSubNtk, vParti, fA, fB);
+          std::cout << "----fA----" << std::endl;
+          PrintAig(fA);
+          std::cout << "----fB----" << std::endl;
+          PrintAig(fB);
+        }
+      }
       else if(fPrintParti){
         printf("----%s----\n", Abc_ObjName(pPo));
         std::cout << "Fail" << std::endl;
       }
 
-      if(fPrintParti && result){
-        printf("----%s----\n", Abc_ObjName(pPo));
-            for(int i = 0; i < Abc_NtkPiNum(pSubNtk); i++){
-            if(vParti[i] == XC) printf("PI %d: XC\n", i);
-            else if(vParti[i] == XA) printf("PI %d: XA\n", i);
-            else if(vParti[i] == XB) printf("PI %d: XB\n", i);
-            else printf("PI %d: XAB\n", i);
-        }
-      }
-
-      if(fSynthesis && result){
-        Abc_Ntk_t *fA = NULL, *fB = NULL;
-        NtkXorBidecSynthesis(pSubNtk, vParti, fA, fB);
-        std::cout << "----fA----" << std::endl;
-        PrintAig(fA);
-        std::cout << "----fB----" << std::endl;
-        PrintAig(fB);
-      }
+      
   }
   
 
-  std::cout << "Number of bidecomposable POs: " << nSuccess << std::endl;
+  if(fOutput != -1){
+    std::cout << "PO[" << fOutput << "] " << Abc_NtkPo(pNtk, fOutput) << " - Bidecomposable: ";
+    if(nSuccess) std::cout << "Yes";
+    else std::cout << "No";
+    std::cout << std::endl;
+  }
+  else std::cout << "Number of bidecomposable POs: " << nSuccess << std::endl;
   Abc_PrintTime( 1, "Time used:", Abc_Clock() - clk );
   return 1;
     

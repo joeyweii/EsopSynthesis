@@ -43,11 +43,12 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     }
 }
 
-void BidecEsopMain(Abc_Ntk_t* pNtk){
+void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput){
     Abc_Obj_t* pPo;
     int iPo;
 
     Abc_NtkForEachPo(pNtk, pPo, iPo){
+        if(fOutput != -1 && iPo != fOutput) continue;
         // create cone for the current PO
         Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
 
