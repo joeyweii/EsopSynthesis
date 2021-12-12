@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <unordered_map>
+#include <climits>
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
 #include "sat/cnf/cnf.h"
