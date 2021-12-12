@@ -709,7 +709,7 @@ int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
 
       int result = NtkXorBidecSingleOutput(pSubNtk, vParti);
       if(result) nSuccess++;
-      else{
+      else if(fPrintParti){
         printf("----%s----\n", Abc_ObjName(pPo));
         std::cout << "Fail" << std::endl;
       }
