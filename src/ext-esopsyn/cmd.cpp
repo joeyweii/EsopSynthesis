@@ -1,6 +1,5 @@
-#include "xorbidec.h"
-#include "myexorcism.h"
-#include "mintesop.h"
+#include "utils.h"
+
 /**Function*************************************************************
 
   Synopsis    [Synthesis minterm esop.]
@@ -76,7 +75,7 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [Modified exorcism.]
+  Synopsis    [Modified exorcism command function.]
 
   Description []
                
@@ -151,6 +150,52 @@ usage:
   SeeAlso     []
 
 ***********************************************************************/
+int EsopSyn_CommandBidecEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  int c;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      default:
+        goto usage;
+    }
+  }
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  if(!Abc_NtkIsStrash(pNtk)){
+    pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
+  }
+
+  BidecEsopMain(pNtk);
+
+  Abc_NtkDelete(pNtk);
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: bidecesop [-h] \n");
+  Abc_Print(-2, "\t        for each PO, recursively do xor bidecomposition and synthesis esop\n");
+  Abc_Print(-2, "\t-h    : print the command usage\n");
+  return 1;
+  
+}
+
+/**Function*************************************************************
+
+  Synopsis    [XorBidec command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
 int EsopSyn_CommandXorBidec(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   int c;
@@ -208,6 +253,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "xorbidec", EsopSyn_CommandXorBidec, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "myexorcism", EsopSyn_CommandMyExorCism, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "mintesop", EsopSyn_CommandMintEsop, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
 }
 
 // called during ABC termination

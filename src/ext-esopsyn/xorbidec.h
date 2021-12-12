@@ -1,10 +1,4 @@
 #include "utils.h"
-enum Set{
-  XC,
-  XB,
-  XA,
-  XAB
-};
 
 void PrintAig(Abc_Ntk_t* pNtk);
 int my_sat_solver_add_buffer_enable( sat_solver * pSat, int iVarA, int iVarB, int iVarEn, int fCompl );

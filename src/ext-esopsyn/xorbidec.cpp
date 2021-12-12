@@ -707,8 +707,14 @@ int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
       if( Abc_ObjFaninC0(pPo) )
         Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
-      if(NtkXorBidecSingleOutput(pSubNtk, vParti)) nSuccess++;
-      if(fPrintParti){
+      int result = NtkXorBidecSingleOutput(pSubNtk, vParti);
+      if(result) nSuccess++;
+      else{
+        printf("----%s----\n", Abc_ObjName(pPo));
+        std::cout << "Fail" << std::endl;
+      }
+
+      if(fPrintParti && result){
         printf("----%s----\n", Abc_ObjName(pPo));
             for(int i = 0; i < Abc_NtkPiNum(pSubNtk); i++){
             if(vParti[i] == XC) printf("PI %d: XC\n", i);
@@ -718,7 +724,7 @@ int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis){
         }
       }
 
-      if(fSynthesis){
+      if(fSynthesis && result){
         Abc_Ntk_t *fA = NULL, *fB = NULL;
         NtkXorBidecSynthesis(pSubNtk, vParti, fA, fB);
         std::cout << "----fA----" << std::endl;
