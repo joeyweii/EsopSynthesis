@@ -46,6 +46,7 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
         std::cout << "subNtk[" << i << "] #PI: " << Abc_NtkPiNum(subNtks[i]) << std::endl;
     }
 
+    
     clk = Abc_Clock();
 
     int nCubes = 0;
@@ -63,7 +64,7 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     }
     std::cout << "nCubes: " << nCubes << std::endl;
     Abc_PrintTime( 1, "Starting Cover Compute Time", Abc_Clock() - clk );
-
+    
     for(int i = 0; i < subNtks.size(); i++){
         Abc_NtkDelete(subNtks[i]);
     }

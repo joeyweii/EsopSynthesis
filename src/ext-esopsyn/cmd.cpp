@@ -60,7 +60,7 @@ int EsopSyn_CommandMintEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
         Abc_NtkDelete( pNtk );
     }
 
-    assert(Abc_NtkPoNum(pNtkBdd) == 1); 
+    assert(Abc_NtkPoNum(pNtkBdd) == 1);
 
     pNode = Abc_ObjFanin0( Abc_NtkPo(pNtkBdd, 0) );
     Abc_NtkToBdd(pNtkBdd);
