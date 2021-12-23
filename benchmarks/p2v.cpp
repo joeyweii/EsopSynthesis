@@ -123,8 +123,10 @@ int main(int argc, char* argv[]){
                 }
             }
 
-            assert(cnt > 0);
-            if(cnt == 1){
+            if(cnt == 0){
+                OutFile << "assign w" << i << " = 1;" << std::endl;
+            }
+            else if(cnt == 1){
                 OutFile << "assign w" << i << " = x";
                 for(int j = 0; j < numPI; j++){
                     if(Esop[i][j] != '-'){

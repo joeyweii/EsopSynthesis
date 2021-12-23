@@ -317,6 +317,7 @@ usage:
 int EsopSyn_CommandAigPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   int c;
+  abctime clk;
 
   Extra_UtilGetoptReset();
   while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF) {
@@ -340,8 +341,11 @@ int EsopSyn_CommandAigPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
 
   assert(Abc_NtkIsStrash(pNtk));
 
-  AigPSDKROMain(pNtk);
+  clk = Abc_Clock();
 
+  AigPSDKROMain(pNtk);
+  
+  Abc_PrintTime( 1, "Time used:", Abc_Clock() - clk );
   return 0;
 
 usage:

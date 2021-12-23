@@ -138,7 +138,7 @@ Abc_Ntk_t* AIGXOR(Abc_Ntk_t* pNtk1, Abc_Ntk_t* pNtk2){
 
 ***********************************************************************/
 
-void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::vector<char> >& Esop){
+void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::string>& Esop){
     Abc_Obj_t* f = Abc_ObjFanin0(Abc_NtkPo(pNtk, 0));
     if(f == Abc_AigConst1(pNtk)){
         // f == 0
@@ -148,6 +148,9 @@ void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::vector<char>
         // f == 1
         else{
             Cost = 1;
+            std::string alldash;
+            for(int i = 0; i < numPI; i++) alldash += "-";
+            Esop.push_back(alldash);
         }
         return;
     }
@@ -157,12 +160,10 @@ void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::vector<char>
     Abc_Ntk_t* p0 = AIGCOF(pNtk, level, 0);
     Abc_Ntk_t* p1 = AIGCOF(pNtk, level, 1);
     Abc_Ntk_t* p01 = AIGXOR(p0, p1);
-    p01 = Abc_NtkCollapse(p01, 1000000, 0, 0, 0, 0, 0);
-    p01 = Abc_NtkStrash(p01, 0, 0, 0);
 
-    std::vector<std::vector<char> > Esop0;
-    std::vector<std::vector<char> > Esop1;
-    std::vector<std::vector<char> > Esop01;
+    std::vector<std::string> Esop0;
+    std::vector<std::string> Esop1;
+    std::vector<std::string> Esop01;
     int Cost0;
     int Cost1;
     int Cost01;
@@ -175,6 +176,35 @@ void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::vector<char>
     Abc_NtkDelete(p01);
 
     Cost = Cost0 + Cost1 + Cost01 - std::max(Cost0, std::max(Cost1, Cost01));
+    if(Cost == Cost0 + Cost01){
+        for(int i = 0; i < Esop0.size(); i++) Esop.push_back(Esop0[i]);
+        for(int i = 0; i < Esop01.size(); i++){
+            assert(Esop01[i][level] == '-');
+            Esop01[i][level] = '1';
+            Esop.push_back(Esop01[i]);
+        }  
+    }
+    else if(Cost == Cost1 + Cost01){
+        for(int i = 0; i < Esop1.size(); i++) Esop.push_back(Esop1[i]);
+        for(int i = 0; i < Esop01.size(); i++){
+            assert(Esop01[i][level] == '-');
+            Esop01[i][level] = '0';
+            Esop.push_back(Esop01[i]);
+        }  
+    }
+    else{
+        for(int i = 0; i < Esop0.size(); i++){
+            assert(Esop0[i][level] == '-');
+            Esop0[i][level] = '0';
+           
+            Esop.push_back(Esop0[i]);
+        } 
+        for(int i = 0; i < Esop1.size(); i++){
+            assert(Esop1[i][level] == '-');
+            Esop1[i][level] = '1';
+            Esop.push_back(Esop1[i]);
+        }   
+    }
 }
 
 /**Function*************************************************************
@@ -193,8 +223,12 @@ void AigPSDKROMain(Abc_Ntk_t* pNtk){
     assert(Abc_NtkPoNum(pNtk) == 1);
     numPI = Abc_NtkPiNum(pNtk);
 
-    std::vector<std::vector<char> > Esop;
+    std::vector<std::string> Esop;
     int Cost;
     PSDKRO(pNtk, 0, Cost, Esop); 
     printf("Cost: %d\n", Cost);
+    printf("Esop:\n");
+    for(int i = 0; i < Esop.size(); i++){
+        std::cout << Esop[i] << std::endl;
+    }
 }
