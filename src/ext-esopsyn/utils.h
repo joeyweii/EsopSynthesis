@@ -29,3 +29,5 @@ extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti);
 extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk_t*& fA, Abc_Ntk_t*& fB);
 extern void PrintAig(Abc_Ntk_t* pNtk);
+extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
+

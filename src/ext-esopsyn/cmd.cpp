@@ -303,6 +303,55 @@ usage:
   
 }
 
+/**Function*************************************************************
+
+  Synopsis    [XorBidec command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandAigPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  int c;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      default:
+        goto usage;
+    }
+  }
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  assert(Abc_NtkPoNum(pNtk) == 1);
+
+  if(!Abc_NtkIsStrash(pNtk)){
+    pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
+  }
+
+  assert(Abc_NtkIsStrash(pNtk));
+
+  AigPSDKROMain(pNtk);
+
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: aigextract [-h] \n");
+  Abc_Print(-2, "\t        synthesis ESOP with aig psdkro extraction\n");
+  Abc_Print(-2, "\t-h    : print the command usage\n");
+  return 1;
+  
+}
+
 // called during ABC startup
 void init(Abc_Frame_t* pAbc)
 {
@@ -310,6 +359,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "myexorcism", EsopSyn_CommandMyExorCism, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "mintesop", EsopSyn_CommandMintEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "aigpsdkro", EsopSyn_CommandAigPSDKRO, 0);
 }
 
 // called during ABC termination
