@@ -25,10 +25,11 @@ extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
 
 extern int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
-extern void My_Exorcism(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput);
+extern void MyExorcismMain(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti);
 extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk_t*& fA, Abc_Ntk_t*& fB);
 extern void PrintAig(Abc_Ntk_t* pNtk);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
+extern void BddPSDKROMain(Abc_Ntk_t* pNtk);
 

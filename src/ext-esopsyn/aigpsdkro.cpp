@@ -128,7 +128,7 @@ Abc_Ntk_t* AIGXOR(Abc_Ntk_t* pNtk1, Abc_Ntk_t* pNtk2){
 
 /**Function*************************************************************
 
-  Synopsis    [PSDKRO recursive function]
+  Synopsis    [AIG PSDKRO recursive function]
 
   Description []
                
@@ -138,7 +138,7 @@ Abc_Ntk_t* AIGXOR(Abc_Ntk_t* pNtk1, Abc_Ntk_t* pNtk2){
 
 ***********************************************************************/
 
-void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::string>& Esop){
+static void AigPSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::string>& Esop){
     Abc_Obj_t* f = Abc_ObjFanin0(Abc_NtkPo(pNtk, 0));
     if(f == Abc_AigConst1(pNtk)){
         // f == 0
@@ -168,11 +168,11 @@ void PSDKRO(Abc_Ntk_t* pNtk, int level, int& Cost, std::vector<std::string>& Eso
     int Cost1;
     int Cost01;
 
-    PSDKRO(p0, level+1, Cost0, Esop0);
+    AigPSDKRO(p0, level+1, Cost0, Esop0);
     Abc_NtkDelete(p0);
-    PSDKRO(p1, level+1, Cost1, Esop1);
+    AigPSDKRO(p1, level+1, Cost1, Esop1);
     Abc_NtkDelete(p1);
-    PSDKRO(p01, level+1, Cost01, Esop01);
+    AigPSDKRO(p01, level+1, Cost01, Esop01);
     Abc_NtkDelete(p01);
 
     Cost = Cost0 + Cost1 + Cost01 - std::max(Cost0, std::max(Cost1, Cost01));
@@ -225,7 +225,7 @@ void AigPSDKROMain(Abc_Ntk_t* pNtk){
 
     std::vector<std::string> Esop;
     int Cost;
-    PSDKRO(pNtk, 0, Cost, Esop); 
+    AigPSDKRO(pNtk, 0, Cost, Esop); 
     printf("Cost: %d\n", Cost);
     printf("Esop:\n");
     for(int i = 0; i < Esop.size(); i++){

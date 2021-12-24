@@ -144,7 +144,7 @@ int EsopSyn_CommandMyExorCism(Abc_Frame_t* pAbc, int argc, char** argv) {
       return 0;
     }
 
-    My_Exorcism(pNtk, nCubesMax, fOutput);
+    MyExorcismMain(pNtk, nCubesMax, fOutput);
 
     return 0;
 
@@ -305,7 +305,7 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [XorBidec command function.]
+  Synopsis    [AIG PSDKRO command function.]
 
   Description []
                
@@ -349,8 +349,69 @@ int EsopSyn_CommandAigPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: aigextract [-h] \n");
+  Abc_Print(-2, "usage: aigpsdkro [-h] \n");
   Abc_Print(-2, "\t        synthesis ESOP with aig psdkro extraction\n");
+  Abc_Print(-2, "\t-h    : print the command usage\n");
+  return 1;
+  
+}
+
+/**Function*************************************************************
+
+  Synopsis    [BDD PSDKRO command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  Abc_Ntk_t* pNtkBdd = NULL;
+  int c;
+  abctime clk;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      default:
+        goto usage;
+    }
+  }
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  assert(Abc_NtkPoNum(pNtk) == 1);
+
+  clk = Abc_Clock();
+  if ( Abc_NtkIsStrash(pNtk) )
+      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 0, 0, 0, 0);
+  else{
+      pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 0, 0, 0, 0);
+      Abc_NtkDelete( pNtk );
+  }
+
+  Abc_PrintTime( 1, "BDD construction time used:", Abc_Clock() - clk );
+ 
+  clk = Abc_Clock();
+
+  BddPSDKROMain(pNtkBdd);
+  
+  Abc_PrintTime( 1, "PSDKRO time used:", Abc_Clock() - clk );
+
+  Abc_NtkDelete(pNtkBdd);
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: bddpsdkro [-h] \n");
+  Abc_Print(-2, "\t        synthesis ESOP with bdd psdkro extraction\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   
@@ -364,6 +425,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "mintesop", EsopSyn_CommandMintEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "aigpsdkro", EsopSyn_CommandAigPSDKRO, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "bddpsdkro", EsopSyn_CommandBddPSDKRO, 0);
 }
 
 // called during ABC termination
