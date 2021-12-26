@@ -370,6 +370,8 @@ usage:
 int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   Abc_Ntk_t* pNtkBdd = NULL;
+  Abc_Obj_t* pPo;
+  int iPo;
   int c;
   abctime clk;
 
@@ -387,26 +389,36 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
-  assert(Abc_NtkPoNum(pNtk) == 1);
+  Abc_NtkForEachPo(pNtk, pPo, iPo){
 
-  clk = Abc_Clock();
-  if ( Abc_NtkIsStrash(pNtk) )
-      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 1, 0, 0, 0);
-  else{
-      pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
-      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 1, 0, 0, 0);
-      Abc_NtkDelete( pNtk );
-  }
+    // create cone for the current PO
+    Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
 
-  Abc_PrintTime( 1, "BDD construction time used:", Abc_Clock() - clk );
- 
-  clk = Abc_Clock();
+    if( Abc_ObjFaninC0(pPo) )
+      Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
-  BddPSDKROMain(pNtkBdd);
+    clk = Abc_Clock();
+
+    if ( Abc_NtkIsStrash(pSubNtk) )
+        pNtkBdd = Abc_NtkCollapse( pSubNtk, 1000000000, 0, 0, 0, 0, 0);
+    else{
+        Abc_Ntk_t* pStrNtk;
+        pStrNtk = Abc_NtkStrash( pSubNtk, 0, 0, 0 );
+        pNtkBdd = Abc_NtkCollapse( pStrNtk, 1000000000, 0, 0, 0, 0, 0);
+        Abc_NtkDelete( pStrNtk );
+    }
+
+    Abc_PrintTime( 1, "BDD construction time used:", Abc_Clock() - clk );
   
-  Abc_PrintTime( 1, "PSDKRO time used:", Abc_Clock() - clk );
+    clk = Abc_Clock();
 
-  Abc_NtkDelete(pNtkBdd);
+    BddPSDKROMain(pNtkBdd);
+    
+    Abc_PrintTime( 1, "PSDKRO time used:", Abc_Clock() - clk );
+
+    Abc_NtkDelete(pSubNtk);
+    Abc_NtkDelete(pNtkBdd);
+  }
   return 0;
 
 usage:
