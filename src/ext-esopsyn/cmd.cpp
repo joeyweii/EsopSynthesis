@@ -391,10 +391,10 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
 
   clk = Abc_Clock();
   if ( Abc_NtkIsStrash(pNtk) )
-      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 0, 0, 0, 0);
+      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 1, 0, 0, 0);
   else{
       pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
-      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 0, 0, 0, 0);
+      pNtkBdd = Abc_NtkCollapse( pNtk, 1000000000, 0, 1, 0, 0, 0);
       Abc_NtkDelete( pNtk );
   }
 

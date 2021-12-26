@@ -1,0 +1,37 @@
+
+Date: January 23, 1991
+
+A total of seven ISCAS'89 benchmark circuits have been modified. Four of the
+seven circuits have been modified to eliminate flip-flops that were unreachable
+by any path starting at the primary inputs. This was accomplished by removing
+selected flip-flops from the circuit and declaring these flip-flop inputs and
+outputs to be primary outputs and inputs, respectively. The affected circuits
+are s9234, s13207, s15850 and s38584. The other three circuits modified are
+digital fraction multipliers that were functionally incorrect. The affected
+circuits are s208, s420 and s838. All seven circuits have been renamed to
+add a .1 suffix to their names. For example, the corrected version of s208
+is named s208.1. The old versions of these circuits will no longer be
+distributed as part of the ISCAS'89 benchmarks.
+
+Questions should be emailed to bryan@mcnc.org or phone (919) 248-1432.
+
+********************************************************************************
+********************************************************************************
+
+Summary of changes:
+-------------------
+
+Were functionally incorrect:
+
+s208.blif  	->	s208.1.blif 
+s420.blif  	->	s420.1.blif 
+s838.blif  	->	s838.1.blif 
+
+--------------------------------------
+
+Contained unreachable flip-flops:
+
+s9234.blif  	->	s9234.1.blif 
+s13207.blif 	->	s13207.1.blif
+s15850.blif 	->	s15850.1.blif
+s38584.blif 	->	s38584.1.blif 

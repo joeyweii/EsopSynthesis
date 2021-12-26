@@ -1,7 +1,5 @@
 #include "bddpsdkro.h"
 
-#define DEBUG 1
-
 static DdManager* dd = NULL;
 int numPI = -1;
 
@@ -75,7 +73,7 @@ void BddPSDKRO(DdNode* pNode, int level, int& Cost, std::vector<std::string>& Es
 // TODO: add reordering
 void BddPSDKROMain(Abc_Ntk_t* pNtk){
     dd = (DdManager*) pNtk->pManFunc;
-    numPI = Abc_NtkPiNum(pNtk);
+    numPI = Abc_NtkPiNum(pNtk);    
 
     assert(Abc_NtkPoNum(pNtk) == 1);
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtk, 0));
@@ -88,4 +86,6 @@ void BddPSDKROMain(Abc_Ntk_t* pNtk){
     std::cout << "Esop:" << std::endl;
     for(int i = 0; i < Esop.size(); i++)
         std::cout << Esop[i] << std::endl;
+
+    assert(Cudd_ReadReorderings(dd) == 0);
 }
