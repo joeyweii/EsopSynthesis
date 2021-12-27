@@ -1,20 +1,25 @@
 #include "bddpsdkro.h"
 
 static DdManager* dd = NULL;
-int numPI = -1;
+static int numPI = -1;
+static std::unordered_map<DdNode*, PSDKRONode*> umap;
 
-void BddPSDKRO(DdNode* pNode, int& Cost, std::vector<std::string>& Esop){
+void BddPSDKRO(DdNode* pNode){
+    assert(umap.find(pNode) != umap.end());
+    PSDKRONode* n = umap[pNode];
     if(pNode == Cudd_Not(Cudd_ReadLogicZero(dd))){
-        Cost = 1;
+        n->Cost = 1;
         std::string c;
         for(int i = 0; i < numPI; i++) c += "-";
-        Esop.push_back(c);
+        n->Esop.push_back(c);
         return;
     }
     else if(pNode == Cudd_ReadLogicZero(dd)){
-        Cost = 0;
+        n->Cost = 0;
         return;
     }
+
+    
 
     int level = Cudd_NodeReadIndex(pNode);
     DdNode* var = Cudd_bddIthVar(dd, level); 
@@ -23,56 +28,70 @@ void BddPSDKRO(DdNode* pNode, int& Cost, std::vector<std::string>& Esop){
     DdNode* p1 = Cudd_Cofactor(dd, pNode, var); Cudd_Ref(p1);
     DdNode* p01 = Cudd_bddXor(dd, p0, p1); Cudd_Ref(p01);
 
+    PSDKRONode* n0;
+    if(umap.find(p0) == umap.end()){
+        n0 = new PSDKRONode();
+        umap[p0] = n0;
+        n0->Cost = -1;
+    }else n0 = umap[p0];
 
-    std::vector<std::string> Esop0;
-    std::vector<std::string> Esop1;
-    std::vector<std::string> Esop01;
-    int Cost0;
-    int Cost1;
-    int Cost01;
+    PSDKRONode* n1;
+    if(umap.find(p1) == umap.end()){
+        n1 = new PSDKRONode();
+        umap[p1] = n1;
+        n1->Cost = -1;
+    }else n1 = umap[p1];
 
-    BddPSDKRO(p0, Cost0, Esop0);
-    Cudd_RecursiveDeref(dd, p0);
+    PSDKRONode* n01;
+    if(umap.find(p01) == umap.end()){
+        n01 = new PSDKRONode();
+        umap[p01] = n01;
+        n01->Cost = -1;
+    }else n01 = umap[p01];
 
-    BddPSDKRO(p1, Cost1, Esop1);
-    Cudd_RecursiveDeref(dd, p1);
+    if(n0->Cost == -1) BddPSDKRO(p0);
+    if(n1->Cost == -1) BddPSDKRO(p1);
+    if(n01->Cost == -1) BddPSDKRO(p01);
 
-    BddPSDKRO(p01, Cost01, Esop01);
-    Cudd_RecursiveDeref(dd, p01);
+    assert(pNode != p0 && pNode != p1 && pNode != p01);
 
-    Cost = Cost0 + Cost1 + Cost01 - std::max(Cost0, std::max(Cost1, Cost01));
-    if(Cost == Cost0 + Cost01){
-        for(int i = 0; i < Esop0.size(); i++) Esop.push_back(Esop0[i]);
-        for(int i = 0; i < Esop01.size(); i++){
-            assert(Esop01[i][level] == '-');
-            std::string tem = Esop01[i];
+    n->Cost = n0->Cost + n1->Cost + n01->Cost - std::max(n0->Cost, std::max(n1->Cost, n01->Cost));
+    if(n->Cost == n0->Cost + n01->Cost){
+        for(int i = 0; i < n0->Esop.size(); i++) n->Esop.push_back(n0->Esop[i]);
+        for(int i = 0; i < n01->Esop.size(); i++){
+            assert(n01->Esop[i][level] == '-');
+            std::string tem = n01->Esop[i];
             tem[level] = '1';
-            Esop.push_back(tem);
+            n->Esop.push_back(tem);
         }  
     }
-    else if(Cost == Cost1 + Cost01){
-        for(int i = 0; i < Esop1.size(); i++) Esop.push_back(Esop1[i]);
-        for(int i = 0; i < Esop01.size(); i++){
-            assert(Esop01[i][level] == '-');
-            std::string tem = Esop01[i];
+    else if(n->Cost == n1->Cost + n01->Cost){
+        for(int i = 0; i < n1->Esop.size(); i++) n->Esop.push_back(n1->Esop[i]);
+        for(int i = 0; i < n01->Esop.size(); i++){
+            assert(n01->Esop[i][level] == '-');
+            std::string tem = n01->Esop[i];
             tem[level] = '0';
-            Esop.push_back(tem);
+            n->Esop.push_back(tem);
         }  
     }
     else{
-        for(int i = 0; i < Esop0.size(); i++){
-            assert(Esop0[i][level] == '-');
-            std::string tem = Esop0[i];
+        for(int i = 0; i < n0->Esop.size(); i++){
+            assert(n0->Esop[i][level] == '-');
+            std::string tem = n0->Esop[i];
             tem[level] = '0';
-            Esop.push_back(tem);
+            n->Esop.push_back(tem);
         } 
-        for(int i = 0; i < Esop1.size(); i++){
-            assert(Esop1[i][level] == '-');
-            std::string tem = Esop1[i];
+        for(int i = 0; i < n1->Esop.size(); i++){
+            assert(n1->Esop[i][level] == '-');
+            std::string tem = n1->Esop[i];
             tem[level] = '1';
-            Esop.push_back(tem);
+            n->Esop.push_back(tem);
         }   
     }
+
+    Cudd_RecursiveDeref(dd, p0);
+    Cudd_RecursiveDeref(dd, p1);
+    Cudd_RecursiveDeref(dd, p01);
 }
 
 // TODO: add reordering
@@ -84,14 +103,21 @@ void BddPSDKROMain(Abc_Ntk_t* pNtk){
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtk, 0));
 
     DdNode* pNode = (DdNode *) pObj->pData;
+    PSDKRONode* nNode = new PSDKRONode();
+    umap[pNode] = nNode;
+    nNode->Cost = -1;
 
-    std::vector<std::string> Esop;
-    int Cost;
-    BddPSDKRO(pNode, Cost, Esop);
-    std::cout << "Cost: " << Cost << std::endl;
+    BddPSDKRO(pNode);
+    std::cout << "Cost: " << nNode->Cost << std::endl;
     std::cout << "Esop:" << std::endl;
-    for(int i = 0; i < Esop.size(); i++)
-        std::cout << Esop[i] << std::endl;
+    for(int i = 0; i < nNode->Esop.size(); i++)
+        std::cout << nNode->Esop[i] << std::endl;
 
     assert(Cudd_ReadReorderings(dd) == 0);
+
+    for(auto& n : umap){
+        delete n.second;
+    }
+
+    umap.clear();
 }
