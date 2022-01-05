@@ -89,9 +89,9 @@ void BddPSDKRO(DdNode* pNode){
         }   
     }
 
-    Cudd_RecursiveDeref(dd, p0);
-    Cudd_RecursiveDeref(dd, p1);
-    Cudd_RecursiveDeref(dd, p01);
+    // Cudd_RecursiveDeref(dd, p0);
+    // Cudd_RecursiveDeref(dd, p1);
+    // Cudd_RecursiveDeref(dd, p01);
 }
 
 // TODO: add reordering

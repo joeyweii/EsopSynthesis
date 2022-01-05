@@ -418,6 +418,7 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
 
     Abc_NtkDelete(pSubNtk);
     Abc_NtkDelete(pNtkBdd);
+
   }
   return 0;
 
