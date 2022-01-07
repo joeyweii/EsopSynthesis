@@ -10,11 +10,18 @@
 #include "sat/cnf/cnf.h"
 #include "sat/bsat/satSolver.h"
 #include "aig/aig/aig.h"
+
 enum Set{
   XC,
   XB,
   XA,
   XAB
+};
+
+typedef struct PSDKRONode PSDKRONode;
+struct PSDKRONode{
+    std::vector<std::string> Esop;
+    int Cost;
 };
 
 extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
@@ -25,13 +32,16 @@ extern "C" int Abc_NtkDarCec( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int nConfLim
 extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
 extern "C" void Abc_NodeShowBdd( Abc_Obj_t * pNode, int fCompl );
 
-extern int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
+extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
 extern void MyExorcismMain(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput);
+extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
+extern void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
+extern void ScalablePSDKROMain(Abc_Ntk_t* pNtk, int numCof);
+
 extern int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti);
 extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk_t*& fA, Abc_Ntk_t*& fB);
 extern void PrintAig(Abc_Ntk_t* pNtk);
-extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
-extern void BddPSDKROMain(Abc_Ntk_t* pNtk);
-
+extern Abc_Ntk_t* AIGCOF(Abc_Ntk_t* pNtk, int var, int phase);
+extern Abc_Ntk_t* AIGXOR(Abc_Ntk_t* pNtk1, Abc_Ntk_t* pNtk2);

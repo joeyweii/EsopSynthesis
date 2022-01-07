@@ -12,7 +12,7 @@
   SeeAlso     []
 
 ***********************************************************************/
-void Abc_NtkMiterFinalize( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNtkMiter, int fComb, int nPartSize, int fImplic, int fMulti )
+static void Abc_NtkMiterFinalize( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNtkMiter, int fComb, int nPartSize, int fImplic, int fMulti )
 {
     Vec_Ptr_t * vPairs;
     Abc_Obj_t * pMiter, * pNode;
@@ -105,7 +105,7 @@ void Abc_NtkMiterFinalize( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNt
     Vec_PtrFree( vPairs );
 }
 
-void Abc_NtkMiterAddOne( Abc_Ntk_t * pNtk, Abc_Ntk_t * pNtkMiter )
+static void Abc_NtkMiterAddOne( Abc_Ntk_t * pNtk, Abc_Ntk_t * pNtkMiter )
 {
     Abc_Obj_t * pNode;
     int i;
@@ -115,7 +115,7 @@ void Abc_NtkMiterAddOne( Abc_Ntk_t * pNtk, Abc_Ntk_t * pNtkMiter )
 }
 
 
-void My_NtkMiterPrepare( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNtkMiter, int fComb, int nPartSize, int fMulti )
+static void My_NtkMiterPrepare( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNtkMiter, int fComb, int nPartSize, int fMulti )
 {
     Abc_Obj_t * pObj, * pObjNew;
     int i;
@@ -238,7 +238,7 @@ Abc_Ntk_t * My_NtkMiterInt( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int fComb, int
     return pNtkMiter;
 }
 
-Abc_Ntk_t * My_NtkXor( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int fComb, int nPartSize, int fImplic, int fMulti )
+static Abc_Ntk_t * My_NtkXor( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int fComb, int nPartSize, int fImplic, int fMulti )
 {
     Abc_Ntk_t * pTemp = NULL;
     int fRemove1, fRemove2;
@@ -315,7 +315,7 @@ void PrintAig(Abc_Ntk_t* pNtk){
   SeeAlso     []
 
 ***********************************************************************/
-int my_sat_solver_add_buffer_enable( sat_solver * pSat, int iVarA, int iVarB, int iVarEn, int fCompl )
+static int my_sat_solver_add_buffer_enable( sat_solver * pSat, int iVarA, int iVarB, int iVarEn, int fCompl )
 {
     lit Lits[3];
     int Cid;
@@ -703,7 +703,7 @@ int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk
   SeeAlso     []
 
 ***********************************************************************/
-int NtkXorBidec(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput){
+int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput){
   Abc_Obj_t* pPo = NULL;
   int iPo = -1;
 

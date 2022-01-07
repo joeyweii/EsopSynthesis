@@ -4,28 +4,24 @@ static DdManager* dd = NULL;
 static int numPI = -1;
 static std::unordered_map<DdNode*, PSDKRONode*> umap;
 
-void BddPSDKRO(DdNode* pNode){
-    assert(umap.find(pNode) != umap.end());
-    PSDKRONode* n = umap[pNode];
-    if(pNode == Cudd_Not(Cudd_ReadLogicZero(dd))){
+static void BddPSDKRO(DdNode* p, PSDKRONode* n){
+    if(p == Cudd_Not(Cudd_ReadLogicZero(dd))){
         n->Cost = 1;
         std::string c;
         for(int i = 0; i < numPI; i++) c += "-";
         n->Esop.push_back(c);
         return;
     }
-    else if(pNode == Cudd_ReadLogicZero(dd)){
+    else if(p == Cudd_ReadLogicZero(dd)){
         n->Cost = 0;
         return;
     }
 
-    
-
-    int level = Cudd_NodeReadIndex(pNode);
+    int level = Cudd_NodeReadIndex(p);
     DdNode* var = Cudd_bddIthVar(dd, level); 
    
-    DdNode* p0 = Cudd_Cofactor(dd, pNode, Cudd_Not(var)); Cudd_Ref(p0);
-    DdNode* p1 = Cudd_Cofactor(dd, pNode, var); Cudd_Ref(p1);
+    DdNode* p0 = Cudd_Cofactor(dd, p, Cudd_Not(var)); Cudd_Ref(p0);
+    DdNode* p1 = Cudd_Cofactor(dd, p, var); Cudd_Ref(p1);
     DdNode* p01 = Cudd_bddXor(dd, p0, p1); Cudd_Ref(p01);
 
     PSDKRONode* n0;
@@ -49,11 +45,11 @@ void BddPSDKRO(DdNode* pNode){
         n01->Cost = -1;
     }else n01 = umap[p01];
 
-    if(n0->Cost == -1) BddPSDKRO(p0);
-    if(n1->Cost == -1) BddPSDKRO(p1);
-    if(n01->Cost == -1) BddPSDKRO(p01);
+    if(n0->Cost == -1) BddPSDKRO(p0, n0);
+    if(n1->Cost == -1) BddPSDKRO(p1, n1);
+    if(n01->Cost == -1) BddPSDKRO(p01, n01);
 
-    assert(pNode != p0 && pNode != p1 && pNode != p01);
+    assert(p != p0 && p != p1 && p != p01);
 
     n->Cost = n0->Cost + n1->Cost + n01->Cost - std::max(n0->Cost, std::max(n1->Cost, n01->Cost));
     if(n->Cost == n0->Cost + n01->Cost){
@@ -95,7 +91,7 @@ void BddPSDKRO(DdNode* pNode){
 }
 
 // TODO: add reordering
-void BddPSDKROMain(Abc_Ntk_t* pNtk){
+void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut){
     dd = (DdManager*) pNtk->pManFunc;
     numPI = Abc_NtkPiNum(pNtk);    
 
@@ -107,13 +103,29 @@ void BddPSDKROMain(Abc_Ntk_t* pNtk){
     umap[pNode] = nNode;
     nNode->Cost = -1;
 
-    BddPSDKRO(pNode);
-    std::cout << "Cost: " << nNode->Cost << std::endl;
+    BddPSDKRO(pNode, nNode);
+
+    assert(Cudd_ReadReorderings(dd) == 0);
+
+    std::cout << "#Terms: " << nNode->Cost << std::endl;
+    
+    /*
     std::cout << "Esop:" << std::endl;
     for(int i = 0; i < nNode->Esop.size(); i++)
         std::cout << nNode->Esop[i] << std::endl;
+    */
 
-    assert(Cudd_ReadReorderings(dd) == 0);
+    if(pFileNameOut != NULL){
+        std::ofstream File;
+        File.open(pFileNameOut, std::ios::out);
+
+        File << ".i " << numPI << std::endl;
+        File << ".o 1" << std::endl;
+        File << ".type esop" << std::endl;
+        for(int i = 0; i < nNode->Esop.size(); i++)
+            File << nNode->Esop[i] << " 1" << std::endl;
+        File << ".e" << std::endl;
+    }
 
     for(auto& n : umap){
         delete n.second;

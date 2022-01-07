@@ -5,4 +5,5 @@ SRC += \
     src/ext-esopsyn/mintesop.cpp \
     src/ext-esopsyn/bidecesop.cpp \
     src/ext-esopsyn/aigpsdkro.cpp \
-    src/ext-esopsyn/bddpsdkro.cpp
+    src/ext-esopsyn/bddpsdkro.cpp \
+    src/ext-esopsyn/scalpsdkro.cpp
