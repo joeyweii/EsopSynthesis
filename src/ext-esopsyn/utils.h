@@ -1,10 +1,9 @@
 #include <iostream>
-#include <vector>
 #include <fstream>
+#include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <climits>
-#include <iostream>
-#include <unordered_map>
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
 #include "sat/cnf/cnf.h"
@@ -36,7 +35,7 @@ extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int
 extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
 extern void MyExorcismMain(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
-extern void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut);
+extern void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut, int type);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void ScalablePSDKROMain(Abc_Ntk_t* pNtk, int numCof);
 

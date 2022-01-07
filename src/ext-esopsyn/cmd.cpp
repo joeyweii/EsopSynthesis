@@ -374,14 +374,18 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   int iPo;
   int c;
   int fOutput = -1;
+  int type = 1;
   abctime clk;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "ho")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hto")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
+      case 't':
+        type = 0;
+        break;
       case 'o':
         if ( globalUtilOptind >= argc ){
             Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
@@ -434,7 +438,7 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   
     clk = Abc_Clock();
 
-    BddPSDKROMain(pNtkBdd, pFileNameOut);
+    BddPSDKROMain(pNtkBdd, pFileNameOut, type);
     
     Abc_PrintTime( 1, "PSDKRO time used:", Abc_Clock() - clk );
 
@@ -445,9 +449,10 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: bddpsdkro [-ho] \n");
+  Abc_Print(-2, "usage: bddpsdkro [-hto] \n");
   Abc_Print(-2, "\t        synthesis ESOP with bdd psdkro extraction\n");
-  Abc_Print(-2, "\t-o    : specidy the output to be processed\n");
+  Abc_Print(-2, "\t-t    : specify the type of bddpsdkro(original/select) default: select\n");
+  Abc_Print(-2, "\t-o    : specify the output to be processed\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   
