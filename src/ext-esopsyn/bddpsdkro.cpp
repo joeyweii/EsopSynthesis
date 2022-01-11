@@ -141,7 +141,7 @@ static void BddPSDKROSelect(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*
     int size01 = BddNodeNum(p01);
 
     int sizemax = std::max(size0, std::max(size1, size01));
-    if(sizemax == size0){
+    if(sizemax == size0 && p0 != Cudd_ReadLogicZero(dd)){
         PSDKRONode* n1;
         if(umap.find(p1) == umap.end()){
             n1 = new PSDKRONode();

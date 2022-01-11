@@ -1,6 +1,6 @@
 
 CC   := gcc
-CXX  := g++
+CXX  := g++ -std=c++17 -O3
 AR   := ar
 LD   := $(CXX)
 
