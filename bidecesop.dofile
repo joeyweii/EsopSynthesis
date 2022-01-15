@@ -1,2 +1,0 @@
-read benchmarks/bidecpaper/rot.blif
-bidecesop -o 14
