@@ -450,8 +450,8 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
 
 usage:
   Abc_Print(-2, "usage: bddpsdkro [-ht] [-o <ith PO>] [output_file] \n");
-  Abc_Print(-2, "\t        synthesis ESOP with bdd psdkro extraction\n");
-  Abc_Print(-2, "\t-t    : toggle the type of bddpsdkro(original/pruned) default: pruned\n");
+  Abc_Print(-2, "\t        synthesis ESOP with BDD extract or Pruned extract\n");
+  Abc_Print(-2, "\t-t    : toggle the type of extraction (BDD / Prunded) default: Pruned\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
