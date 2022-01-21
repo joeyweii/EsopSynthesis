@@ -116,7 +116,7 @@ static void BddPSDKRO(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*, PSDK
     // Cudd_RecursiveDeref(dd, p01);
 }
 
-static void BddPSDKROSelect(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*, PSDKRONode*>& umap){
+static void PrunedPSDKRO(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*, PSDKRONode*>& umap){
     if(p == Cudd_Not(Cudd_ReadLogicZero(dd))){
         n->Cost = 1;
         std::string c;
@@ -156,8 +156,8 @@ static void BddPSDKROSelect(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*
             n01->Cost = -1;
         }else n01 = umap[p01];
 
-        if(n1->Cost == -1) BddPSDKROSelect(p1, n1, umap);
-        if(n01->Cost == -1) BddPSDKROSelect(p01, n01, umap);
+        if(n1->Cost == -1) PrunedPSDKRO(p1, n1, umap);
+        if(n01->Cost == -1) PrunedPSDKRO(p01, n01, umap);
 
         for(int i = 0; i < n1->Esop.size(); i++) n->Esop.push_back(n1->Esop[i]);
         for(int i = 0; i < n01->Esop.size(); i++){
@@ -184,8 +184,8 @@ static void BddPSDKROSelect(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*
             n01->Cost = -1;
         }else n01 = umap[p01];
 
-        if(n0->Cost == -1) BddPSDKROSelect(p0, n0, umap);
-        if(n01->Cost == -1) BddPSDKROSelect(p01, n01, umap);
+        if(n0->Cost == -1) PrunedPSDKRO(p0, n0, umap);
+        if(n01->Cost == -1) PrunedPSDKRO(p01, n01, umap);
 
         for(int i = 0; i < n0->Esop.size(); i++) n->Esop.push_back(n0->Esop[i]);
         for(int i = 0; i < n01->Esop.size(); i++){
@@ -213,8 +213,8 @@ static void BddPSDKROSelect(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*
             n1->Cost = -1;
         }else n1 = umap[p1];
 
-        if(n0->Cost == -1) BddPSDKROSelect(p0, n0, umap);
-        if(n1->Cost == -1) BddPSDKROSelect(p1, n1, umap);
+        if(n0->Cost == -1) PrunedPSDKRO(p0, n0, umap);
+        if(n1->Cost == -1) PrunedPSDKRO(p1, n1, umap);
 
         for(int i = 0; i < n0->Esop.size(); i++){
             assert(n0->Esop[i][level] == '-');
@@ -246,25 +246,21 @@ void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut, int type){
 
     std::unordered_map<DdNode*, PSDKRONode*> umap;
 
-    
-
     DdNode* pNode = (DdNode *) pObj->pData;
     PSDKRONode* nNode = new PSDKRONode();
     umap[pNode] = nNode;
     nNode->Cost = -1;
 
     if(type == 0) BddPSDKRO(pNode, nNode, umap);
-    else BddPSDKROSelect(pNode, nNode, umap);
+    else PrunedPSDKRO(pNode, nNode, umap);
 
     assert(Cudd_ReadReorderings(dd) == 0);
 
     std::cout << "#Terms: " << nNode->Cost << std::endl;
     
-    /*
     std::cout << "Esop:" << std::endl;
     for(int i = 0; i < nNode->Esop.size(); i++)
         std::cout << nNode->Esop[i] << std::endl;
-    */
 
     if(pFileNameOut != NULL){
         std::ofstream File;
