@@ -30,7 +30,7 @@ int BddNodeNum(DdNode* p){
     return cnt;
 }
 
-static void BddPSDKRO(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*, PSDKRONode*> umap){
+static void BddPSDKRO(DdNode* p, PSDKRONode* n, std::unordered_map<DdNode*, PSDKRONode*>& umap){
     if(p == Cudd_Not(Cudd_ReadLogicZero(dd))){
         n->Cost = 1;
         std::string c;
