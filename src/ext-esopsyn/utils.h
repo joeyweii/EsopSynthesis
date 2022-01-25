@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <climits>
+#include <utility>
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
 #include "sat/cnf/cnf.h"
@@ -23,6 +24,56 @@ struct PSDKRONode{
     int Cost;
 };
 
+struct cube32{
+  union {
+		struct {
+			std::uint32_t polarity;
+			std::uint32_t mask;
+		};
+		std::uint64_t value;
+	};
+
+  explicit cube32(const std::uint32_t p, const std::uint32_t m)
+	: polarity{p}, mask{m}
+	{ }
+
+  bool operator==(const cube32 that) const
+	{ return value == that.value; }
+
+	bool operator!=(const cube32 that) const
+	{ return value != that.value; }
+
+	bool operator< (const cube32 that) const
+	{ return value <  that.value; }
+
+	bool operator==(const std::uint64_t v) const
+	{ return value == v; }
+
+	bool operator!=(const std::uint64_t v) const
+	{ return value != v; }
+
+	std::string str(const std::uint32_t n_inputs) const
+	{
+		std::string s;
+		for (auto i = 0; i < n_inputs; ++i) {
+			if (((mask >> i) & 1) == 0) {
+				s.push_back('-');
+			} else if (polarity & (1 << i))
+				s.push_back('1');
+			else
+				s.push_back('0');
+		}
+		return s;
+	}
+
+};
+
+struct cube32_hash {
+	std::size_t operator()(const cube32 &c) const {
+		return std::hash<std::uint64_t>()(c.value);
+	}
+};
+
 extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
 extern "C" int Abc_ExorcismMain( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut, int Quality, int Verbosity, int nCubesMax, int fUseQCost );
 extern "C" Vec_Wec_t * Abc_ExorcismNtk2Esop( Abc_Ntk_t * pNtk );
@@ -38,6 +89,7 @@ extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut, int type);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void ScalablePSDKROMain(Abc_Ntk_t* pNtk, int numCof);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 
 extern int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti);
 extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk_t*& fA, Abc_Ntk_t*& fB);

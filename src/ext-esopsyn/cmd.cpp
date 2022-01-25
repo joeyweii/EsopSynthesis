@@ -425,11 +425,11 @@ int EsopSyn_CommandBddPSDKRO(Abc_Frame_t* pAbc, int argc, char** argv) {
     clk = Abc_Clock();
 
     if ( Abc_NtkIsStrash(pSubNtk) )
-        pNtkBdd = Abc_NtkCollapse( pSubNtk, 1000000000, 0, 0, 0, 0, 0);
+        pNtkBdd = Abc_NtkCollapse( pSubNtk, 1000000000, 0, 1, 0, 0, 0);
     else{
         Abc_Ntk_t* pStrNtk;
         pStrNtk = Abc_NtkStrash( pSubNtk, 0, 0, 0 );
-        pNtkBdd = Abc_NtkCollapse( pStrNtk, 1000000000, 0, 0, 0, 0, 0);
+        pNtkBdd = Abc_NtkCollapse( pStrNtk, 1000000000, 0, 1, 0, 0, 0);
         Abc_NtkDelete( pStrNtk );
     }
 
@@ -453,6 +453,94 @@ usage:
   Abc_Print(-2, "\t        synthesis ESOP with BDD extract or Pruned extract\n");
   Abc_Print(-2, "\t-t    : toggle the type of extraction (BDD / Prunded) default: Pruned\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed\n");
+  Abc_Print(-2, "\t-h    : print the command usage\n");
+  return 1;
+  
+}
+
+/**Function*************************************************************
+
+  Synopsis    [BDD Extract command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  Abc_Obj_t* pPo;
+  int iPo;
+  int c;
+  int fOutput = -1;
+  int fVerbose = 0;
+  char* pFileNameOut = NULL;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "hov")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      case 'o':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fOutput = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fOutput < 0 )
+            goto usage;
+        break;
+      case 'v':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fVerbose = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fVerbose < 0  || fVerbose > 1)
+            goto usage;
+        break;
+      default:
+        goto usage;
+    }
+  }
+
+  if ( argc == globalUtilOptind + 1 ){
+      pFileNameOut = argv[globalUtilOptind];
+  }
+
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  Abc_NtkForEachPo(pNtk, pPo, iPo){
+    if(fOutput != -1 && iPo != fOutput) continue;
+
+    // create cone for the current PO
+    Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+
+    if( Abc_ObjFaninC0(pPo) )
+      Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+
+    std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+    std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+
+    BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
+    
+
+    Abc_NtkDelete(pSubNtk);
+  }
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: bddextract [-h] [-o <ith PO>] [-v [0/1]]\n");
+  Abc_Print(-2, "\t        synthesis ESOP with BDD extract or Pruned extract\n");
+  Abc_Print(-2, "\t-o    : specify the output to be processed\n");
+  Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   
@@ -560,6 +648,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "aigpsdkro", EsopSyn_CommandAigPSDKRO, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bddpsdkro", EsopSyn_CommandBddPSDKRO, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "scalpsdkro", EsopSyn_CommandScalablePSDKRO, 0);
 }
 
