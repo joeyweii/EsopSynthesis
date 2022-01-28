@@ -82,14 +82,12 @@ extern "C" int Abc_NtkDarCec( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int nConfLim
 extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
 extern "C" void Abc_NodeShowBdd( Abc_Obj_t * pNode, int fCompl );
 
-extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
-extern void MyExorcismMain(Abc_Ntk_t * pNtk, int nCubeMax, int fOutput);
-extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
-extern void BddPSDKROMain(Abc_Ntk_t* pNtk, char* pFileNameOut, int type);
+extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
-extern void ScalablePSDKROMain(Abc_Ntk_t* pNtk, int numCof);
+extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 
 extern int NtkXorBidecSingleOutput(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti);
 extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk_t*& fA, Abc_Ntk_t*& fB);

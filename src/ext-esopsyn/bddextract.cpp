@@ -31,7 +31,6 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 		return;
 	}
 	// Find the best expansion by a cache lookup
-	assert(_exp_cost.find(f) != _exp_cost.end());
 	exp_type expansion = _exp_cost[f].first;
 
 	// Determine the top-most variable
