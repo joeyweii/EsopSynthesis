@@ -18,6 +18,18 @@ enum Set{
   XAB
 };
 
+enum var_value : std::uint8_t {
+	POSITIVE, // xi = 1
+	NEGATIVE, // xi = 0
+	UNUSED // xi don't care
+};
+
+enum exp_type : std::uint8_t {
+	POSITIVE_DAVIO,
+	NEGATIVE_DAVIO,
+	SHANNON
+};
+
 typedef struct PSDKRONode PSDKRONode;
 struct PSDKRONode{
     std::vector<std::string> Esop;
@@ -73,6 +85,8 @@ struct cube32_hash {
 		return std::hash<std::uint64_t>()(c.value);
 	}
 };
+
+
 
 extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
 extern "C" int Abc_ExorcismMain( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut, int Quality, int Verbosity, int nCubesMax, int fUseQCost );

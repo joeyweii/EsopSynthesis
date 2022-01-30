@@ -8,10 +8,10 @@ void PrunedExtractManager::extract(DdNode *f)
 {
 	if (f == NULL) return;
 
-    _nPaths.clear();
 	_exp_cost.clear();
 	_esop.clear();
 	std::fill(_values.begin(), _values.end(), UNUSED);
+
 	best_expansion(f);
     generate_psdkro(f);
 }
@@ -21,6 +21,7 @@ void PrunedExtractManager::generate_psdkro(DdNode *f)
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return;
+
 	if (f == Cudd_ReadOne(_ddmanager)) {
 		cube32 cube(0u, 0u);
 		for (auto var : _vars) {
@@ -39,31 +40,30 @@ void PrunedExtractManager::generate_psdkro(DdNode *f)
 	auto idx = _ordering[Cudd_NodeReadIndex(f)];
 	_vars.push_back(idx);
 
-    if (expansion == POSITIVE_DAVIO) {
-        DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
-        DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+    DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
+    DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+
+    if (expansion == POSITIVE_DAVIO) {  
         DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
 
 		_values[idx] = UNUSED;
 		generate_psdkro(f0);
 		_values[idx] = POSITIVE;
 		generate_psdkro(f2);
+
         Cudd_RecursiveDeref(_ddmanager, f2);
 	}
     else if (expansion == NEGATIVE_DAVIO) {
-        DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
-        DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
         DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
 
 		_values[idx] = UNUSED;
 		generate_psdkro(f1);
 		_values[idx] = NEGATIVE;
 		generate_psdkro(f2);
+
         Cudd_RecursiveDeref(_ddmanager, f2);
 	}
     else{
-        DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
-	    DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
         _values[idx] = NEGATIVE;
 		generate_psdkro(f0);
 		_values[idx] = POSITIVE;
@@ -75,13 +75,14 @@ void PrunedExtractManager::generate_psdkro(DdNode *f)
 	
 }
 
-std::pair<PrunedExtractManager::exp_type, std::uint32_t> PrunedExtractManager::best_expansion(DdNode *f)
+std::pair<exp_type, std::uint32_t> PrunedExtractManager::best_expansion(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return std::make_pair(POSITIVE_DAVIO, 0u);
 	if (f == Cudd_ReadOne(_ddmanager))
 		return std::make_pair(POSITIVE_DAVIO, 1u);
+        
 	auto it = _exp_cost.find(f);
 	if (it != _exp_cost.end()) {
 		return it->second;
@@ -159,33 +160,40 @@ void PrunedExtractManager::write_esop_to_file(char* filename){
 	}
 }
 
-uint32_t PrunedExtractManager::Const1Path(DdNode* p){
-    if(_nPaths.find(p) != _nPaths.end())
-        return _nPaths[p];
+uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
+    return Cudd_CountPathsToNonZero(p);
+}
+
+/*
+
+uint32_t PrunedExtractManager::Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>& nPaths){
+    if(nPaths.find(p) != nPaths.end())
+        return nPaths[p];
 
     if(p == Cudd_ReadOne(_ddmanager)){
-        _nPaths[p] = 1;
+        nPaths[p] = 1;
         return 1;
     }
 
     if(p == Cudd_ReadLogicZero(_ddmanager)){
-        _nPaths[p] = 0;
+        nPaths[p] = 0;
         return 0;
     }
 
     DdNode* t = Cudd_NotCond(Cudd_T(p), Cudd_IsComplement(p));
-    uint32_t l = Const1Path(t);
+    uint32_t l = Const1Path(t, nPaths);
     DdNode* e = Cudd_NotCond(Cudd_E(p), Cudd_IsComplement(p));
-    uint32_t r = Const1Path(e);
-    _nPaths[p] = l + r;
+    uint32_t r = Const1Path(e, nPaths);
+    nPaths[p] = l + r;
     return l + r;
 }
 
 uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
-    return Const1Path(p);
+    std::unordered_map<DdNode*, uint32_t> nPaths;
+    return Const1Path(p, nPaths);
 }
 
-/*
+
 uint32_t PrunedExtractManager::BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited){
     if(visited.find(p) != visited.end()) return 0;
 
@@ -205,11 +213,7 @@ uint32_t PrunedExtractManager::BddNodeNum(DdNode* p, std::unordered_set<DdNode*>
 
 uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
     std::unordered_set<DdNode*> visited;
-    auto it = _nPaths.find(p);
-    if(it != _nPaths.end()) return it->second;
-    uint32_t size = BddNodeNum(p, visited);
-    _nPaths[p] = size;
-    return size;
+    return BddNodeNum(p, visited);
 }
 */
 
@@ -271,4 +275,6 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
     
 	if(filename)
 		m.write_esop_to_file(filename);
+
+    Abc_NtkDelete(pNtkBdd);
 }

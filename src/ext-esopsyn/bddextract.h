@@ -8,27 +8,14 @@ public:
 	void get_ordering(std::vector<uint32_t>& ordering);
 	void print_esop(int);
 	void write_esop_to_file(char* filename);
-private:
-	
-	enum var_value : std::uint8_t {
-		POSITIVE, // xi = 1
-		NEGATIVE, // xi = 0
-		UNUSED // xi don't care
-	};
-	enum exp_type : std::uint8_t {
-		POSITIVE_DAVIO,
-		NEGATIVE_DAVIO,
-		SHANNON
-	};
 
-	// Second pass: generate PSDKRO 
-	void generate_psdkro(DdNode *);
+private:
 
 	// First pass: dicide the best expansion and calculate the cost 
 	std::pair<exp_type, std::uint32_t> best_expansion(DdNode *);
 
-	//  Print the esop
-	
+	// Second pass: generate PSDKRO 
+	void generate_psdkro(DdNode *);
 
 private:
 	DdManager* _ddmanager; // cudd manager

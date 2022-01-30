@@ -11,6 +11,7 @@ void BDDExtractManager::extract(DdNode *f)
 	_exp_cost.clear();
 	_esop.clear();
 	std::fill(_values.begin(), _values.end(), UNUSED);
+
 	best_expansion(f);
     generate_psdkro(f);
 }
@@ -30,6 +31,7 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 		_esop.insert(cube);
 		return;
 	}
+
 	// Find the best expansion by a cache lookup
 	exp_type expansion = _exp_cost[f].first;
 
@@ -40,20 +42,22 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 	// Calculate f0, f1, f2
 	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
-	DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
-	Cudd_Ref(f2);
-
+	
 	// Generate psdkro of the branches 
 	if (expansion == POSITIVE_DAVIO) {
+		DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
 		_values[idx] = UNUSED;
 		generate_psdkro(f0);
 		_values[idx] = POSITIVE;
 		generate_psdkro(f2);
+		Cudd_RecursiveDeref(_ddmanager, f2);
 	} else if (expansion == NEGATIVE_DAVIO) {
+		DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1); 
 		_values[idx] = UNUSED;
 		generate_psdkro(f1);
 		_values[idx] = NEGATIVE;
 		generate_psdkro(f2);
+		Cudd_RecursiveDeref(_ddmanager, f2);
 	} else { /* SHANNON */
 		_values[idx] = NEGATIVE;
 		generate_psdkro(f0);
@@ -62,16 +66,16 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 	}
 	_vars.pop_back();
 	_values[idx] = UNUSED;
-	Cudd_RecursiveDeref(_ddmanager, f2);
 }
 
-std::pair<BDDExtractManager::exp_type, std::uint32_t> BDDExtractManager::best_expansion(DdNode *f)
+std::pair<exp_type, std::uint32_t> BDDExtractManager::best_expansion(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return std::make_pair(POSITIVE_DAVIO, 0u);
 	if (f == Cudd_ReadOne(_ddmanager))
 		return std::make_pair(POSITIVE_DAVIO, 1u);
+		
 	auto it = _exp_cost.find(f);
 	if (it != _exp_cost.end()) {
 		return it->second;
@@ -80,8 +84,7 @@ std::pair<BDDExtractManager::exp_type, std::uint32_t> BDDExtractManager::best_ex
 	// Calculate f0, f1, f2
 	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
-	DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
-	Cudd_Ref(f2);
+	DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2);
 
 	// Recusive calls on f0, f1, f2
 	std::uint32_t n0 = best_expansion(f0).second;
@@ -198,4 +201,6 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
 	m.print_esop(fVerbose);
 	if(filename)
 		m.write_esop_to_file(filename);
+
+	Abc_NtkDelete(pNtkBdd);
 }
