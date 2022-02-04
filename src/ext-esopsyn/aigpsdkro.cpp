@@ -1,6 +1,17 @@
-#include "utils.h"
+#include "base/main/main.h"
+
+#include <iostream>
+#include <vector>
+#include <string>
 
 static int numPI;
+
+typedef struct PSDKRONode PSDKRONode;
+
+struct PSDKRONode{
+    std::vector<std::string> Esop;
+    int Cost;
+};
 
 /**Function*************************************************************
 

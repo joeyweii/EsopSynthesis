@@ -1,5 +1,15 @@
-#include "utils.h"
+#include "base/main/main.h"
+#include "base/main/mainInt.h"
 
+#include <iostream>
+#include <fstream>
+
+extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
+extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
+extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
+extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 /**Function*************************************************************
 
   Synopsis    [Synthesis minterm esop.]

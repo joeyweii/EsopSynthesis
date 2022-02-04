@@ -1,4 +1,9 @@
-#include "utils.h"
+#include "base/main/main.h"
+#include "aig/aig/aig.h"
+#include "xorbidec.h"
+
+#include <iostream>
+#include <vector>
 
 extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
 extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );

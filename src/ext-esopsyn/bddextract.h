@@ -1,5 +1,14 @@
+#include "base/main/main.h"
+#ifdef ABC_USE_CUDD
+#include "bdd/extrab/extraBdd.h"
+#endif
 #include "utils.h"
 #include "memory_measure.h"
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <unordered_map>
 
 using namespace bddpsdkro;
 

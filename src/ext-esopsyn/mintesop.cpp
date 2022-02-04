@@ -1,4 +1,12 @@
-#include "utils.h"
+#include "base/main/main.h"
+#ifdef ABC_USE_CUDD
+#include "bdd/extrab/extraBdd.h"
+#endif
+
+#include "iostream"
+#include "fstream"
+#include "vector"
+
 
 void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile){
     DdManager * dd = (DdManager *)pNode->pNtk->pManFunc;

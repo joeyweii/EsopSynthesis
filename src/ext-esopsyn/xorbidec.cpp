@@ -1,4 +1,8 @@
 #include "xorbidec.h"
+#include "sat/cnf/cnf.h"
+#include "sat/bsat/satSolver.h"
+
+#include <iostream>
 
 #define DEBUG 0
 
