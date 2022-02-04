@@ -1,6 +1,10 @@
 #include "xorbidec.h"
 
 #define DEBUG 0
+
+extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
+extern "C" int Abc_NtkDarCec( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int nConfLimit, int fPartition, int fVerbose );
+
 /**Function*************************************************************
 
   Synopsis    [Xor two Network]

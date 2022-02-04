@@ -1,4 +1,9 @@
-#include "bidecesop.h"
+#include "utils.h"
+
+extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
+extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
+extern "C" Gia_Man_t * Eso_ManCompute( Gia_Man_t * pGia, int fVerbose, Vec_Wec_t ** pvRes );
+
 void CleanUnusedPi(Abc_Ntk_t* pNtk){
     Abc_Obj_t* pObj;
     int i;

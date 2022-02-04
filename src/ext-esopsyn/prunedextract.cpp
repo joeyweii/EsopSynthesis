@@ -23,13 +23,13 @@ void PrunedExtractManager::generate_psdkro(DdNode *f)
 		return;
 
 	if (f == Cudd_ReadOne(_ddmanager)) {
-		cube32 cube(0u, 0u);
+		cube c; // mask & polarity initialized 0
 		for (auto var : _vars) {
-			cube.mask |= ((_values[var] != UNUSED) << var);
-			cube.polarity |= ((_values[var] == POSITIVE) << var);
+			if(_values[var] != UNUSED) c.mask.set(var);
+			if(_values[var] == POSITIVE) c.polarity.set(var);
 		}
 
-		_esop.insert(cube);
+		_esop.push_back(c);
 		return;
 	}
 
@@ -128,9 +128,6 @@ void PrunedExtractManager::get_ordering(std::vector<uint32_t>& ordering){
 }
 
 void PrunedExtractManager::print_esop(int verbose){
-	std::vector<cube32> ret;
-	std::copy(_esop.begin(), _esop.end(), std::back_inserter(ret));
-
 	if(verbose){
 		std::cout << "Resulting PSDKRO:" << std::endl;
 		for (auto &cube : _esop) {
@@ -141,9 +138,6 @@ void PrunedExtractManager::print_esop(int verbose){
 }
 
 void PrunedExtractManager::write_esop_to_file(char* filename){
-	std::vector<cube32> ret;
-	std::copy(_esop.begin(), _esop.end(), std::back_inserter(ret));
-
 	std::ofstream file;
 	file.open(filename, std::ios::out);
 
@@ -222,6 +216,15 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
 
+    // get the number of variables
+	int nVars = Abc_NtkPiNum(pNtk);
+
+	// check the numPI is smaller than the bitwidth of a cube in psdkro
+	if (nVars > bddpsdkro::bitwidth) {
+		std::cout << "Cannot support nVars > " << bddpsdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
+		return;
+	}
+
 	abctime clk = Abc_Clock();
 	// Build BDD
     if ( Abc_NtkIsStrash(pNtk) )
@@ -233,7 +236,7 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
         Abc_NtkDelete( pStrNtk );
     }
 
-	Abc_PrintTime( 1, "BDD construction time used:", Abc_Clock() - clk );
+	std::cout << "BDD construction time used: \t" <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
 
 	// get CUDD manager
     DdManager* ddmanager = (DdManager*) pNtkBdd->pManFunc;
@@ -242,9 +245,8 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
     DdNode* ddnode = (DdNode *) pObj->pData;
 
-	// get the number of variables
-    int nVars = Cudd_SupportSize(ddmanager, ddnode);
-    assert(nVars == Abc_NtkPiNum(pNtk)); // make sure that every variable is used
+	// make sure that every PI is used in BDD
+    assert(nVars == Cudd_SupportSize(ddmanager, ddnode)); 
 
 	// get the ordering
 	char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
@@ -260,16 +262,14 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
 
     PrunedExtractManager m(ddmanager, nVars);   
 
-    if (nVars > 32) {
-		std::cout << "Cannot support nVars > 32 cases." << std::endl;
-		return;
-	}
-
 	m.get_ordering(ordering);
 
 	clk = Abc_Clock();
     m.extract(ddnode);
-	Abc_PrintTime( 1, "PSDKRO time used:", Abc_Clock() - clk );
+
+	double currentSize = getCurrentRSS( );
+	std::cout << "PSDKRO time used: \t\t" <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
+	std::cout << "PSDKRO memory used: \t\t" << currentSize / (1024.0 * 1024.0) << " MB" << std::endl;
 	
 	m.print_esop(fVerbose);
     

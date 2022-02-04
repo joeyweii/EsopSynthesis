@@ -1,4 +1,7 @@
 #include "utils.h"
+#include "memory_measure.h"
+
+using namespace bddpsdkro;
 
 class PrunedExtractManager {
 public:
@@ -28,7 +31,7 @@ private:
 	std::vector<std::uint32_t> _vars; // for generating psdkro 
 	std::vector<var_value> _values; // for generating psdkro
 	std::unordered_map<DdNode *, std::pair<exp_type, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
-	std::unordered_set<cube32, cube32_hash> _esop; // storing the resulting esop
+	std::vector<cube> _esop; // storing the resulting esop
 	std::vector<std::uint32_t> _ordering; // the variable ordering
     
 };

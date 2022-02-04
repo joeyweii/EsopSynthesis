@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <climits>
+#include <bitset>
 #include <utility>
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
@@ -18,17 +19,6 @@ enum Set{
   XAB
 };
 
-enum var_value : std::uint8_t {
-	POSITIVE, // xi = 1
-	NEGATIVE, // xi = 0
-	UNUSED // xi don't care
-};
-
-enum exp_type : std::uint8_t {
-	POSITIVE_DAVIO,
-	NEGATIVE_DAVIO,
-	SHANNON
-};
 
 typedef struct PSDKRONode PSDKRONode;
 struct PSDKRONode{
@@ -36,57 +26,45 @@ struct PSDKRONode{
     int Cost;
 };
 
-struct cube32{
-  union {
-		struct {
-			std::uint32_t polarity;
-			std::uint32_t mask;
-		};
-		std::uint64_t value;
+namespace bddpsdkro{
+	constexpr int bitwidth = 64;
+
+	enum var_value : std::uint8_t {
+		POSITIVE, // xi = 1
+		NEGATIVE, // xi = 0
+		UNUSED // xi don't care
 	};
 
-  explicit cube32(const std::uint32_t p, const std::uint32_t m)
-	: polarity{p}, mask{m}
-	{ }
+	enum exp_type : std::uint8_t {
+		POSITIVE_DAVIO,
+		NEGATIVE_DAVIO,
+		SHANNON
+	};
 
-  bool operator==(const cube32 that) const
-	{ return value == that.value; }
+	struct cube{
+		std::bitset<bitwidth> polarity;
+		std::bitset<bitwidth> mask;
 
-	bool operator!=(const cube32 that) const
-	{ return value != that.value; }
-
-	bool operator< (const cube32 that) const
-	{ return value <  that.value; }
-
-	bool operator==(const std::uint64_t v) const
-	{ return value == v; }
-
-	bool operator!=(const std::uint64_t v) const
-	{ return value != v; }
-
-	std::string str(const std::uint32_t n_inputs) const
-	{
-		std::string s;
-		for (auto i = 0; i < n_inputs; ++i) {
-			if (((mask >> i) & 1) == 0) {
-				s.push_back('-');
-			} else if (polarity & (1 << i))
-				s.push_back('1');
-			else
-				s.push_back('0');
+		cube(){
+			polarity.reset();
+			mask.reset();
 		}
-		return s;
-	}
 
-};
-
-struct cube32_hash {
-	std::size_t operator()(const cube32 &c) const {
-		return std::hash<std::uint64_t>()(c.value);
-	}
-};
-
-
+		std::string str(const std::uint32_t n_inputs) const
+		{
+			std::string s;
+			for (auto i = 0; i < n_inputs; ++i) {
+				if (!mask.test(i)) {
+					s.push_back('-');
+				} else if (polarity.test(i))
+					s.push_back('1');
+				else
+					s.push_back('0');
+			}
+			return s;
+		}
+	};
+}
 
 extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegisters );
 extern "C" int Abc_ExorcismMain( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut, int Quality, int Verbosity, int nCubesMax, int fUseQCost );
@@ -108,3 +86,4 @@ extern int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, 
 extern void PrintAig(Abc_Ntk_t* pNtk);
 extern Abc_Ntk_t* AIGCOF(Abc_Ntk_t* pNtk, int var, int phase);
 extern Abc_Ntk_t* AIGXOR(Abc_Ntk_t* pNtk1, Abc_Ntk_t* pNtk2);
+
