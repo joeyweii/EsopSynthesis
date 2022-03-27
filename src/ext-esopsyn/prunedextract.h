@@ -33,6 +33,7 @@ private:
     // uint32_t BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited);
     // uint32_t Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>&);
     uint32_t CostFunction(DdNode*);
+	uint32_t CostFunctionLevel(DdNode*, int);
 
 private:
 	DdManager* _ddmanager; // cudd manager

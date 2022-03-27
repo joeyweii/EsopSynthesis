@@ -155,7 +155,27 @@ void PrunedExtractManager::write_esop_to_file(char* filename){
 }
 
 uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
-    return Cudd_CountPathsToNonZero(p);
+    return CostFunctionLevel(p, 0);
+}
+
+uint32_t PrunedExtractManager::CostFunctionLevel(DdNode* f, int level){ 
+	if(level == 0) return  Cudd_CountPathsToNonZero(f);
+
+	if (f == Cudd_ReadLogicZero(_ddmanager))
+		return 0;
+	if (f == Cudd_ReadOne(_ddmanager))
+		return 1;
+
+	// Calculate f0, f1, f2
+	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
+	DdNode* f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+	DdNode* f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2);
+
+    uint32_t s0 = CostFunctionLevel(f0, level-1); 
+    uint32_t s1 = CostFunctionLevel(f1, level-1); 
+    uint32_t s2 = CostFunctionLevel(f2, level-1);
+
+	return s0 + s1 + s2 - std::max(s0, std::max(s1, s2));
 }
 
 /*
