@@ -9,7 +9,7 @@ extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
-extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
 /**Function*************************************************************
 
   Synopsis    [Synthesis minterm esop.]
@@ -389,10 +389,11 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   int c;
   int fOutput = -1;
   int fVerbose = 0;
+  int fLevel = 1;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hov")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hovl")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -404,6 +405,16 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
         fOutput = atoi(argv[globalUtilOptind]);
         globalUtilOptind++;
         if ( fOutput < 0 )
+            goto usage;
+        break;
+      case 'l':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-l\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fLevel = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fLevel < 0 )
             goto usage;
         break;
       case 'v':
@@ -442,7 +453,7 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
     std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
     std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    PrunedExtractMain(pSubNtk, pFileNameOut, fVerbose);
+    PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
     
 
     Abc_NtkDelete(pSubNtk);
@@ -450,10 +461,11 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: prunedextract [-h] [-o <ith PO>] [-v [0/1]]\n");
+  Abc_Print(-2, "usage: prunedextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]]\n");
   Abc_Print(-2, "\t        synthesis ESOP with Pruned extract\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed\n");
   Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
+  Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 1\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   

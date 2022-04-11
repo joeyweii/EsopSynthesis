@@ -15,7 +15,7 @@ using namespace bddpsdkro;
 class PrunedExtractManager {
 public:
 
-	PrunedExtractManager(DdManager*, std::uint32_t);
+	PrunedExtractManager(DdManager*, std::uint32_t, std::uint32_t);
 	void extract(DdNode *);
 	void get_ordering(std::vector<uint32_t>& ordering);
 	void print_esop(int);
@@ -43,6 +43,7 @@ private:
 	std::unordered_map<DdNode *, std::pair<exp_type, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop; // storing the resulting esop
 	std::vector<std::uint32_t> _ordering; // the variable ordering
+	uint32_t _level; //
     
 };
 

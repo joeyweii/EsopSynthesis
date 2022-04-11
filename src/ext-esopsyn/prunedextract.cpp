@@ -1,7 +1,7 @@
 #include "prunedextract.h"
 
-PrunedExtractManager::PrunedExtractManager(DdManager* _ddmanager, uint32_t nVars)
-	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED)
+PrunedExtractManager::PrunedExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
+	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED), _level(fLevel)
 { }
 
 void PrunedExtractManager::extract(DdNode *f)
@@ -155,7 +155,7 @@ void PrunedExtractManager::write_esop_to_file(char* filename){
 }
 
 uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
-    return CostFunctionLevel(p, 0);
+    return CostFunctionLevel(p, _level-1);
 }
 
 uint32_t PrunedExtractManager::CostFunctionLevel(DdNode* f, int level){ 
@@ -231,7 +231,7 @@ uint32_t PrunedExtractManager::CostFunction(DdNode* p){
 }
 */
 
-void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
+void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
@@ -280,7 +280,7 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
         }
     }
 
-    PrunedExtractManager m(ddmanager, nVars);   
+    PrunedExtractManager m(ddmanager, nVars, fLevel);   
 
 	m.get_ordering(ordering);
 
