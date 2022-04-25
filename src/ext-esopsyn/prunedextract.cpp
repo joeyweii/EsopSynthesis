@@ -231,7 +231,7 @@ uint32_t PrunedExtractManager::CostFunction(DdNode* p){
 }
 */
 
-void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose){
+void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
@@ -263,23 +263,29 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose
 
 	// get the root node of the BDD
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
-    DdNode* ddnode = (DdNode *) pObj->pData;
-
-	// make sure that every PI is used in BDD
-    assert(nVars == Cudd_SupportSize(ddmanager, ddnode)); 
+    DdNode* ddnode = (DdNode *) pObj->pData; 
 
 	// get the ordering
 	char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
 	std::vector<uint32_t> ordering;
     for(int i = 0; i < nVars; i++){
-        for(int j = 0; j < nVars; j++){
-            if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j)))){
-                ordering.push_back(j);
-                break;
-            }
-        }
+		if(fOrder)
+		{
+			for(int j = 0; j < nVars; j++)
+			{
+				if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j))))
+				{
+					ordering.push_back(j);
+					break;
+				}
+			}
+		}
+		else ordering.push_back(i);
     }
 
+	// make sure that every PI is used in BDD
+	if(fOrder) assert(nVars == Cudd_SupportSize(ddmanager, ddnode)); 
+	else nVars = Cudd_SupportSize(ddmanager, ddnode);
     PrunedExtractManager m(ddmanager, nVars, fLevel);   
 
 	m.get_ordering(ordering);

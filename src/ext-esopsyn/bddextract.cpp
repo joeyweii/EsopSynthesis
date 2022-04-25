@@ -71,10 +71,12 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 std::pair<exp_type, std::uint32_t> BDDExtractManager::best_expansion(DdNode *f)
 {
 	// Reach constant 0/1
-	if (f == Cudd_ReadLogicZero(_ddmanager))
+	if (f == Cudd_ReadLogicZero(_ddmanager)){
 		return std::make_pair(POSITIVE_DAVIO, 0u);
-	if (f == Cudd_ReadOne(_ddmanager))
+	}
+	if (f == Cudd_ReadOne(_ddmanager)){
 		return std::make_pair(POSITIVE_DAVIO, 1u);
+	}
 		
 	auto it = _exp_cost.find(f);
 	if (it != _exp_cost.end()) {
@@ -139,7 +141,7 @@ void BDDExtractManager::write_esop_to_file(char* filename){
 	}
 }
 
-void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
+void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
@@ -159,7 +161,7 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
         pNtkBdd = Abc_NtkCollapse( pNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
     else{
         Abc_Ntk_t* pStrNtk;
-        pStrNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        pStrNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
         pNtkBdd = Abc_NtkCollapse( pStrNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
         Abc_NtkDelete( pStrNtk );
     }
@@ -172,27 +174,36 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
 	// get the root node of the BDD
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
     DdNode* ddnode = (DdNode *) pObj->pData;
- 
-	// make sure that every PI is used in BDD
-    assert(nVars == Cudd_SupportSize(ddmanager, ddnode)); 
 
 	// get the ordering
 	char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
 	std::vector<uint32_t> ordering;
-    for(int i = 0; i < nVars; i++){
-        for(int j = 0; j < nVars; j++){
-            if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j)))){
-                ordering.push_back(j);
-                break;
-            }
-        }
+    for(int i = 0; i < Cudd_SupportSize(ddmanager, ddnode); i++)
+	{
+		if(fOrder)
+		{
+			for(int j = 0; j < nVars; j++)
+			{
+				if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j))))
+				{
+					ordering.push_back(j);
+					break;
+				}
+			}
+		}
+		else ordering.push_back(i);
     }
 
-    BDDExtractManager m(ddmanager, nVars);   
+	// make sure that every PI is used in BDD
+	if(fOrder) assert(nVars == Cudd_SupportSize(ddmanager, ddnode));
+	else nVars = Cudd_SupportSize(ddmanager, ddnode);
+	
+    BDDExtractManager m(ddmanager, nVars); 
 
 	m.get_ordering(ordering);
 
 	clk = Abc_Clock();
+
     m.extract(ddnode);	
 
 	double currentSize = getCurrentRSS( );

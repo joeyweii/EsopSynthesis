@@ -8,8 +8,10 @@ extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
 extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
-extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
-extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder);
+extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder);
+
+extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
 /**Function*************************************************************
 
   Synopsis    [Synthesis minterm esop.]
@@ -301,10 +303,11 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   int c;
   int fOutput = -1;
   int fVerbose = 0;
+  int fLUT = 0;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hov")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hovu")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -328,6 +331,9 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
         if ( fVerbose < 0  || fVerbose > 1)
             goto usage;
         break;
+      case 'u':
+        fLUT ^= 1;
+        break;
       default:
         goto usage;
     }
@@ -342,30 +348,48 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
-  Abc_NtkForEachPo(pNtk, pPo, iPo){
-    if(fOutput != -1 && iPo != fOutput) continue;
+  if(fLUT)
+  {
+    Abc_NtkForEachNode( pNtk, pPo, iPo)
+    {
+      if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
+      std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    // create cone for the current PO
-    Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+      BddExtractMain(pSubNtk, pFileNameOut, fVerbose, 0);
+      Abc_NtkDelete(pSubNtk);
+    }
+  }
+  else 
+  {
+    Abc_NtkForEachPo(pNtk, pPo, iPo)
+    {
+      if(fOutput != -1 && iPo != fOutput) continue;
 
-    if( Abc_ObjFaninC0(pPo) )
-      Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+      // create cone for the current PO
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
 
-    std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-    std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+      if( Abc_ObjFaninC0(pPo) )
+        Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
-    BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
-    
+      std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    Abc_NtkDelete(pSubNtk);
+      BddExtractMain(pSubNtk, pFileNameOut, fVerbose, 1);
+      
+
+      Abc_NtkDelete(pSubNtk);
+    }
   }
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: bddextract [-h] [-o <ith PO>] [-v [0/1]]\n");
+  Abc_Print(-2, "usage: bddextract [-hl] [-o <ith PO>] [-v [0/1]]\n");
   Abc_Print(-2, "\t        synthesis ESOP with BDD extract\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed\n");
   Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
+  Abc_Print(-2, "\t-u    : toggle using LUT mapping. Default: 0\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   
@@ -390,10 +414,11 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   int fOutput = -1;
   int fVerbose = 0;
   int fLevel = 1;
+  int fLUT = 0;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hovl")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hovlu")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -427,6 +452,9 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
         if ( fVerbose < 0  || fVerbose > 1)
             goto usage;
         break;
+      case 'u':
+        fLUT ^= 1;
+        break;
       default:
         goto usage;
     }
@@ -441,22 +469,38 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
     return 1;
   }
 
-  Abc_NtkForEachPo(pNtk, pPo, iPo){
-    if(fOutput != -1 && iPo != fOutput) continue;
+  if(fLUT)
+  {
+    Abc_NtkForEachNode( pNtk, pPo, iPo)
+    {
+      if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
+      std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    // create cone for the current PO
-    Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 0);
+      Abc_NtkDelete(pSubNtk);
+    }
+  }
+  else
+  {
+    Abc_NtkForEachPo(pNtk, pPo, iPo){
+      if(fOutput != -1 && iPo != fOutput) continue;
 
-    if( Abc_ObjFaninC0(pPo) )
-      Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+      // create cone for the current PO
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
 
-    std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-    std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+      if( Abc_ObjFaninC0(pPo) )
+        Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
 
-    PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
-    
+      std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    Abc_NtkDelete(pSubNtk);
+      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 1);
+      
+
+      Abc_NtkDelete(pSubNtk);
+    }
   }
   return 0;
 
