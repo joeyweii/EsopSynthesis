@@ -349,7 +349,7 @@ void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, in
     uint32_t nTerms_start = m.starting_cover(ddnode);
 
 	double runtime_start = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory_start = getCurrentRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	double memory_start = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
 
 	std::cout << "---- Staring Cover ----" << std::endl;
 	std::cout << "Time used: \t\t" <<  runtime_start << " sec" << std::endl;
@@ -361,7 +361,7 @@ void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, in
 	m.generate_psdkro(ddnode);
 
 	double runtime_refine = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory_refine = getCurrentRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	double memory_refine = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
 
 	std::cout << "---- Refinement ----" << std::endl;
 	std::cout << "Time used: \t\t" <<  runtime_refine << " sec" << std::endl;
