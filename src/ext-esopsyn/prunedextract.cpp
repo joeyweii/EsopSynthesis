@@ -159,12 +159,13 @@ uint32_t PrunedExtractManager::CostFunction(DdNode* p){
 }
 
 uint32_t PrunedExtractManager::CostFunctionLevel(DdNode* f, int level){ 
-	if(level == 0) return  Cudd_CountPathsToNonZero(f);
-
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return 0;
 	if (f == Cudd_ReadOne(_ddmanager))
 		return 1;
+
+	if(level == 0) return  Cudd_CountPathsToNonZero(f);
+	// if(level == 0) return Cudd_DagSize(f);
 
 	// Calculate f0, f1, f2
 	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
@@ -240,8 +241,8 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose
 	int nVars = Abc_NtkPiNum(pNtk);
 
 	// check the numPI is smaller than the bitwidth of a cube in psdkro
-	if (nVars > bddpsdkro::bitwidth) {
-		std::cout << "Cannot support nVars > " << bddpsdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
+	if (nVars > psdkro::bitwidth) {
+		std::cout << "Cannot support nVars > " << psdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
 		return;
 	}
 

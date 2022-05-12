@@ -10,7 +10,7 @@
 #include <vector>
 #include <unordered_map>
 
-using namespace bddpsdkro;
+using namespace psdkro;
 
 class BDDExtractManager {
 

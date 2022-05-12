@@ -1,7 +1,7 @@
 #include <bitset>
 #include <vector>
 
-namespace bddpsdkro{
+namespace psdkro{
 
 	// Modify to fit the number of variables
 	constexpr int bitwidth = 64;

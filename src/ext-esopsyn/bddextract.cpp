@@ -150,8 +150,8 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder){
 	int nVars = Abc_NtkPiNum(pNtk);
 
 	// check the numPI is smaller than the bitwidth of a cube in psdkro
-	if (nVars > bddpsdkro::bitwidth) {
-		std::cout << "Cannot support nVars > " << bddpsdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
+	if (nVars > psdkro::bitwidth) {
+		std::cout << "Cannot support nVars > " << psdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
 		return;
 	}
 
