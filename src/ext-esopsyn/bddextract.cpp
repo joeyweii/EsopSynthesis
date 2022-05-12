@@ -206,9 +206,10 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder){
 
     m.extract(ddnode);	
 
-	double currentSize = getCurrentRSS( );
-	std::cout << "PSDKRO time used: \t\t" <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
-	std::cout << "PSDKRO memory used: \t\t" << currentSize / (1024.0 * 1024.0) << " MB" << std::endl;
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory = getPeakRSS( )  / (1024.0 * 1024.0 * 1024.0);
+	std::cout << "PSDKRO time used: \t\t" << runtime << " sec" << std::endl;
+	std::cout << "PSDKRO memory used: \t\t" << memory << " GB" << std::endl;
 
 	m.print_esop(fVerbose);
 	if(filename)

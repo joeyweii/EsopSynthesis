@@ -12,23 +12,29 @@
 
 using namespace psdkro;
 
-class PrunedExtractManager {
+class ARExtractManager {
 public:
 
-	PrunedExtractManager(DdManager*, std::uint32_t, std::uint32_t);
-	void extract(DdNode *);
+	ARExtractManager(DdManager*, std::uint32_t, std::uint32_t);
+
 	void get_ordering(std::vector<uint32_t>& ordering);
 	void print_esop(int);
 	void write_esop_to_file(char* filename);
+
+	// initialize data structure 
+	void init();
+		
+	// find the starting cover
+	std::uint32_t starting_cover(DdNode *);
+
+	// refinement
+	std::uint32_t refine(DdNode *);
+
+	// generate the psdkro
+	void generate_psdkro(DdNode *);
 	
 private:
 
-	// First pass: dicide the best expansion and calculate the cost 
-	std::pair<exp_type, std::uint32_t> best_expansion(DdNode *);
-
-	// Second pass: generate PSDKRO 
-	void generate_psdkro(DdNode *);
-	
 	//  Cost Functions
     // uint32_t BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited);
     // uint32_t Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>&);
@@ -47,5 +53,5 @@ private:
     
 };
 
-void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 

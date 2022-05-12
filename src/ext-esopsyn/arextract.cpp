@@ -1,22 +1,17 @@
-#include "prunedextract.h"
+#include "arextract.h"
 
-PrunedExtractManager::PrunedExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
+ARExtractManager::ARExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
 	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED), _level(fLevel)
 { }
 
-void PrunedExtractManager::extract(DdNode *f)
+void ARExtractManager::init()
 {
-	if (f == NULL) return;
-
 	_exp_cost.clear();
 	_esop.clear();
 	std::fill(_values.begin(), _values.end(), UNUSED);
-
-	best_expansion(f);
-    generate_psdkro(f);
 }
 
-void PrunedExtractManager::generate_psdkro(DdNode *f)
+void ARExtractManager::generate_psdkro(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
@@ -75,17 +70,127 @@ void PrunedExtractManager::generate_psdkro(DdNode *f)
 	
 }
 
-std::pair<exp_type, std::uint32_t> PrunedExtractManager::best_expansion(DdNode *f)
+uint32_t ARExtractManager::refine(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
-		return std::make_pair(POSITIVE_DAVIO, 0u);
+		return 0u;
 	if (f == Cudd_ReadOne(_ddmanager))
-		return std::make_pair(POSITIVE_DAVIO, 1u);
+		return 1u;
+        
+	auto iter_f = _exp_cost.find(f);
+
+	// Calculate f0, f1, f2
+	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
+	DdNode* f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+	DdNode* f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2); 
+
+	if(iter_f->second.first == NEGATIVE_DAVIO)
+	{
+		auto cost_f1 = _exp_cost[f1].second;
+		auto cost_f2 = _exp_cost[f2].second;
+
+		uint32_t cost_f0 = starting_cover(f0);
+		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+
+		if(cost_max == cost_f0)
+		{
+			cost_f1 = refine(f1);
+			cost_f2 = refine(f2);
+			iter_f->second.second = cost_f1 + cost_f2;
+			return cost_f1 + cost_f2;
+		}
+		else if(cost_max == cost_f1)
+		{
+			cost_f0 = refine(f0);
+			cost_f2 = refine(f2);
+			iter_f->second = std::make_pair(POSITIVE_DAVIO, cost_f0 + cost_f2);
+			return cost_f0 + cost_f2;
+		}
+		else if(cost_max == cost_f2)
+		{
+			cost_f0 = refine(f0);
+			cost_f1 = refine(f1);
+			iter_f->second = std::make_pair(SHANNON, cost_f0 + cost_f1);
+			return cost_f0 + cost_f1;
+		}
+	}
+	else if(iter_f->second.first == POSITIVE_DAVIO)
+	{
+		auto cost_f0 = _exp_cost[f0].second;
+		auto cost_f2 = _exp_cost[f2].second;
+
+		uint32_t cost_f1 = starting_cover(f1);
+		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+
+		if(cost_max == cost_f1)
+		{
+			cost_f0 = refine(f0);
+			cost_f1 = refine(f2);
+			iter_f->second.second = cost_f0 + cost_f1;
+			return cost_f0 + cost_f1;
+		}
+		else if(cost_max == cost_f0)
+		{
+			cost_f1 = refine(f1);
+			cost_f2 = refine(f2);
+			iter_f->second = std::make_pair(NEGATIVE_DAVIO, cost_f1 + cost_f2);
+			return cost_f1 + cost_f2;
+		}
+		else if(cost_max == cost_f2)
+		{
+			cost_f0 = refine(f0);
+			cost_f1 = refine(f1);
+			iter_f->second = std::make_pair(SHANNON, cost_f0 + cost_f1);
+			return cost_f0 + cost_f1;
+		}
+	}
+	// SHANNON
+	else
+	{
+		auto cost_f0 = _exp_cost[f0].second;
+		auto cost_f1 = _exp_cost[f1].second;
+
+		uint32_t cost_f2 = starting_cover(f2);
+		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+
+		if(cost_max == cost_f2)
+		{
+			cost_f0 = refine(f0);
+			cost_f1 = refine(f1);
+			iter_f->second.second = cost_f0 + cost_f1;
+			return cost_f0 + cost_f1;
+		}
+		else if(cost_max == cost_f0)
+		{
+			cost_f1 = refine(f1);
+			cost_f2 = refine(f2);
+			iter_f->second = std::make_pair(NEGATIVE_DAVIO, cost_f1 + cost_f2);
+			return cost_f1 + cost_f2;
+		}
+		else if(cost_max == cost_f1)
+		{
+			cost_f0 = refine(f0);
+			cost_f2 = refine(f2);
+			iter_f->second = std::make_pair(POSITIVE_DAVIO, cost_f0 + cost_f2);
+			return cost_f0 + cost_f2;
+		}
+	}
+
+	return 0;
+}
+
+std::uint32_t ARExtractManager::starting_cover(DdNode *f)
+{
+	// Reach constant 0/1
+	if (f == Cudd_ReadLogicZero(_ddmanager))
+		return 0u;
+	if (f == Cudd_ReadOne(_ddmanager))
+		return 1u;
         
 	auto it = _exp_cost.find(f);
 	if (it != _exp_cost.end()) {
-		return it->second;
+		return it->second.second;
 	}
 
 	// Calculate f0, f1, f2
@@ -103,41 +208,40 @@ std::pair<exp_type, std::uint32_t> PrunedExtractManager::best_expansion(DdNode *
 
     std::pair<exp_type, std::uint32_t> ret;
     if(s0 == smax){
-        std::uint32_t n1 = best_expansion(f1).second;
-	    std::uint32_t n2 = best_expansion(f2).second;
+        std::uint32_t n1 = starting_cover(f1);
+	    std::uint32_t n2 = starting_cover(f2);
         ret = std::make_pair(NEGATIVE_DAVIO, n1 + n2);
     }
     else if(s1 == smax){
-        std::uint32_t n0 = best_expansion(f0).second;
-        std::uint32_t n2 = best_expansion(f2).second;
+        std::uint32_t n0 = starting_cover(f0);
+        std::uint32_t n2 = starting_cover(f2);
         ret = std::make_pair(POSITIVE_DAVIO, n0 + n2);
     }
     else{
-        Cudd_RecursiveDeref(_ddmanager, f2);
-        std::uint32_t n0 = best_expansion(f0).second;
-	    std::uint32_t n1 = best_expansion(f1).second;
+        // Cudd_RecursiveDeref(_ddmanager, f2);
+        std::uint32_t n0 = starting_cover(f0);
+	    std::uint32_t n1 = starting_cover(f1);
         ret = std::make_pair(SHANNON, n0 + n1);
     }
 
 	_exp_cost[f] = ret;
-	return ret;
+	return ret.second;
 }
 
-void PrunedExtractManager::get_ordering(std::vector<uint32_t>& ordering){
+void ARExtractManager::get_ordering(std::vector<uint32_t>& ordering){
 	_ordering = ordering;	
 }
 
-void PrunedExtractManager::print_esop(int verbose){
+void ARExtractManager::print_esop(int verbose){
 	if(verbose){
 		std::cout << "Resulting PSDKRO:" << std::endl;
 		for (auto &cube : _esop) {
 			std::cout << cube.str(_nVars) << std::endl;
 		}
 	}
-	std::cout << "nTerms: " << _esop.size() << std::endl;
 }
 
-void PrunedExtractManager::write_esop_to_file(char* filename){
+void ARExtractManager::write_esop_to_file(char* filename){
 	std::ofstream file;
 	file.open(filename, std::ios::out);
 
@@ -154,17 +258,17 @@ void PrunedExtractManager::write_esop_to_file(char* filename){
 	}
 }
 
-uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
+uint32_t ARExtractManager::CostFunction(DdNode* p){ 
     return CostFunctionLevel(p, _level-1);
 }
 
-uint32_t PrunedExtractManager::CostFunctionLevel(DdNode* f, int level){ 
+uint32_t ARExtractManager::CostFunctionLevel(DdNode* f, int level){ 
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return 0;
 	if (f == Cudd_ReadOne(_ddmanager))
 		return 1;
 
-	// if(level == 0) return  Cudd_CountPathsToNonZero(f);
+	//if(level == 0) return  Cudd_CountPathsToNonZero(f);
 	if(level == 0) return Cudd_DagSize(f);
 
 	// Calculate f0, f1, f2
@@ -179,60 +283,7 @@ uint32_t PrunedExtractManager::CostFunctionLevel(DdNode* f, int level){
 	return s0 + s1 + s2 - std::max(s0, std::max(s1, s2));
 }
 
-/*
-
-uint32_t PrunedExtractManager::Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>& nPaths){
-    if(nPaths.find(p) != nPaths.end())
-        return nPaths[p];
-
-    if(p == Cudd_ReadOne(_ddmanager)){
-        nPaths[p] = 1;
-        return 1;
-    }
-
-    if(p == Cudd_ReadLogicZero(_ddmanager)){
-        nPaths[p] = 0;
-        return 0;
-    }
-
-    DdNode* t = Cudd_NotCond(Cudd_T(p), Cudd_IsComplement(p));
-    uint32_t l = Const1Path(t, nPaths);
-    DdNode* e = Cudd_NotCond(Cudd_E(p), Cudd_IsComplement(p));
-    uint32_t r = Const1Path(e, nPaths);
-    nPaths[p] = l + r;
-    return l + r;
-}
-
-uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
-    std::unordered_map<DdNode*, uint32_t> nPaths;
-    return Const1Path(p, nPaths);
-}
-
-
-uint32_t PrunedExtractManager::BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited){
-    if(visited.find(p) != visited.end()) return 0;
-
-    if(p == Cudd_ReadOne(_ddmanager) || p == Cudd_ReadLogicZero(_ddmanager)){
-        visited.emplace(p);
-        return 1;
-    }
-
-    DdNode* t = Cudd_NotCond(Cudd_T(p), Cudd_IsComplement(p));
-    uint32_t l = BddNodeNum(t, visited);
-    DdNode* e = Cudd_NotCond(Cudd_E(p), Cudd_IsComplement(p));
-    uint32_t r = BddNodeNum(e, visited);
-    visited.emplace(p);
-    return l + r + 1;
-}
-
-
-uint32_t PrunedExtractManager::CostFunction(DdNode* p){ 
-    std::unordered_set<DdNode*> visited;
-    return BddNodeNum(p, visited);
-}
-*/
-
-void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder){
+void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
@@ -287,18 +338,36 @@ void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose
 	// make sure that every PI is used in BDD
 	if(fOrder) assert(nVars == Cudd_SupportSize(ddmanager, ddnode)); 
 	else nVars = Cudd_SupportSize(ddmanager, ddnode);
-    PrunedExtractManager m(ddmanager, nVars, fLevel);   
+
+    ARExtractManager m(ddmanager, nVars, fLevel);   
 
 	m.get_ordering(ordering);
 
-	clk = Abc_Clock();
-    m.extract(ddnode);
+	m.init();
 
-	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
-	std::cout << "PSDKRO time used: \t\t" << runtime << " sec" << std::endl;
-	std::cout << "PSDKRO memory used: \t\t" << memory << " GB" << std::endl;
+	clk = Abc_Clock();
+    uint32_t nTerms_start = m.starting_cover(ddnode);
+
+	double runtime_start = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory_start = getCurrentRSS( ) / (1024.0 * 1024.0 * 1024.0);
+
+	std::cout << "---- Staring Cover ----" << std::endl;
+	std::cout << "Time used: \t\t" <<  runtime_start << " sec" << std::endl;
+	std::cout << "Memory used: \t" << memory_start << " GB" << std::endl;
+	std::cout << "nTerms: \t\t" << nTerms_start << std::endl;
 	
+	clk = Abc_Clock();
+    uint32_t nTerms_refine = m.refine(ddnode);
+	m.generate_psdkro(ddnode);
+
+	double runtime_refine = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory_refine = getCurrentRSS( ) / (1024.0 * 1024.0 * 1024.0);
+
+	std::cout << "---- Refinement ----" << std::endl;
+	std::cout << "Time used: \t\t" <<  runtime_refine << " sec" << std::endl;
+	std::cout << "Memory used: \t" << memory_refine << " GB" << std::endl;
+	std::cout << "nTerms: \t\t" << nTerms_refine << std::endl;
+
 	m.print_esop(fVerbose);
     
 	if(filename)

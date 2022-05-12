@@ -10,6 +10,7 @@ extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder);
 extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder);
+extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder);
 
 extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
 /**Function*************************************************************
@@ -515,6 +516,126 @@ usage:
   
 }
 
+/**Function*************************************************************
+
+  Synopsis    [AR Extract command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  Abc_Obj_t* pPo;
+  int iPo;
+  int c;
+  int fOutput = -1;
+  int fVerbose = 0;
+  int fLevel = 1;
+  int fLUT = 0;
+  char* pFileNameOut = NULL;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "hovlu")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      case 'o':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fOutput = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fOutput < 0 )
+            goto usage;
+        break;
+      case 'l':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-l\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fLevel = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fLevel < 0 )
+            goto usage;
+        break;
+      case 'v':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fVerbose = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fVerbose < 0  || fVerbose > 1)
+            goto usage;
+        break;
+      case 'u':
+        fLUT ^= 1;
+        break;
+      default:
+        goto usage;
+    }
+  }
+
+  if ( argc == globalUtilOptind + 1 ){
+      pFileNameOut = argv[globalUtilOptind];
+  }
+
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  if(fLUT)
+  {
+    Abc_NtkForEachNode( pNtk, pPo, iPo)
+    {
+      if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
+      std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+
+      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 0);
+      Abc_NtkDelete(pSubNtk);
+    }
+  }
+  else
+  {
+    Abc_NtkForEachPo(pNtk, pPo, iPo){
+      if(fOutput != -1 && iPo != fOutput) continue;
+
+      // create cone for the current PO
+      Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+
+      if( Abc_ObjFaninC0(pPo) )
+        Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+
+      std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+
+      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 1);
+      
+
+      Abc_NtkDelete(pSubNtk);
+    }
+  }
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: arextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]]\n");
+  Abc_Print(-2, "\t        synthesis ESOP with AR extract\n");
+  Abc_Print(-2, "\t-o    : specify the output to be processed\n");
+  Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
+  Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 1\n");
+  Abc_Print(-2, "\t-h    : print the command usage\n");
+  return 1;
+  
+}
+
 // called during ABC startup
 void init(Abc_Frame_t* pAbc)
 {
@@ -524,6 +645,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "aigpsdkro", EsopSyn_CommandAigPSDKRO, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "prunedextract", EsopSyn_CommandPrunedExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandARExtract, 0);
 }
 
 // called during ABC termination
