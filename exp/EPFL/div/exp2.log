@@ -1,0 +1,11277 @@
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 27 -a; bddextract -u".
+
+Time: 85.8933
+FINISHED CPU 104.86 MEM 76960 MAXMEM 76960 STALE 0 MAXMEM_RSS 59896
+<time name="ALL">104910</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 27 -a; bddextract -u".
+
+
+The number of referenced nodes = 1263
+
+
+The number of referenced nodes = 742
+
+
+The number of referenced nodes = 673
+
+
+The number of referenced nodes = 1010
+
+
+The number of referenced nodes = 673
+
+
+The number of referenced nodes = 677
+
+
+The number of referenced nodes = 19886848
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 6518
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 508222
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 508222
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 508222
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 508222
+
+
+The number of referenced nodes = 777387
+
+
+The number of referenced nodes = 4687098
+
+
+The number of referenced nodes = 837060
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12509
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 230
+
+
+The number of referenced nodes = 687
+
+
+The number of referenced nodes = 122
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 211
+
+
+The number of referenced nodes = 121472
+
+
+The number of referenced nodes = 2969461
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 35721
+
+
+The number of referenced nodes = 1107
+
+
+The number of referenced nodes = 680
+
+
+The number of referenced nodes = 9814
+
+
+The number of referenced nodes = 15559
+
+
+The number of referenced nodes = 25287
+
+
+The number of referenced nodes = 29699
+
+
+The number of referenced nodes = 58929
+
+
+The number of referenced nodes = 22782
+
+
+The number of referenced nodes = 6683
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 1244707
+
+
+The number of referenced nodes = 595676
+
+
+The number of referenced nodes = 1678573
+
+
+The number of referenced nodes = 122
+
+
+The number of referenced nodes = 383
+
+
+The number of referenced nodes = 5627
+
+
+The number of referenced nodes = 121457
+
+
+The number of referenced nodes = 3317
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 524
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3317
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 687
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 92
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3317
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 193
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 687
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3317
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 10184
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 312481
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 182098
+
+
+The number of referenced nodes = 181615
+
+
+The number of referenced nodes = 3264687
+
+
+The number of referenced nodes = 45
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 4668549
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 1236079
+
+
+The number of referenced nodes = 70213654
+
+
+The number of referenced nodes = 9103394
+
+
+The number of referenced nodes = 478333
+
+
+The number of referenced nodes = 2532535
+
+
+The number of referenced nodes = 351520
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 591897
+
+
+The number of referenced nodes = 110452282
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 9103394
+
+
+The number of referenced nodes = 2446586
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 351520
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 591897
+
+
+The number of referenced nodes = 4055419
+
+
+The number of referenced nodes = 9103394
+
+
+The number of referenced nodes = 351520
+
+
+The number of referenced nodes = 591897
+
+
+The number of referenced nodes = 4055419
+
+
+The number of referenced nodes = 9103394
+
+
+The number of referenced nodes = 3250
+
+
+The number of referenced nodes = 45
+
+
+The number of referenced nodes = 591897
+
+
+The number of referenced nodes = 3757197
+
+
+The number of referenced nodes = 832
+
+
+The number of referenced nodes = 115
+
+
+The number of referenced nodes = 43
+
+
+The number of referenced nodes = 4952680
+
+
+The number of referenced nodes = 591927
+
+
+The number of referenced nodes = 507460
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 505218
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 505218
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 53044
+
+
+The number of referenced nodes = 505218
+
+
+The number of referenced nodes = 776680
+
+
+The number of referenced nodes = 4987833
+
+
+The number of referenced nodes = 814199
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 50946
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 122
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 38
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 7589
+
+
+The number of referenced nodes = 239
+
+
+The number of referenced nodes = 680
+
+
+The number of referenced nodes = 9854
+
+
+The number of referenced nodes = 25287
+
+
+The number of referenced nodes = 66294
+
+
+The number of referenced nodes = 83244
+
+
+The number of referenced nodes = 22782
+
+
+The number of referenced nodes = 29699
+
+
+The number of referenced nodes = 6683
+
+
+The number of referenced nodes = 9286
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 446081
+
+
+The number of referenced nodes = 43258
+
+
+The number of referenced nodes = 73925
+
+
+The number of referenced nodes = 293609
+
+
+The number of referenced nodes = 122
+
+
+The number of referenced nodes = 383
+
+
+The number of referenced nodes = 5579
+
+
+The number of referenced nodes = 93
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 93
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 93
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 93
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 93
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 64
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3448
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 491
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 3448
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 491
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 3448
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 491
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3448
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 194
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 491
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 269
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3448
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 43135
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 654432
+
+
+The number of referenced nodes = 15132984
+
+
+The number of referenced nodes = 182126
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 824467
+
+
+The number of referenced nodes = 3264621
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 45
+
+
+The number of referenced nodes = 4665193
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 1233306
+
+
+The number of referenced nodes = 71036539
+
+
+The number of referenced nodes = 9100503
+
+
+The number of referenced nodes = 478290
+
+
+The number of referenced nodes = 2522032
+
+
+The number of referenced nodes = 295245
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 591890
+
+
+The number of referenced nodes = 110446346
+
+
+The number of referenced nodes = 9100503
+
+
+The number of referenced nodes = 1665762
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 295245
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 591890
+
+
+The number of referenced nodes = 4055393
+
+
+The number of referenced nodes = 9100503
+
+
+The number of referenced nodes = 295550
+
+
+The number of referenced nodes = 591890
+
+
+The number of referenced nodes = 10227997
+
+
+The number of referenced nodes = 9101413
+
+
+The number of referenced nodes = 6776446
+
+
+The number of referenced nodes = 82981183
+
+
+The number of referenced nodes = 149522631
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 85
+
+
+The number of referenced nodes = 689
+
+
+The number of referenced nodes = 5326
+
+
+The number of referenced nodes = 61170
+
+
+The number of referenced nodes = 458648
+
+
+The number of referenced nodes = 9501416
+
+nTerms: 3194006
+Time: 3573.72
+Memory: 12.3685
+FINISHED CPU 3813.62 MEM 76968 MAXMEM 12987688 STALE 0 MAXMEM_RSS 12969268
+<time name="ALL">3813630</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 27 -a; prunedextract -u -l 8".
+
+
+The number of referenced nodes = 1272
+
+
+The number of referenced nodes = 710
+
+
+The number of referenced nodes = 518
+
+
+The number of referenced nodes = 851
+
+
+The number of referenced nodes = 518
+
+
+The number of referenced nodes = 516
+
+
+The number of referenced nodes = 948668
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6645
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 170315
+
+
+The number of referenced nodes = 844419
+
+
+The number of referenced nodes = 153446
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 7840
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 290
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 288
+
+
+The number of referenced nodes = 64947
+
+
+The number of referenced nodes = 398961
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 21530
+
+
+The number of referenced nodes = 1212
+
+
+The number of referenced nodes = 767
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 7046
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 13666
+
+
+The number of referenced nodes = 24375
+
+
+The number of referenced nodes = 18154
+
+
+The number of referenced nodes = 32625
+
+
+The number of referenced nodes = 20545
+
+
+The number of referenced nodes = 4777
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 259731
+
+
+The number of referenced nodes = 168810
+
+
+The number of referenced nodes = 253788
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 434
+
+
+The number of referenced nodes = 4271
+
+
+The number of referenced nodes = 47534
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 553
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 9403
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 110449
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 52688
+
+
+The number of referenced nodes = 72615
+
+
+The number of referenced nodes = 429049
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 48
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 615269
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 288258
+
+
+The number of referenced nodes = 1815643
+
+
+The number of referenced nodes = 819304
+
+
+The number of referenced nodes = 134778
+
+
+The number of referenced nodes = 454379
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 2278135
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 819304
+
+
+The number of referenced nodes = 712577
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 819304
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 819304
+
+
+The number of referenced nodes = 3432
+
+
+The number of referenced nodes = 48
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 762937
+
+
+The number of referenced nodes = 966
+
+
+The number of referenced nodes = 146
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 1549619
+
+
+The number of referenced nodes = 112173
+
+
+The number of referenced nodes = 124219
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 136371
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 136371
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 136371
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 171435
+
+
+The number of referenced nodes = 842012
+
+
+The number of referenced nodes = 138030
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 27511
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 5681
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 295
+
+
+The number of referenced nodes = 767
+
+
+The number of referenced nodes = 7046
+
+
+The number of referenced nodes = 24375
+
+
+The number of referenced nodes = 43934
+
+
+The number of referenced nodes = 42646
+
+
+The number of referenced nodes = 20545
+
+
+The number of referenced nodes = 18154
+
+
+The number of referenced nodes = 4777
+
+
+The number of referenced nodes = 7353
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 116661
+
+
+The number of referenced nodes = 19004
+
+
+The number of referenced nodes = 35840
+
+
+The number of referenced nodes = 74020
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 434
+
+
+The number of referenced nodes = 4340
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18289
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 134716
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 876666
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 51883
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 136253
+
+
+The number of referenced nodes = 477224
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 48
+
+
+The number of referenced nodes = 636495
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 248370
+
+
+The number of referenced nodes = 2360703
+
+
+The number of referenced nodes = 686410
+
+
+The number of referenced nodes = 134909
+
+
+The number of referenced nodes = 276621
+
+
+The number of referenced nodes = 114460
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 2215793
+
+
+The number of referenced nodes = 686410
+
+
+The number of referenced nodes = 210950
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 114460
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 468964
+
+
+The number of referenced nodes = 686410
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 111389
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 717275
+
+
+The number of referenced nodes = 686775
+
+
+The number of referenced nodes = 2660077
+
+
+The number of referenced nodes = 11582292
+
+
+The number of referenced nodes = 4113744
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 89
+
+
+The number of referenced nodes = 726
+
+
+The number of referenced nodes = 5255
+
+
+The number of referenced nodes = 45199
+
+
+The number of referenced nodes = 138131
+
+
+The number of referenced nodes = 564498
+
+nTerms: 3542966
+Time: 343.303
+Memory: 0.513607
+FINISHED CPU 391.90 MEM 100676 MAXMEM 556388 STALE 0 MAXMEM_RSS 538556
+<time name="ALL">391950</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 27 -a; prunedextract -u -l 4".
+
+
+The number of referenced nodes = 903
+
+
+The number of referenced nodes = 604
+
+
+The number of referenced nodes = 422
+
+
+The number of referenced nodes = 743
+
+
+The number of referenced nodes = 422
+
+
+The number of referenced nodes = 422
+
+
+The number of referenced nodes = 173971
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 3810
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 41627
+
+
+The number of referenced nodes = 238791
+
+
+The number of referenced nodes = 33557
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3495
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 240
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 250
+
+
+The number of referenced nodes = 18149
+
+
+The number of referenced nodes = 87793
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 7524
+
+
+The number of referenced nodes = 743
+
+
+The number of referenced nodes = 572
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3465
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 5323
+
+
+The number of referenced nodes = 8760
+
+
+The number of referenced nodes = 5817
+
+
+The number of referenced nodes = 9758
+
+
+The number of referenced nodes = 9357
+
+
+The number of referenced nodes = 1963
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 97494
+
+
+The number of referenced nodes = 49305
+
+
+The number of referenced nodes = 67653
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 330
+
+
+The number of referenced nodes = 2332
+
+
+The number of referenced nodes = 21678
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 404
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3453
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 29631
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20364
+
+
+The number of referenced nodes = 23405
+
+
+The number of referenced nodes = 108769
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 93053
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 72119
+
+
+The number of referenced nodes = 466762
+
+
+The number of referenced nodes = 148486
+
+
+The number of referenced nodes = 35694
+
+
+The number of referenced nodes = 87743
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 444439
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 148486
+
+
+The number of referenced nodes = 166016
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 148486
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 148486
+
+
+The number of referenced nodes = 1720
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 149431
+
+
+The number of referenced nodes = 705
+
+
+The number of referenced nodes = 133
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 244914
+
+
+The number of referenced nodes = 33062
+
+
+The number of referenced nodes = 46338
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 41577
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 41577
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 41577
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 40970
+
+
+The number of referenced nodes = 162590
+
+
+The number of referenced nodes = 40087
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 10143
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 2882
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 247
+
+
+The number of referenced nodes = 572
+
+
+The number of referenced nodes = 3465
+
+
+The number of referenced nodes = 8760
+
+
+The number of referenced nodes = 13491
+
+
+The number of referenced nodes = 14153
+
+
+The number of referenced nodes = 9357
+
+
+The number of referenced nodes = 5817
+
+
+The number of referenced nodes = 1963
+
+
+The number of referenced nodes = 3065
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 35957
+
+
+The number of referenced nodes = 8248
+
+
+The number of referenced nodes = 13095
+
+
+The number of referenced nodes = 24434
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 330
+
+
+The number of referenced nodes = 2368
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 8094
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 41084
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 242590
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20956
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 43764
+
+
+The number of referenced nodes = 108931
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 96245
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 62750
+
+
+The number of referenced nodes = 451473
+
+
+The number of referenced nodes = 148039
+
+
+The number of referenced nodes = 35484
+
+
+The number of referenced nodes = 61937
+
+
+The number of referenced nodes = 26243
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 441861
+
+
+The number of referenced nodes = 148039
+
+
+The number of referenced nodes = 47344
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 26243
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 102308
+
+
+The number of referenced nodes = 148039
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26001
+
+
+The number of referenced nodes = 33308
+
+
+The number of referenced nodes = 135778
+
+
+The number of referenced nodes = 149159
+
+
+The number of referenced nodes = 442871
+
+
+The number of referenced nodes = 1238683
+
+
+The number of referenced nodes = 963073
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 75
+
+
+The number of referenced nodes = 480
+
+
+The number of referenced nodes = 2607
+
+
+The number of referenced nodes = 14823
+
+
+The number of referenced nodes = 33972
+
+
+The number of referenced nodes = 161117
+
+nTerms: 3820909
+Time: 18.4542
+Memory: 0.100193
+FINISHED CPU 88.14 MEM 76972 MAXMEM 122648 STALE 0 MAXMEM_RSS 105060
+<time name="ALL">88190</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 27 -a; arextract -u -l 4".
+
+
+The number of referenced nodes = 1239
+
+
+The number of referenced nodes = 715
+
+
+The number of referenced nodes = 790
+
+
+The number of referenced nodes = 947
+
+
+The number of referenced nodes = 790
+
+
+The number of referenced nodes = 775
+
+
+The number of referenced nodes = 718924
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 5699
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 113712
+
+
+The number of referenced nodes = 546823
+
+
+The number of referenced nodes = 104757
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6153
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 314
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 322
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 46719
+
+
+The number of referenced nodes = 343864
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16941
+
+
+The number of referenced nodes = 1119
+
+
+The number of referenced nodes = 757
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 5171
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 10272
+
+
+The number of referenced nodes = 17364
+
+
+The number of referenced nodes = 12989
+
+
+The number of referenced nodes = 22253
+
+
+The number of referenced nodes = 17094
+
+
+The number of referenced nodes = 3453
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 199135
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 131871
+
+
+The number of referenced nodes = 234514
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 424
+
+
+The number of referenced nodes = 3932
+
+
+The number of referenced nodes = 47241
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 591
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6553
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 68412
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 38538
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 53685
+
+
+The number of referenced nodes = 275771
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 62
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 692845
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 188131
+
+
+The number of referenced nodes = 1436252
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 547566
+
+
+The number of referenced nodes = 112816
+
+
+The number of referenced nodes = 255900
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 1942238
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 547566
+
+
+The number of referenced nodes = 470872
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 547566
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 547566
+
+
+The number of referenced nodes = 3103
+
+
+The number of referenced nodes = 62
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 479447
+
+
+The number of referenced nodes = 997
+
+
+The number of referenced nodes = 170
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 801176
+
+
+The number of referenced nodes = 98963
+
+
+The number of referenced nodes = 93285
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 88549
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 88549
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 88549
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 114839
+
+
+The number of referenced nodes = 526463
+
+
+The number of referenced nodes = 105142
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 22027
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 42
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 5162
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 319
+
+
+The number of referenced nodes = 757
+
+
+The number of referenced nodes = 5171
+
+
+The number of referenced nodes = 17364
+
+
+The number of referenced nodes = 31269
+
+
+The number of referenced nodes = 33786
+
+
+The number of referenced nodes = 17094
+
+
+The number of referenced nodes = 12989
+
+
+The number of referenced nodes = 3453
+
+
+The number of referenced nodes = 5516
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 97743
+
+
+The number of referenced nodes = 15372
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 27452
+
+
+The number of referenced nodes = 56724
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 424
+
+
+The number of referenced nodes = 3971
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 14686
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 99766
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 698281
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 41096
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 143906
+
+
+The number of referenced nodes = 276745
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 62
+
+
+The number of referenced nodes = 605285
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 189124
+
+
+The number of referenced nodes = 1741139
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 484055
+
+
+The number of referenced nodes = 114247
+
+
+The number of referenced nodes = 193686
+
+
+The number of referenced nodes = 74275
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 1948359
+
+
+The number of referenced nodes = 484055
+
+
+The number of referenced nodes = 147917
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 74275
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 329687
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 484055
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 76816
+
+
+The number of referenced nodes = 98246
+
+
+The number of referenced nodes = 483028
+
+
+The number of referenced nodes = 479960
+
+
+The number of referenced nodes = 1403935
+
+
+The number of referenced nodes = 4495567
+
+
+The number of referenced nodes = 3163100
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 715
+
+
+The number of referenced nodes = 4722
+
+
+The number of referenced nodes = 26321
+
+
+The number of referenced nodes = 99510
+
+
+The number of referenced nodes = 461703
+
+nTerms: 3236485
+Time: 108.448
+Memory: 0.234573
+FINISHED CPU 156.15 MEM 263920 MAXMEM 263920 STALE 0 MAXMEM_RSS 245968
+<time name="ALL">156190</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 28 -a; bddextract -u".
+
+Time: 83.6795
+FINISHED CPU 102.65 MEM 0 MAXMEM 76964 STALE 0 MAXMEM_RSS 60192
+<time name="ALL">102670</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 28 -a; bddextract -u".
+
+MEM_RSS CPU 2985.66 MEM 20988584 MAXMEM 20988584 STALE 0 MAXMEM_RSS 20971908
+<time name="ALL">2985740</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 28 -a; prunedextract -u -l 8".
+
+
+The number of referenced nodes = 1272
+
+
+The number of referenced nodes = 710
+
+
+The number of referenced nodes = 142
+
+
+The number of referenced nodes = 815
+
+
+The number of referenced nodes = 518
+
+
+The number of referenced nodes = 251
+
+
+The number of referenced nodes = 781
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 804672
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 804672
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 804672
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 804672
+
+
+The number of referenced nodes = 122405
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 7840
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 290
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 2896
+
+
+The number of referenced nodes = 44138
+
+
+The number of referenced nodes = 294156
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 3535
+
+
+The number of referenced nodes = 767
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 7046
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24375
+
+
+The number of referenced nodes = 20545
+
+
+The number of referenced nodes = 113140
+
+
+The number of referenced nodes = 33233
+
+
+The number of referenced nodes = 113807
+
+
+The number of referenced nodes = 113129
+
+
+The number of referenced nodes = 90888
+
+
+The number of referenced nodes = 9637
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 289851
+
+
+The number of referenced nodes = 86870
+
+
+The number of referenced nodes = 430
+
+
+The number of referenced nodes = 4271
+
+
+The number of referenced nodes = 28678
+
+
+The number of referenced nodes = 372396
+
+
+The number of referenced nodes = 23135
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 553
+
+
+The number of referenced nodes = 7112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 9403
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 110449
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 52688
+
+
+The number of referenced nodes = 72615
+
+
+The number of referenced nodes = 429049
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 2377038
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 794361
+
+
+The number of referenced nodes = 644512
+
+
+The number of referenced nodes = 2278135
+
+
+The number of referenced nodes = 451883
+
+
+The number of referenced nodes = 794361
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 829891
+
+
+The number of referenced nodes = 2278135
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 451883
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 829891
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 713152
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 177373
+
+
+The number of referenced nodes = 713152
+
+
+The number of referenced nodes = 22278030
+
+
+The number of referenced nodes = 6398734
+
+
+The number of referenced nodes = 1112753
+
+
+The number of referenced nodes = 1786148
+
+
+The number of referenced nodes = 966
+
+
+The number of referenced nodes = 146
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 1549619
+
+
+The number of referenced nodes = 1603493
+
+
+The number of referenced nodes = 112173
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 694466
+
+
+The number of referenced nodes = 136371
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 695665
+
+
+The number of referenced nodes = 136371
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 453813
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 27511
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 2896
+
+
+The number of referenced nodes = 63182
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 4762
+
+
+The number of referenced nodes = 767
+
+
+The number of referenced nodes = 7046
+
+
+The number of referenced nodes = 24375
+
+
+The number of referenced nodes = 20545
+
+
+The number of referenced nodes = 113140
+
+
+The number of referenced nodes = 113807
+
+
+The number of referenced nodes = 113129
+
+
+The number of referenced nodes = 90888
+
+
+The number of referenced nodes = 33233
+
+
+The number of referenced nodes = 9637
+
+
+The number of referenced nodes = 62471
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 373246
+
+
+The number of referenced nodes = 430
+
+
+The number of referenced nodes = 4271
+
+
+The number of referenced nodes = 28678
+
+
+The number of referenced nodes = 351446
+
+
+The number of referenced nodes = 33454
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 5890
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18289
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 134716
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 876666
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 51883
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 136253
+
+
+The number of referenced nodes = 477224
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 2319729
+
+
+The number of referenced nodes = 2132229
+
+
+The number of referenced nodes = 596168
+
+
+The number of referenced nodes = 2215793
+
+
+The number of referenced nodes = 5469838
+
+
+The number of referenced nodes = 2132229
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 587121
+
+
+The number of referenced nodes = 2215793
+
+
+The number of referenced nodes = 453813
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 114460
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 712850
+
+
+The number of referenced nodes = 468964
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 127894
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 694467
+
+
+The number of referenced nodes = 947434
+
+
+The number of referenced nodes = 4172659
+
+
+The number of referenced nodes = 645162
+
+
+The number of referenced nodes = 24237602
+
+
+The number of referenced nodes = 5351692
+
+
+The number of referenced nodes = 2678345
+
+
+The number of referenced nodes = 7470441
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 89
+
+
+The number of referenced nodes = 726
+
+
+The number of referenced nodes = 5255
+
+
+The number of referenced nodes = 45199
+
+
+The number of referenced nodes = 138131
+
+
+The number of referenced nodes = 588579
+
+nTerms: 6296622
+Time: 702.545
+Memory: 1.0328
+FINISHED CPU 753.49 MEM 83948 MAXMEM 1100628 STALE 0 MAXMEM_RSS 1082972
+<time name="ALL">753540</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 28 -a; prunedextract -u -l 4".
+
+
+The number of referenced nodes = 903
+
+
+The number of referenced nodes = 604
+
+
+The number of referenced nodes = 136
+
+
+The number of referenced nodes = 708
+
+
+The number of referenced nodes = 422
+
+
+The number of referenced nodes = 240
+
+
+The number of referenced nodes = 650
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 172905
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 172905
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 172905
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 172905
+
+
+The number of referenced nodes = 46199
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3495
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 240
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 1520
+
+
+The number of referenced nodes = 14061
+
+
+The number of referenced nodes = 87571
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 2033
+
+
+The number of referenced nodes = 572
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3465
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 8760
+
+
+The number of referenced nodes = 9357
+
+
+The number of referenced nodes = 31015
+
+
+The number of referenced nodes = 11111
+
+
+The number of referenced nodes = 28043
+
+
+The number of referenced nodes = 30663
+
+
+The number of referenced nodes = 28175
+
+
+The number of referenced nodes = 4065
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 84191
+
+
+The number of referenced nodes = 22724
+
+
+The number of referenced nodes = 343
+
+
+The number of referenced nodes = 2332
+
+
+The number of referenced nodes = 15637
+
+
+The number of referenced nodes = 106274
+
+
+The number of referenced nodes = 10192
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 404
+
+
+The number of referenced nodes = 3311
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3453
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 29631
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20364
+
+
+The number of referenced nodes = 23405
+
+
+The number of referenced nodes = 108769
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 471558
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 150088
+
+
+The number of referenced nodes = 149632
+
+
+The number of referenced nodes = 444439
+
+
+The number of referenced nodes = 123541
+
+
+The number of referenced nodes = 150088
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 157720
+
+
+The number of referenced nodes = 444439
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 123541
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 157720
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 126227
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 47599
+
+
+The number of referenced nodes = 126227
+
+
+The number of referenced nodes = 2679541
+
+
+The number of referenced nodes = 809454
+
+
+The number of referenced nodes = 248258
+
+
+The number of referenced nodes = 374530
+
+
+The number of referenced nodes = 705
+
+
+The number of referenced nodes = 133
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 244914
+
+
+The number of referenced nodes = 247087
+
+
+The number of referenced nodes = 33062
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 156906
+
+
+The number of referenced nodes = 41577
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 156945
+
+
+The number of referenced nodes = 41577
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 130704
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 10143
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 1520
+
+
+The number of referenced nodes = 23899
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 2571
+
+
+The number of referenced nodes = 572
+
+
+The number of referenced nodes = 3465
+
+
+The number of referenced nodes = 8760
+
+
+The number of referenced nodes = 9357
+
+
+The number of referenced nodes = 31015
+
+
+The number of referenced nodes = 28043
+
+
+The number of referenced nodes = 30663
+
+
+The number of referenced nodes = 28175
+
+
+The number of referenced nodes = 11111
+
+
+The number of referenced nodes = 4065
+
+
+The number of referenced nodes = 24688
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 108953
+
+
+The number of referenced nodes = 343
+
+
+The number of referenced nodes = 2332
+
+
+The number of referenced nodes = 15664
+
+
+The number of referenced nodes = 95583
+
+
+The number of referenced nodes = 10470
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 3329
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 8094
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 41084
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 242590
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20956
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 43764
+
+
+The number of referenced nodes = 108931
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 460002
+
+
+The number of referenced nodes = 286800
+
+
+The number of referenced nodes = 144128
+
+
+The number of referenced nodes = 441861
+
+
+The number of referenced nodes = 1122914
+
+
+The number of referenced nodes = 286800
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 165424
+
+
+The number of referenced nodes = 441861
+
+
+The number of referenced nodes = 130704
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 26243
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 127027
+
+
+The number of referenced nodes = 102308
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 39041
+
+
+The number of referenced nodes = 33308
+
+
+The number of referenced nodes = 157354
+
+
+The number of referenced nodes = 344986
+
+
+The number of referenced nodes = 973472
+
+
+The number of referenced nodes = 202901
+
+
+The number of referenced nodes = 2885126
+
+
+The number of referenced nodes = 729096
+
+
+The number of referenced nodes = 435798
+
+
+The number of referenced nodes = 921317
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 75
+
+
+The number of referenced nodes = 480
+
+
+The number of referenced nodes = 2607
+
+
+The number of referenced nodes = 14823
+
+
+The number of referenced nodes = 33972
+
+
+The number of referenced nodes = 139784
+
+nTerms: 6778114
+Time: 35.2949
+Memory: 0.183292
+FINISHED CPU 102.15 MEM 76964 MAXMEM 217124 STALE 0 MAXMEM_RSS 174508
+<time name="ALL">102200</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 28 -a; arextract -u -l 4".
+
+
+The number of referenced nodes = 1239
+
+
+The number of referenced nodes = 715
+
+
+The number of referenced nodes = 145
+
+
+The number of referenced nodes = 848
+
+
+The number of referenced nodes = 790
+
+
+The number of referenced nodes = 254
+
+
+The number of referenced nodes = 826
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 536085
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 536085
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 536085
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 536085
+
+
+The number of referenced nodes = 89333
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6153
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 314
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 2506
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 34687
+
+
+The number of referenced nodes = 192756
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 2866
+
+
+The number of referenced nodes = 757
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 5171
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 17364
+
+
+The number of referenced nodes = 17094
+
+
+The number of referenced nodes = 73446
+
+
+The number of referenced nodes = 24200
+
+
+The number of referenced nodes = 88346
+
+
+The number of referenced nodes = 85645
+
+
+The number of referenced nodes = 67273
+
+
+The number of referenced nodes = 7500
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 256080
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 71118
+
+
+The number of referenced nodes = 426
+
+
+The number of referenced nodes = 3932
+
+
+The number of referenced nodes = 28355
+
+
+The number of referenced nodes = 282039
+
+
+The number of referenced nodes = 18418
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 591
+
+
+The number of referenced nodes = 6348
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6553
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 68412
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 38538
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 53685
+
+
+The number of referenced nodes = 275771
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 1489612
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 709025
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 477898
+
+
+The number of referenced nodes = 1942238
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 329458
+
+
+The number of referenced nodes = 709025
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 550640
+
+
+The number of referenced nodes = 1942238
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 329458
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 550640
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 484320
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 112410
+
+
+The number of referenced nodes = 484320
+
+
+The number of referenced nodes = 10328329
+
+
+The number of referenced nodes = 2840754
+
+
+The number of referenced nodes = 965455
+
+
+The number of referenced nodes = 1455172
+
+
+The number of referenced nodes = 997
+
+
+The number of referenced nodes = 170
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 801176
+
+
+The number of referenced nodes = 884777
+
+
+The number of referenced nodes = 98963
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 486103
+
+
+The number of referenced nodes = 88549
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 487145
+
+
+The number of referenced nodes = 88549
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 331174
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 22027
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 42
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 2505
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 50024
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 4485
+
+
+The number of referenced nodes = 757
+
+
+The number of referenced nodes = 5171
+
+
+The number of referenced nodes = 17364
+
+
+The number of referenced nodes = 17094
+
+
+The number of referenced nodes = 73446
+
+
+The number of referenced nodes = 88346
+
+
+The number of referenced nodes = 85645
+
+
+The number of referenced nodes = 67273
+
+
+The number of referenced nodes = 24200
+
+
+The number of referenced nodes = 7500
+
+
+The number of referenced nodes = 41966
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 268463
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 426
+
+
+The number of referenced nodes = 3932
+
+
+The number of referenced nodes = 28377
+
+
+The number of referenced nodes = 254567
+
+
+The number of referenced nodes = 20995
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 5721
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 14686
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 99766
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 698281
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 41096
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 143906
+
+
+The number of referenced nodes = 276745
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 1464207
+
+
+The number of referenced nodes = 990525
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 475239
+
+
+The number of referenced nodes = 1948359
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 4703444
+
+
+The number of referenced nodes = 990525
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 469369
+
+
+The number of referenced nodes = 1948359
+
+
+The number of referenced nodes = 331174
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 74275
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 486509
+
+
+The number of referenced nodes = 329687
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 95112
+
+
+The number of referenced nodes = 98246
+
+
+The number of referenced nodes = 486103
+
+
+The number of referenced nodes = 816289
+
+
+The number of referenced nodes = 3569190
+
+
+The number of referenced nodes = 513295
+
+
+The number of referenced nodes = 10417617
+
+
+The number of referenced nodes = 2768633
+
+
+The number of referenced nodes = 1359606
+
+
+The number of referenced nodes = 2758791
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 715
+
+
+The number of referenced nodes = 4722
+
+
+The number of referenced nodes = 26321
+
+
+The number of referenced nodes = 99510
+
+
+The number of referenced nodes = 380857
+
+nTerms: 5944307
+Time: 218.117
+Memory: 0.485565
+FINISHED CPU 266.22 MEM 527020 MAXMEM 527020 STALE 0 MAXMEM_RSS 509152
+<time name="ALL">266270</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 29 -a; bddextract -u".
+
+Time: 87.1933
+FINISHED CPU 105.58 MEM 0 MAXMEM 76960 STALE 0 MAXMEM_RSS 60064
+<time name="ALL">105600</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 29 -a; bddextract -u".
+
+MEM_RSS CPU 2021.51 MEM 21080452 MAXMEM 21080452 STALE 0 MAXMEM_RSS 20976152
+<time name="ALL">2021590</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2; if -K 29 -a; prunedextract -u -l 8".
+
+
+The number of referenced nodes = 509
+
+
+The number of referenced nodes = 733
+
+
+The number of referenced nodes = 142
+
+
+The number of referenced nodes = 644
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 874
+
+
+The number of referenced nodes = 36538733
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 477756
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 772899
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 451883
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 421648
+
+
+The number of referenced nodes = 1359632
+
+
+The number of referenced nodes = 2591
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 7840
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 290
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 13669
+
+
+The number of referenced nodes = 160
+
+
+The number of referenced nodes = 114040
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 90888
+
+
+The number of referenced nodes = 260139
+
+
+The number of referenced nodes = 573388
+
+
+The number of referenced nodes = 673607
+
+
+The number of referenced nodes = 403393
+
+
+The number of referenced nodes = 427293
+
+
+The number of referenced nodes = 204257
+
+
+The number of referenced nodes = 16931
+
+
+The number of referenced nodes = 3701
+
+
+The number of referenced nodes = 2044
+
+
+The number of referenced nodes = 4225
+
+
+The number of referenced nodes = 123256
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 553
+
+
+The number of referenced nodes = 6188
+
+
+The number of referenced nodes = 33360
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 653
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3224
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 9403
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 110449
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 52688
+
+
+The number of referenced nodes = 72615
+
+
+The number of referenced nodes = 429049
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 2377038
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 644512
+
+
+The number of referenced nodes = 2278135
+
+
+The number of referenced nodes = 2133290
+
+
+The number of referenced nodes = 3576178
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 369
+
+
+The number of referenced nodes = 1272625
+
+
+The number of referenced nodes = 114
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 2133290
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 2133290
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 139391
+
+
+The number of referenced nodes = 145477
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 471869
+
+
+The number of referenced nodes = 2133290
+
+
+The number of referenced nodes = 4024475
+
+
+The number of referenced nodes = 695609
+
+
+The number of referenced nodes = 11582292
+
+
+The number of referenced nodes = 113140
+
+
+The number of referenced nodes = 24375
+
+
+The number of referenced nodes = 7046
+
+
+The number of referenced nodes = 966
+
+
+The number of referenced nodes = 146
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 726699
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 31313
+
+
+The number of referenced nodes = 453813
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 785151
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 3553397
+
+
+The number of referenced nodes = 369
+
+
+The number of referenced nodes = 453813
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 405295
+
+
+The number of referenced nodes = 814755
+
+
+The number of referenced nodes = 21490
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 27511
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 137
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 13669
+
+
+The number of referenced nodes = 160
+
+
+The number of referenced nodes = 114040
+
+
+The number of referenced nodes = 90888
+
+
+The number of referenced nodes = 260139
+
+
+The number of referenced nodes = 573388
+
+
+The number of referenced nodes = 673607
+
+
+The number of referenced nodes = 403393
+
+
+The number of referenced nodes = 427293
+
+
+The number of referenced nodes = 204257
+
+
+The number of referenced nodes = 16931
+
+
+The number of referenced nodes = 3701
+
+
+The number of referenced nodes = 2044
+
+
+The number of referenced nodes = 4225
+
+
+The number of referenced nodes = 123256
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 6188
+
+
+The number of referenced nodes = 33360
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 106
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 244
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 507
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 348
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 3787
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18289
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 134716
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 876666
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 51883
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 136253
+
+
+The number of referenced nodes = 477224
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 2319729
+
+
+The number of referenced nodes = 596168
+
+
+The number of referenced nodes = 2215793
+
+
+The number of referenced nodes = 2240826
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 2215793
+
+
+The number of referenced nodes = 2240826
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 114460
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 468964
+
+
+The number of referenced nodes = 2133290
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 111389
+
+
+The number of referenced nodes = 147469
+
+
+The number of referenced nodes = 630024
+
+
+The number of referenced nodes = 717275
+
+
+The number of referenced nodes = 2078132
+
+
+The number of referenced nodes = 4033571
+
+
+The number of referenced nodes = 11582292
+
+
+The number of referenced nodes = 55974300
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 89
+
+
+The number of referenced nodes = 726
+
+
+The number of referenced nodes = 5255
+
+
+The number of referenced nodes = 45199
+
+
+The number of referenced nodes = 138131
+
+
+The number of referenced nodes = 588579
+
+
+The number of referenced nodes = 1118789
+
+
+The number of referenced nodes = 5279130
+
+nTerms: 9669676
+Time: 1186.4
+Memory: 2.31858
+FINISHED CPU 1242.99 MEM 0 MAXMEM 2450216 STALE 0 MAXMEM_RSS 2431204
+<time name="ALL">1242990</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 29 -a; prunedextract -u -l 4".
+
+
+The number of referenced nodes = 441
+
+
+The number of referenced nodes = 615
+
+
+The number of referenced nodes = 136
+
+
+The number of referenced nodes = 542
+
+
+The number of referenced nodes = 311
+
+
+The number of referenced nodes = 796
+
+
+The number of referenced nodes = 3224938
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 122232
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 166394
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 123541
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 89629
+
+
+The number of referenced nodes = 250103
+
+
+The number of referenced nodes = 1365
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 3495
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 240
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 4401
+
+
+The number of referenced nodes = 150
+
+
+The number of referenced nodes = 38962
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 28175
+
+
+The number of referenced nodes = 61914
+
+
+The number of referenced nodes = 145258
+
+
+The number of referenced nodes = 166111
+
+
+The number of referenced nodes = 96210
+
+
+The number of referenced nodes = 92967
+
+
+The number of referenced nodes = 48013
+
+
+The number of referenced nodes = 6065
+
+
+The number of referenced nodes = 1634
+
+
+The number of referenced nodes = 1543
+
+
+The number of referenced nodes = 1858
+
+
+The number of referenced nodes = 35801
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 404
+
+
+The number of referenced nodes = 3038
+
+
+The number of referenced nodes = 11441
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 451
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1535
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3453
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 29631
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20364
+
+
+The number of referenced nodes = 23405
+
+
+The number of referenced nodes = 108769
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 471558
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 149632
+
+
+The number of referenced nodes = 444439
+
+
+The number of referenced nodes = 448191
+
+
+The number of referenced nodes = 688133
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 303
+
+
+The number of referenced nodes = 317513
+
+
+The number of referenced nodes = 107
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 448191
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 448191
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 34313
+
+
+The number of referenced nodes = 33033
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 102101
+
+
+The number of referenced nodes = 448191
+
+
+The number of referenced nodes = 701879
+
+
+The number of referenced nodes = 155151
+
+
+The number of referenced nodes = 1238683
+
+
+The number of referenced nodes = 31015
+
+
+The number of referenced nodes = 8760
+
+
+The number of referenced nodes = 3465
+
+
+The number of referenced nodes = 705
+
+
+The number of referenced nodes = 133
+
+
+The number of referenced nodes = 58
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 159085
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11096
+
+
+The number of referenced nodes = 130704
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 156786
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 639030
+
+
+The number of referenced nodes = 303
+
+
+The number of referenced nodes = 130704
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 77067
+
+
+The number of referenced nodes = 163113
+
+
+The number of referenced nodes = 7351
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 10143
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 128
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 41
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 39
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 4401
+
+
+The number of referenced nodes = 150
+
+
+The number of referenced nodes = 38962
+
+
+The number of referenced nodes = 28175
+
+
+The number of referenced nodes = 61914
+
+
+The number of referenced nodes = 145258
+
+
+The number of referenced nodes = 166111
+
+
+The number of referenced nodes = 96210
+
+
+The number of referenced nodes = 92967
+
+
+The number of referenced nodes = 48013
+
+
+The number of referenced nodes = 6065
+
+
+The number of referenced nodes = 1634
+
+
+The number of referenced nodes = 1543
+
+
+The number of referenced nodes = 1858
+
+
+The number of referenced nodes = 35801
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 3038
+
+
+The number of referenced nodes = 11438
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 100
+
+
+The number of referenced nodes = 50
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 73
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 207
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 371
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 267
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1662
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 8094
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 41084
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 242590
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 20956
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 43764
+
+
+The number of referenced nodes = 108931
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 460002
+
+
+The number of referenced nodes = 144128
+
+
+The number of referenced nodes = 441861
+
+
+The number of referenced nodes = 395896
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 441861
+
+
+The number of referenced nodes = 395896
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 26243
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 33309
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 102308
+
+
+The number of referenced nodes = 448190
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26001
+
+
+The number of referenced nodes = 33308
+
+
+The number of referenced nodes = 148196
+
+
+The number of referenced nodes = 135778
+
+
+The number of referenced nodes = 426354
+
+
+The number of referenced nodes = 705060
+
+
+The number of referenced nodes = 1238683
+
+
+The number of referenced nodes = 4313589
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 75
+
+
+The number of referenced nodes = 480
+
+
+The number of referenced nodes = 2607
+
+
+The number of referenced nodes = 14823
+
+
+The number of referenced nodes = 33972
+
+
+The number of referenced nodes = 139784
+
+
+The number of referenced nodes = 254226
+
+
+The number of referenced nodes = 764519
+
+nTerms: 10143510
+Time: 48.0191
+Memory: 0.246998
+FINISHED CPU 97.72 MEM 76964 MAXMEM 277020 STALE 0 MAXMEM_RSS 257940
+<time name="ALL">97770</time>
+ABC command line: "read ../benchmarks/EPFL_suite/div.aig; resyn2; resyn2;  if -K 29 -a; arextract -u -l 4".
+
+
+The number of referenced nodes = 550
+
+
+The number of referenced nodes = 738
+
+
+The number of referenced nodes = 145
+
+
+The number of referenced nodes = 997
+
+
+The number of referenced nodes = 372
+
+
+The number of referenced nodes = 996
+
+
+The number of referenced nodes = 17009849
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22778
+
+
+The number of referenced nodes = 342675
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 654155
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 329458
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 291700
+
+
+The number of referenced nodes = 1114086
+
+
+The number of referenced nodes = 2212
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6153
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 314
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 10275
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 173
+
+
+The number of referenced nodes = 86756
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 67273
+
+
+The number of referenced nodes = 174299
+
+
+The number of referenced nodes = 413826
+
+
+The number of referenced nodes = 462891
+
+
+The number of referenced nodes = 308210
+
+
+The number of referenced nodes = 266790
+
+
+The number of referenced nodes = 131838
+
+
+The number of referenced nodes = 12636
+
+
+The number of referenced nodes = 2830
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 1927
+
+
+The number of referenced nodes = 3059
+
+
+The number of referenced nodes = 82702
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 591
+
+
+The number of referenced nodes = 5584
+
+
+The number of referenced nodes = 24190
+
+
+The number of referenced nodes = 31
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 699
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 2616
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 6553
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 68412
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 38538
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 53685
+
+
+The number of referenced nodes = 275771
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 1489612
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 477898
+
+
+The number of referenced nodes = 1942238
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 1710593
+
+
+The number of referenced nodes = 2655511
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 392
+
+
+The number of referenced nodes = 989584
+
+
+The number of referenced nodes = 114
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 1710593
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1710593
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 96488
+
+
+The number of referenced nodes = 98252
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 331613
+
+
+The number of referenced nodes = 1710593
+
+
+The number of referenced nodes = 2793938
+
+
+The number of referenced nodes = 590904
+
+
+The number of referenced nodes = 4495567
+
+
+The number of referenced nodes = 73446
+
+
+The number of referenced nodes = 17364
+
+
+The number of referenced nodes = 5171
+
+
+The number of referenced nodes = 997
+
+
+The number of referenced nodes = 170
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 583485
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 22773
+
+
+The number of referenced nodes = 331174
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 664719
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 3566311
+
+
+The number of referenced nodes = 392
+
+
+The number of referenced nodes = 331174
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 271791
+
+
+The number of referenced nodes = 536125
+
+
+The number of referenced nodes = 14709
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 22027
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 135
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 42
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 22
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 40
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 29
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 10275
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 173
+
+
+The number of referenced nodes = 86756
+
+
+The number of referenced nodes = 67273
+
+
+The number of referenced nodes = 174299
+
+
+The number of referenced nodes = 413826
+
+
+The number of referenced nodes = 462891
+
+
+The number of referenced nodes = 308210
+
+
+The number of referenced nodes = 266790
+
+
+The number of referenced nodes = 131838
+
+
+The number of referenced nodes = 12636
+
+
+The number of referenced nodes = 2830
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 1927
+
+
+The number of referenced nodes = 3059
+
+
+The number of referenced nodes = 82700
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 5593
+
+
+The number of referenced nodes = 24192
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 36
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 30
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 25
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 27
+
+
+The number of referenced nodes = 59
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 26
+
+
+The number of referenced nodes = 17
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 70
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 74
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 271
+
+
+The number of referenced nodes = 21
+
+
+The number of referenced nodes = 528
+
+
+The number of referenced nodes = 16
+
+
+The number of referenced nodes = 377
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 3011
+
+
+The number of referenced nodes = 28
+
+
+The number of referenced nodes = 14686
+
+
+The number of referenced nodes = 18
+
+
+The number of referenced nodes = 99766
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 698281
+
+
+The number of referenced nodes = 19
+
+
+The number of referenced nodes = 41096
+
+
+The number of referenced nodes = 15
+
+
+The number of referenced nodes = 24
+
+
+The number of referenced nodes = 143906
+
+
+The number of referenced nodes = 276745
+
+
+The number of referenced nodes = 20
+
+
+The number of referenced nodes = 1464207
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 475239
+
+
+The number of referenced nodes = 1948359
+
+
+The number of referenced nodes = 12
+
+
+The number of referenced nodes = 1634174
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 392027
+
+
+The number of referenced nodes = 1948359
+
+
+The number of referenced nodes = 1634174
+
+
+The number of referenced nodes = 13
+
+
+The number of referenced nodes = 74275
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 98253
+
+
+The number of referenced nodes = 392027
+
+
+The number of referenced nodes = 329687
+
+
+The number of referenced nodes = 11
+
+
+The number of referenced nodes = 1710588
+
+
+The number of referenced nodes = 14
+
+
+The number of referenced nodes = 76816
+
+
+The number of referenced nodes = 98246
+
+
+The number of referenced nodes = 392026
+
+
+The number of referenced nodes = 483028
+
+
+The number of referenced nodes = 1693203
+
+
+The number of referenced nodes = 2793737
+
+
+The number of referenced nodes = 4495567
+
+
+The number of referenced nodes = 23352333
+
+
+The number of referenced nodes = 23
+
+
+The number of referenced nodes = 112
+
+
+The number of referenced nodes = 715
+
+
+The number of referenced nodes = 4722
+
+
+The number of referenced nodes = 26321
+
+
+The number of referenced nodes = 99510
+
+
+The number of referenced nodes = 380857
+
+
+The number of referenced nodes = 970821
+
+
+The number of referenced nodes = 3001768
+
+nTerms: 8880570
+Time: 342.128
+Memory: 1.02326
+FINISHED CPU 396.23 MEM 147268 MAXMEM 1091968 STALE 0 MAXMEM_RSS 1072964
+<time name="ALL">396270</time>
