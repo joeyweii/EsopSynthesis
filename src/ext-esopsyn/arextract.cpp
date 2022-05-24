@@ -268,8 +268,13 @@ uint32_t ARExtractManager::CostFunctionLevel(DdNode* f, int level){
 	if (f == Cudd_ReadOne(_ddmanager))
 		return 1;
 
-	//if(level == 0) return  Cudd_CountPathsToNonZero(f);
-	if(level == 0) return Cudd_DagSize(f);
+	// Path Approximation
+	// if(level == 0) return  Cudd_CountPathsToNonZero(f);
+	// Node Approximation
+	// if(level == 0) return Cudd_DagSize(f);
+	// Hybrid Approximation
+	if(level == 0) 
+		return (Cudd_NodeReadIndex(f) >= _nVars - level - 3)? Cudd_CountPathsToNonZero(f) :  Cudd_DagSize(f);
 
 	// Calculate f0, f1, f2
 	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
