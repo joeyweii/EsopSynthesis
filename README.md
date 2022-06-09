@@ -1,112 +1,74 @@
-[![Build Status](https://travis-ci.org/berkeley-abc/abc.svg?branch=master)](https://travis-ci.org/berkeley-abc/abc)
-[![Build status](https://ci.appveyor.com/api/projects/status/7q8gopidgvyos00d?svg=true)](https://ci.appveyor.com/project/berkeley-abc/abc)
+# ESOP synthesis research
+## Description
+### ESOP synthesis algorithm
+1. bddextract: Pseudo-Kronecker expression (a special class of ESOP) synthesis algorithm based on [R. Drechsler, IEEE Trans. C 48(9), 1999, 987–990].
+2. arextract: Optimize bddextract using approximation and refinement.
 
-# ABC: System for Sequential Logic Synthesis and Formal Verification
+### Random Benchmark Generator
+1. random_esop: generate a random esop in pla format.
+2. random_function: generate a random function, with random output value for each assignment, in pla format. 
+3. random_sop: generate a random sop, with 0.4n~n literals in each cube, in pla format.
 
-ABC is always changing but the current snapshot is believed to be stable. 
+### ESOP verification
+1. verify_pla: verify if an ESOP realize a spec function provided by pla format.
+2. verify_tt: verify if an ESOP realize a spec function provided by truth table format.
 
-## Compiling:
+## Compile
+### ABC
+> make
 
-To compile ABC as a binary, download and unzip the code, then type `make`.
-To compile ABC as a static library, type `make libabc.a`.
+### Random Benchmark Generator
+> ./compile.sh
 
-When ABC is used as a static library, two additional procedures, `Abc_Start()` 
-and `Abc_Stop()`, are provided for starting and quitting the ABC framework in 
-the calling application. A simple demo program (file src/demo.c) shows how to 
-create a stand-alone program performing DAG-aware AIG rewriting, by calling 
-APIs of ABC compiled as a static library.
+### easy library for verification
+> cd easy
+> mkdir build
+> cd build
+> cmake \.\.
+> make
 
-To build the demo program
+## Usage
+### ESOP synthesis algorithm  (ABC command)
+1. bddextract
+> ./abc
+> read <circuit/function file>
+> bddextract [-hl] [-o <ith PO>] [-v [0/1]]
+	-o    : specify the output to be processed
+	-v    : specify the level of verbose. Default: 0
+	-u    : toggle using LUT mapping. Default: 0
+	-h    : print the command usage
 
- * Copy demo.c and libabc.a to the working directory
- * Run `gcc -Wall -g -c demo.c -o demo.o`
- * Run `g++ -g -o demo demo.o libabc.a -lm -ldl -lreadline -lpthread`
+2. arextract
+> ./abc
+> read <circuit/function file>
+> arextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]]
+	-o    : specify the output to be processed
+	-v    : specify the level of verbose. Default: 0
+	-l    : specify the level of cost function. Default: 1
+	-h    : print the command usage
 
-To run the demo program, give it a file with the logic network in AIGER or BLIF. For example:
+### Random Benchmark Generator
+1. random_esop
+./random_esop <out.pla> <#variable> <#cube> <#max_literals_per_cube> <random_seed>
 
-    [...] ~/abc> demo i10.aig
-    i10          : i/o =  257/  224  lat =    0  and =   2396  lev = 37
-    i10          : i/o =  257/  224  lat =    0  and =   1851  lev = 35
-    Networks are equivalent.
-    Reading =   0.00 sec   Rewriting =   0.18 sec   Verification =   0.41 sec
+2. random function
+./random_function <numPI> <out.pla> <random seed>
 
-The same can be produced by running the binary in the command-line mode:
+3. random sop
+ ./random_sop <out.pla> <#variable> <#cube> <random_seed>
 
-    [...] ~/abc> ./abc
-    UC Berkeley, ABC 1.01 (compiled Oct  6 2012 19:05:18)
-    abc 01> r i10.aig; b; ps; b; rw -l; rw -lz; b; rw -lz; b; ps; cec
-    i10          : i/o =  257/  224  lat =    0  and =   2396  lev = 37
-    i10          : i/o =  257/  224  lat =    0  and =   1851  lev = 35
-    Networks are equivalent.
+### ESOP verification
+1. verify_pla
+./easy/build/verify/verify_pla <function.pla> <esop.pla>
 
-or in the batch mode:
+2. verify_tt
+./easy/build/verify/verify_tt <truth_table> <esop.pla>
 
-    [...] ~/abc> ./abc -c "r i10.aig; b; ps; b; rw -l; rw -lz; b; rw -lz; b; ps; cec"
-    ABC command line: "r i10.aig; b; ps; b; rw -l; rw -lz; b; rw -lz; b; ps; cec".
-    i10          : i/o =  257/  224  lat =    0  and =   2396  lev = 37
-    i10          : i/o =  257/  224  lat =    0  and =   1851  lev = 35
-    Networks are equivalent.
+## Reference
+[easy library](https://github.com/hriener/easy)
 
-## Compiling as C or C++
+[Rolf Drechsler. 1999. Pseudo-Kronecker expressions for symmetric functions. IEEE Transactions on Computers 48, 9 (1999), 987–990.](https://people.eecs.berkeley.edu/~alanmi/publications/other/tc99_drechsler.pdf)
 
-The current version of ABC can be compiled with C compiler or C++ compiler.
-
- * To compile as C code (default): make sure that `CC=gcc` and `ABC_NAMESPACE` is not defined.
- * To compile as C++ code without namespaces: make sure that `CC=g++` and `ABC_NAMESPACE` is not defined.
- * To compile as C++ code with namespaces: make sure that `CC=g++` and `ABC_NAMESPACE` is set to
-   the name of the requested namespace. For example, add `-DABC_NAMESPACE=xxx` to OPTFLAGS.
-
-## Building a shared library
-
- * Compile the code as position-independent by adding `ABC_USE_PIC=1`.
- * Build the `libabc.so` target: 
- 
-     make ABC_USE_PIC=1 libabc.so
-
-## Bug reporting:
-
-Please try to reproduce all the reported bugs and unexpected features using the latest 
-version of ABC available from https://github.com/berkeley-abc/abc
-
-If the bug still persists, please provide the following information:    
-
- 1. ABC version (when it was downloaded from GitHub)
- 1. Linux distribution and version (32-bit or 64-bit)
- 1. The exact command-line and error message when trying to run the tool
- 1. The output of the `ldd` command run on the exeutable (e.g. `ldd abc`).
- 1. Versions of relevant tools or packages used.
-
-
-## Troubleshooting:
-
- 1. If compilation does not start because of the cyclic dependency check, 
-try touching all files as follows: `find ./ -type f -exec touch "{}" \;`
- 1. If compilation fails because readline is missing, install 'readline' library or
-compile with `make ABC_USE_NO_READLINE=1`
- 1. If compilation fails because pthreads are missing, install 'pthread' library or
-compile with `make ABC_USE_NO_PTHREADS=1`
-    * See http://sourceware.org/pthreads-win32/ for pthreads on Windows
-    * Precompiled DLLs are available from ftp://sourceware.org/pub/pthreads-win32/dll-latest
- 1. If compilation fails in file "src/base/main/libSupport.c", try the following:
-    * Remove "src/base/main/libSupport.c" from "src/base/main/module.make"
-    * Comment out calls to `Libs_Init()` and `Libs_End()` in "src/base/main/mainInit.c"
- 1. On some systems, readline requires adding '-lcurses' to Makefile.
-
-The following comment was added by Krish Sundaresan:
-
-"I found that the code does compile correctly on Solaris if gcc is used (instead of 
-g++ that I was using for some reason). Also readline which is not available by default 
-on most Sol10 systems, needs to be installed. I downloaded the readline-5.2 package 
-from sunfreeware.com and installed it locally. Also modified CFLAGS to add the local 
-include files for readline and LIBS to add the local libreadline.a. Perhaps you can 
-add these steps in the readme to help folks compiling this on Solaris."
-
-The following tutorial is kindly offered by Ana Petkovska from EPFL:
-https://www.dropbox.com/s/qrl9svlf0ylxy8p/ABC_GettingStarted.pdf
-
-## Final remarks:
-
-Unfortunately, there is no comprehensive regression test. Good luck!                                
-
-This system is maintained by Alan Mishchenko <alanmi@berkeley.edu>. Consider also 
-using ZZ framework developed by Niklas Een: https://bitbucket.org/niklaseen/abc-zz (or https://github.com/berkeley-abc/abc-zz)
+[ABC: System for Sequential Logic Synthesis and Formal Verification](https://github.com/berkeley-abc/abc)
+    
+[BDD extract implementation](https://github.com/boschmitt/losys)

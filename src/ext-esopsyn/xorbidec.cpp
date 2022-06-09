@@ -3,6 +3,7 @@
 #include "sat/bsat/satSolver.h"
 
 #include <iostream>
+#include <climits>
 
 #define DEBUG 0
 
