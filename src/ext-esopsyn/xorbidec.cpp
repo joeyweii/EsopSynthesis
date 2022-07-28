@@ -12,18 +12,18 @@ extern "C" int Abc_NtkDarCec( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, int nConfLim
 
 /**Function*************************************************************
 
-  Synopsis    [Xor two Network]
+	Synopsis    [Xor two Network]
 
-  Description [Only single output is allowed. The name of PO is set the same as pNtk1 and pNtk2.]
+	Description [Only networks with single output are allowed. The name of PO is set the same as pNtk1 and pNtk2.]
                
-  SideEffects []
+	SideEffects []
 
-  SeeAlso     []
+	SeeAlso     []
 
 ***********************************************************************/
 static void Abc_NtkMiterFinalize( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t * pNtkMiter, int fComb, int nPartSize, int fImplic, int fMulti )
 {
-    Vec_Ptr_t * vPairs;
+	Vec_Ptr_t * vPairs;
     Abc_Obj_t * pMiter, * pNode;
     int i;
     assert( nPartSize == 0 || fMulti == 0 );
@@ -129,8 +129,8 @@ static void My_NtkMiterPrepare( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t 
     Abc_Obj_t * pObj, * pObjNew;
     int i;
     // clean the copy field in all objects
-//    Abc_NtkCleanCopy( pNtk1 );
-//    Abc_NtkCleanCopy( pNtk2 );
+	// Abc_NtkCleanCopy( pNtk1 );
+    // Abc_NtkCleanCopy( pNtk2 );
     Abc_AigConst1(pNtk1)->pCopy = Abc_AigConst1(pNtkMiter);
     Abc_AigConst1(pNtk2)->pCopy = Abc_AigConst1(pNtkMiter);
 
@@ -151,7 +151,7 @@ static void My_NtkMiterPrepare( Abc_Ntk_t * pNtk1, Abc_Ntk_t * pNtk2, Abc_Ntk_t 
         {
             // create POs
             if ( fMulti )
-            {
+			{
                 Abc_NtkForEachCo( pNtk1, pObj, i )
                 {
                     pObjNew = Abc_NtkCreatePo( pNtkMiter );
@@ -731,10 +731,10 @@ int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutpu
 
       int result = NtkXorBidecSingleOutput(pSubNtk, vParti);
       if(result){
-        nSuccess++;
-        if(fPrintParti){
-          printf("----%s----\n", Abc_ObjName(pPo));
-              for(int i = 0; i < Abc_NtkPiNum(pSubNtk); i++){
+		nSuccess++;
+		if(fPrintParti){
+			printf("----%s----\n", Abc_ObjName(pPo));
+			for(int i = 0; i < Abc_NtkPiNum(pSubNtk); i++){
               if(vParti[i] == XC) printf("PI %d: XC\n", i);
               else if(vParti[i] == XA) printf("PI %d: XA\n", i);
               else if(vParti[i] == XB) printf("PI %d: XB\n", i);

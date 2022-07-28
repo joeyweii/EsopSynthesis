@@ -37,7 +37,6 @@ int main(int argc, char* argv[]){
     f.open(argv[2], ios::out);
     f << ".i " << numPI << endl;
     f << ".o 1" << endl;
-    f << ".type esop" << endl;
 
     int seed = atoi(argv[3]);
     srand(seed);

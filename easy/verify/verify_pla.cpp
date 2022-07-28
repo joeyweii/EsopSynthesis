@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	kitty::dynamic_truth_table sop_tt( nVars_sop );
 	kitty::create_from_cubes( sop_tt, sop, false );
 
-	if(kitty::equal(esop_tt, esop_tt))
+	if(kitty::equal(sop_tt, esop_tt))
 		std::cout << "Equivalent" << std::endl;
 	else
 		std::cout << "Not equivalent" << std::endl;

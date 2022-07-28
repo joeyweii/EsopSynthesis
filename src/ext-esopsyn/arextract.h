@@ -17,9 +17,10 @@ public:
 
 	ARExtractManager(DdManager*, std::uint32_t, std::uint32_t);
 
-	void get_ordering(std::vector<uint32_t>& ordering);
-	void print_esop(int);
-	void write_esop_to_file(char* filename);
+	void printResult() const;
+    void printESOPwithOrder(int nPi, std::vector<int>& ordering) const;
+    void writePLAwithOrder(int nPi, std::vector<int>& ordering, char* filename) const;
+    uint32_t getNumTerms() const;
 
 	// initialize data structure 
 	void init();
@@ -48,10 +49,6 @@ private:
 	std::vector<var_value> _values; // for generating psdkro
 	std::unordered_map<DdNode *, std::pair<exp_type, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop; // storing the resulting esop
-	std::vector<std::uint32_t> _ordering; // the variable ordering
 	uint32_t _level; // k level look ahead
     
 };
-
-void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
-

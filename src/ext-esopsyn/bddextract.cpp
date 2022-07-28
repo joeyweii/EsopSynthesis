@@ -37,7 +37,7 @@ void BDDExtractManager::generate_psdkro(DdNode *f)
 	exp_type expansion = _exp_cost[f].first;
 
 	// Determine the top-most variable
-	auto idx = _ordering[Cudd_NodeReadIndex(f)];
+	auto idx = Cudd_NodeReadIndex(f);
 	_vars.push_back(idx);
 
 	// Calculate f0, f1, f2
@@ -109,53 +109,69 @@ std::pair<exp_type, std::uint32_t> BDDExtractManager::best_expansion(DdNode *f)
 	return ret;
 }
 
-void BDDExtractManager::get_ordering(std::vector<uint32_t>& ordering){
-	_ordering = ordering;	
-}
-
-void BDDExtractManager::print_esop(int verbose){
-
-	if(verbose){
-		std::cout << "Resulting PSDKRO:" << std::endl;
-		for (auto &cube : _esop) {
-			std::cout << cube.str(_nVars) << std::endl;
-		}
-	}
-	std::cout << "nTerms: " << _esop.size() << std::endl;
-}
-
-void BDDExtractManager::write_esop_to_file(char* filename){
-	std::ofstream file;
-	file.open(filename, std::ios::out);
-
-	if(!file.is_open()) std::cout << "Output file cannot be opened!" << std::endl;
-	else{
-		file << ".i " << _nVars << "\n";
-		file << ".o 1\n";
-		file << ".type esop\n";
-
-		for (auto &cube : _esop) {
-			file << cube.str(_nVars) << " 1\n";
-		}
-		file << ".e\n";
+void BDDExtractManager::printResult() const
+{
+	std::cout << "Resulting PSDKRO:" << std::endl;
+	for (auto &cube : _esop)
+    {
+		std::cout << cube.str(_nVars) << std::endl;
 	}
 }
 
-void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder){
+void BDDExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) const
+{
+    assert(ordering.size() == _nVars);
+	std::cout << "Resulting PSDKRO (with order):" << std::endl;
+    for(auto &cube : _esop) 
+    {
+        std::string e(nPi, '-');
+        for(uint32_t i = 0; i < _nVars; ++i)
+          e[ordering[i]] = cube.lit(i);
+
+        std::cout << e << std::endl; 
+    }   
+}
+
+void BDDExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, char* filename) const
+{
+    assert(ordering.size() == _nVars);
+    assert(filename);
+    std::ofstream outFile;
+    outFile.open(filename, std::ios::out);
+    
+    outFile << ".i " << nPi << '\n';
+    outFile << ".o 1\n";
+    outFile << ".type esop\n";
+
+    for(auto &cube : _esop) 
+    {
+        std::string e(nPi, '-');
+        for(uint32_t i = 0; i < _nVars; ++i)
+          e[ordering[i]] = cube.lit(i);
+
+        outFile << e << " 1" << '\n';
+    }   
+    
+    outFile << ".e\n" << std::endl;
+
+    outFile.close();
+}
+
+uint32_t BDDExtractManager::getNumTerms() const
+{
+    return _esop.size();
+}
+
+void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
 
-	// get the number of variables
-	int nVars = Abc_NtkPiNum(pNtk);
-
-	// check the numPI is smaller than the bitwidth of a cube in psdkro
-	if (nVars > psdkro::bitwidth) {
-		std::cout << "Cannot support nVars > " << psdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
-		return;
-	}
+	// number of variables in Ntk
+	int nPi = Abc_NtkPiNum(pNtk);
 
 	abctime clk = Abc_Clock();
+
 	// Build BDD
     if ( Abc_NtkIsStrash(pNtk) )
         pNtkBdd = Abc_NtkCollapse( pNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
@@ -174,46 +190,55 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder){
 	// get the root node of the BDD
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
     DdNode* ddnode = (DdNode *) pObj->pData;
+   
+    // number of used variables in BDD
+    int nVars = Cudd_SupportSize(ddmanager, ddnode); 
 
-	// get the ordering
-	char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
-	std::vector<uint32_t> ordering;
-    for(int i = 0; i < Cudd_SupportSize(ddmanager, ddnode); i++)
-	{
-		if(fOrder)
-		{
-			for(int j = 0; j < nVars; j++)
-			{
-				if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j))))
-				{
-					ordering.push_back(j);
-					break;
-				}
-			}
-		}
-		else ordering.push_back(i);
-    }
+    char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
+   
+	// check the numPI is smaller than the bitwidth of a cube in psdkro
+	if (nVars > psdkro::bitwidth) {
+		std::cout << "Cannot support nVars > " << psdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
+		return;
+	}
 
-	// make sure that every PI is used in BDD
-	if(fOrder) assert(nVars == Cudd_SupportSize(ddmanager, ddnode));
-	else nVars = Cudd_SupportSize(ddmanager, ddnode);
-	
     BDDExtractManager m(ddmanager, nVars); 
-
-	m.get_ordering(ordering);
 
 	clk = Abc_Clock();
 
+    // extract
     m.extract(ddnode);	
 
 	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
 	double memory = getPeakRSS( )  / (1024.0 * 1024.0 * 1024.0);
 	std::cout << "PSDKRO time used: \t\t" << runtime << " sec" << std::endl;
 	std::cout << "PSDKRO memory used: \t\t" << memory << " GB" << std::endl;
+    std::cout << "Number of terms: \t\t" << m.getNumTerms() << std::endl;
 
-	m.print_esop(fVerbose);
-	if(filename)
-		m.write_esop_to_file(filename);
+    // dump ordering. ordering[i] indicates the order of variable i in PIs.
+    std::vector<int> ordering;
+    ordering.resize(nPi);
+    for(int i = 0; i < nVars; ++i)
+    {
+        for(int j = 0; j < nPi; ++j)
+        {
+            if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j))))
+            {
+                ordering[i] = j;
+                break;
+            }
+        }
+    }
+  
+    // print ESOP and write PLA file
+    if(fVerbose)
+    { 
+        m.printESOPwithOrder(nPi, ordering); 
+    }
+    if(filename)
+    {
+        m.writePLAwithOrder(nPi, ordering, filename);
+    }
 
 	Abc_NtkDelete(pNtkBdd);
 }

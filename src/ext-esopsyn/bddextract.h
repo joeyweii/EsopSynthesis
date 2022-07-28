@@ -17,9 +17,10 @@ class BDDExtractManager {
 public:
 	BDDExtractManager(DdManager*, std::uint32_t);
 	void extract(DdNode *);
-	void get_ordering(std::vector<uint32_t>& ordering);
-	void print_esop(int);
-	void write_esop_to_file(char* filename);
+	void printResult() const;
+    void printESOPwithOrder(int nPi, std::vector<int>& ordering) const;
+    void writePLAwithOrder(int nPi, std::vector<int>& ordering, char* filename) const;
+    uint32_t getNumTerms() const;
 
 private:
 
@@ -30,11 +31,10 @@ private:
 	void generate_psdkro(DdNode *);
 
 private:
-	DdManager* _ddmanager; // cudd manager
-	uint32_t _nVars; // the number of variables
-	std::vector<std::uint32_t> _vars; // for generating psdkro 
-	std::vector<var_value> _values; // for generating psdkro
+	DdManager* _ddmanager;              // cudd manager
+	uint32_t _nVars;                    // the number of variables
+	std::vector<std::uint32_t> _vars;   // for generating psdkro 
+	std::vector<var_value> _values;     // for generating psdkro
 	std::unordered_map<DdNode *, std::pair<exp_type, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
-	std::vector<cube> _esop; // storing the resulting esop
-	std::vector<std::uint32_t> _ordering; // the variable ordering
+	std::vector<cube> _esop;            // storing the resulting esop
 };

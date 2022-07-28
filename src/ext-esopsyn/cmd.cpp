@@ -8,9 +8,9 @@ extern void MintEsopMain(Abc_Obj_t* pNode, std::ofstream& OutFile);
 extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
-extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, int fOrder);
-extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder);
-extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose, int fOrder);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
+extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
 
 extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
 /**Function*************************************************************
@@ -358,7 +358,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      BddExtractMain(pSubNtk, pFileNameOut, fVerbose, 0);
+      BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
       Abc_NtkDelete(pSubNtk);
     }
   }
@@ -377,8 +377,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      BddExtractMain(pSubNtk, pFileNameOut, fVerbose, 1);
-      
+      BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
 
       Abc_NtkDelete(pSubNtk);
     }
@@ -479,7 +478,7 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 0);
+      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
       Abc_NtkDelete(pSubNtk);
     }
   }
@@ -497,7 +496,7 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 1);
+      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
       
 
       Abc_NtkDelete(pSubNtk);
@@ -599,7 +598,7 @@ int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 0);
+      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
       Abc_NtkDelete(pSubNtk);
     }
   }
@@ -617,8 +616,7 @@ int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose, 1);
-      
+      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
 
       Abc_NtkDelete(pSubNtk);
     }
