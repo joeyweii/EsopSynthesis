@@ -638,7 +638,8 @@ int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk
   Abc_Obj_t* pObj;
   int i;
 
-  Abc_NtkForEachPi(fA, pObj, i){
+  Abc_NtkForEachPi(fA, pObj, i)
+  {
       if(vParti[i] == XB){
           Abc_ObjTransferFanout(pObj, const0);
       }
@@ -697,6 +698,7 @@ int NtkXorBidecSynthesis(Abc_Ntk_t* pNtk, std::vector<enum Set>& vParti, Abc_Ntk
   if(0){
     Abc_Ntk_t* f = My_NtkXor( fA, fB, 1, 0, 0, 0 );
     Abc_NtkDarCec( f, pNtk, 0, 0, 0 );
+    Abc_NtkDelete(f);
   }
   return 0; 
 }
@@ -755,8 +757,7 @@ int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutpu
         printf("----%s----\n", Abc_ObjName(pPo));
         std::cout << "Fail" << std::endl;
       }
-
-      
+      Abc_NtkDelete(pSubNtk);
   }
   
 

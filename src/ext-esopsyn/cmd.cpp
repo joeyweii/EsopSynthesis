@@ -220,8 +220,7 @@ int EsopSyn_CommandBidecEsop(Abc_Frame_t* pAbc, int argc, char** argv) {
   }
 
   BidecEsopMain(pNtk, fOutput);
-
-  Abc_NtkDelete(pNtk);
+  
   return 0;
 
 usage:

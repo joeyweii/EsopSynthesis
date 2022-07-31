@@ -9,6 +9,8 @@ extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegiste
 extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
 extern "C" Gia_Man_t * Eso_ManCompute( Gia_Man_t * pGia, int fVerbose, Vec_Wec_t ** pvRes );
 
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+
 void CleanUnusedPi(Abc_Ntk_t* pNtk){
     Abc_Obj_t* pObj;
     int i;
@@ -20,6 +22,17 @@ void CleanUnusedPi(Abc_Ntk_t* pNtk){
     }
 }
 
+/**Function*************************************************************
+
+  Synopsis    [Recursive bidecompose pNtk and synthesis ESOP]
+
+  Description []
+               
+  SideEffects [pNtk will be deleted]
+
+  SeeAlso     []
+
+***********************************************************************/
 void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     std::vector<Abc_Ntk_t*> Q;
     std::vector<Abc_Ntk_t*> subNtks;
@@ -56,7 +69,12 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
         std::cout << "subNtk[" << i << "] #PI: " << Abc_NtkPiNum(subNtks[i]) << std::endl;
     }
 
-    
+    for(int i = 0, end_i = subNtks.size(); i < end_i; ++i)
+    {
+        BddExtractMain(subNtks[i], 0, 0);
+    }
+
+    /*
     clk = Abc_Clock();
 
     int nCubes = 0;
@@ -74,7 +92,8 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     }
     std::cout << "nCubes: " << nCubes << std::endl;
     Abc_PrintTime( 1, "Starting Cover Compute Time", Abc_Clock() - clk );
-    
+    */
+
     for(int i = 0; i < subNtks.size(); i++){
         Abc_NtkDelete(subNtks[i]);
     }
