@@ -1,19 +1,19 @@
 #include "bddextract.h"
 
-BDDExtractManager::BDDExtractManager(DdManager* _ddmanager, uint32_t nVars)
-	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED)
+BDDExtractManager::BDDExtractManager(DdManager* ddmanager, DdNode* ddroot, uint32_t nVars)
+	: _ddmanager(ddmanager), _ddroot(ddroot), _nVars(nVars) , _values(nVars, UNUSED)
 { }
 
-void BDDExtractManager::extract(DdNode *f)
+void BDDExtractManager::extract()
 {
-	if (f == NULL) return;
+	if (_ddroot == NULL) return;
 
 	_exp_cost.clear();
 	_esop.clear();
 	std::fill(_values.begin(), _values.end(), UNUSED);
 
-	best_expansion(f);
-    generate_psdkro(f);
+	best_expansion(_ddroot);
+    generate_psdkro(_ddroot);
 }
 
 void BDDExtractManager::generate_psdkro(DdNode *f)
@@ -109,52 +109,17 @@ std::pair<exp_type, std::uint32_t> BDDExtractManager::best_expansion(DdNode *f)
 	return ret;
 }
 
-void BDDExtractManager::printResult() const
-{
-	std::cout << "Resulting PSDKRO:" << std::endl;
-	for (auto &cube : _esop)
-    {
-		std::cout << cube.str(_nVars) << std::endl;
-	}
-}
-
-void BDDExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) const
+void BDDExtractManager::getESOP(int nPi, std::vector<int>& ordering, std::vector<std::string>& ret) const
 {
     assert(ordering.size() == _nVars);
-	std::cout << "Resulting PSDKRO (with order):" << std::endl;
     for(auto &cube : _esop) 
     {
         std::string e(nPi, '-');
         for(uint32_t i = 0; i < _nVars; ++i)
           e[ordering[i]] = cube.lit(i);
 
-        std::cout << e << std::endl; 
+        ret.push_back(e);
     }   
-}
-
-void BDDExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, char* filename) const
-{
-    assert(ordering.size() == _nVars);
-    assert(filename);
-    std::ofstream outFile;
-    outFile.open(filename, std::ios::out);
-    
-    outFile << ".i " << nPi << '\n';
-    outFile << ".o 1\n";
-    outFile << ".type esop\n";
-
-    for(auto &cube : _esop) 
-    {
-        std::string e(nPi, '-');
-        for(uint32_t i = 0; i < _nVars; ++i)
-          e[ordering[i]] = cube.lit(i);
-
-        outFile << e << " 1" << '\n';
-    }   
-    
-    outFile << ".e\n" << std::endl;
-
-    outFile.close();
 }
 
 uint32_t BDDExtractManager::getNumTerms() const
@@ -162,37 +127,36 @@ uint32_t BDDExtractManager::getNumTerms() const
     return _esop.size();
 }
 
-void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
+// extract ESOP using BddExtract algorithm and store the final ESOP into ret 
+void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret)
+{   
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
-    int fBddMaxSize = ABC_INFINITY; // the max size of BDD
+    int fBddMaxSize = ABC_INFINITY; // the maximum size of BDD
 
 	// number of variables in Ntk
-	int nPi = Abc_NtkPiNum(pNtk);
-
-	abctime clk = Abc_Clock();
-
-	// Build BDD
-    if ( Abc_NtkIsStrash(pNtk) )
-        pNtkBdd = Abc_NtkCollapse( pNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
-    else{
+    int nPi = Abc_NtkPiNum(pNtk);
+  
+    // build BDD
+    if( Abc_NtkIsStrash(pNtk) )
+        pNtkBdd = Abc_NtkCollapse(pNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
+    else
+    {
         Abc_Ntk_t* pStrNtk;
         pStrNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
         pNtkBdd = Abc_NtkCollapse( pStrNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
         Abc_NtkDelete( pStrNtk );
-    }
-
-	std::cout << "BDD construction time used: \t" <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
+    }   
 
 	// get CUDD manager
     DdManager* ddmanager = (DdManager*) pNtkBdd->pManFunc;
 
 	// get the root node of the BDD
     Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
-    DdNode* ddnode = (DdNode *) pObj->pData;
+    DdNode* ddroot = (DdNode *) pObj->pData;
    
     // number of used variables in BDD
-    int nVars = Cudd_SupportSize(ddmanager, ddnode); 
+    int nVars = Cudd_SupportSize(ddmanager, ddroot); 
 
     char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
    
@@ -202,22 +166,14 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
 		return;
 	}
 
-    BDDExtractManager m(ddmanager, nVars); 
-
-	clk = Abc_Clock();
+    BDDExtractManager m(ddmanager, ddroot, nVars); 
 
     // extract
-    m.extract(ddnode);	
-
-	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory = getPeakRSS( )  / (1024.0 * 1024.0 * 1024.0);
-	std::cout << "PSDKRO time used: \t\t" << runtime << " sec" << std::endl;
-	std::cout << "PSDKRO memory used: \t\t" << memory << " GB" << std::endl;
-    std::cout << "Number of terms: \t\t" << m.getNumTerms() << std::endl;
+    m.extract();	
 
     // dump ordering. ordering[i] indicates the order of variable i in PIs.
     std::vector<int> ordering;
-    ordering.resize(nPi);
+    ordering.resize(nVars);
     for(int i = 0; i < nVars; ++i)
     {
         for(int j = 0; j < nPi; ++j)
@@ -229,16 +185,51 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose){
             }
         }
     }
-  
-    // print ESOP and write PLA file
+
+    m.getESOP(nPi, ordering, ret);
+
+    Abc_NtkDelete(pNtkBdd);
+}
+
+
+void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose)
+{
+    std::vector<std::string> ESOP;
+
+    abctime clk = Abc_Clock();
+
+    BddExtractSingleOutput(pNtk, ESOP);
+
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	std::cout << "Time used: \t\t" << runtime << " sec" << std::endl;
+	std::cout << "Memory used: \t\t" << memory << " GB" << std::endl;
+    std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
+
     if(fVerbose)
-    { 
-        m.printESOPwithOrder(nPi, ordering); 
-    }
+    {
+        std::cout << "Final ESOP:" << '\n';
+        for(auto& cube: ESOP)
+            std::cout << cube << '\n';
+    } 
+
     if(filename)
     {
-        m.writePLAwithOrder(nPi, ordering, filename);
-    }
+        std::fstream outFile;
+        outFile.open(filename, std::ios::out);
 
-	Abc_NtkDelete(pNtkBdd);
+        if(!outFile.is_open())
+            std::cerr << "Output file failed to be opened." << std::endl;
+        else
+        {
+            outFile << ".i " << Abc_NtkPiNum(pNtk) << '\n';
+            outFile << ".o 1\n";
+            outFile << ".type esop\n";
+            for(auto& cube: ESOP)
+                outFile << cube << " 1\n";
+            outFile << ".e\n";
+        }
+        
+        outFile.close();
+    }
 }

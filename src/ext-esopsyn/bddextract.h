@@ -15,11 +15,14 @@ using namespace psdkro;
 class BDDExtractManager {
 
 public:
-	BDDExtractManager(DdManager*, std::uint32_t);
-	void extract(DdNode *);
-	void printResult() const;
-    void printESOPwithOrder(int nPi, std::vector<int>& ordering) const;
-    void writePLAwithOrder(int nPi, std::vector<int>& ordering, char* filename) const;
+    // initialize
+	BDDExtractManager(DdManager*, DdNode*, std::uint32_t);
+    
+    // extract algorithm
+	void extract();
+
+    // get the final ESOP and number of terms
+    void getESOP(int nPi, std::vector<int>& ordering, std::vector<std::string>& ret) const;
     uint32_t getNumTerms() const;
 
 private:
@@ -32,6 +35,7 @@ private:
 
 private:
 	DdManager* _ddmanager;              // cudd manager
+    DdNode*    _ddroot;                 // dd root node
 	uint32_t _nVars;                    // the number of variables
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
 	std::vector<var_value> _values;     // for generating psdkro

@@ -11,6 +11,7 @@ extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
 extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
+extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, char* filename);
 
 extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
 /**Function*************************************************************
@@ -633,6 +634,93 @@ usage:
   
 }
 
+/**Function*************************************************************
+
+  Synopsis    [DcExtract command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
+  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+  Abc_Obj_t* pPo;
+  int iPo;
+  int c;
+  int fOutput = -1;
+  int fNumCofVar = 8;
+  char* pFileNameOut = NULL;
+
+  Extra_UtilGetoptReset();
+  while ((c = Extra_UtilGetopt(argc, argv, "ho")) != EOF) {
+    switch (c) {
+      case 'h':
+        goto usage;
+      case 'o':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fOutput = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fOutput < 0 )
+            goto usage;
+        break;
+      case 'n':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fNumCofVar = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fNumCofVar < 0 )
+            goto usage;
+        break;
+      default:
+        goto usage;
+    }
+  }
+
+  if ( argc == globalUtilOptind + 1 ){
+      pFileNameOut = argv[globalUtilOptind];
+  }
+
+  if (!pNtk) {
+    Abc_Print(-1, "Empty network.\n");
+    return 1;
+  }
+
+  Abc_NtkForEachPo(pNtk, pPo, iPo)
+  {
+    if(fOutput != -1 && iPo != fOutput) continue;
+
+    // create cone for the current PO
+    Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+
+    if( Abc_ObjFaninC0(pPo) )
+      Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+
+    std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+    std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+
+    DcExtractMain(pSubNtk, fNumCofVar, pFileNameOut);
+
+    Abc_NtkDelete(pSubNtk);
+  }
+  return 0;
+
+usage:
+  Abc_Print(-2, "usage: arextract [-h][-n <int>] [-o <int>]\n");
+  Abc_Print(-2, "\t        synthesis ESOP with DC extract\n");
+  Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 8\n");
+  Abc_Print(-2, "\t-o    : specify the output to be processed. Default: All outputs\n");
+  Abc_Print(-2, "\t-h    : print the command usage.\n");
+  return 1;
+  
+}
 // called during ABC startup
 void init(Abc_Frame_t* pAbc)
 {
@@ -643,6 +731,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "prunedextract", EsopSyn_CommandPrunedExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandARExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
 }
 
 // called during ABC termination
