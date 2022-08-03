@@ -2,6 +2,7 @@
 #include "base/main/mainInt.h"
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <vector>
 #include <cassert>
@@ -24,6 +25,7 @@ void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarL
        
         Abc_Ntk_t *p0 = NULL, *p1 = NULL;
 
+        // selection heuristic depending on AIG size
         for(size_t i = 0, end_i = Abc_NtkPiNum(pNtk); i < end_i; ++i)
         {
             if(CofVarList[i]) continue;
@@ -43,14 +45,32 @@ void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarL
         }
 
         assert(minIdx != -1);
-
         CofVarList[minIdx] = true;
+        
+        // Recursively dividing problem
+        size_t nCubeBefore, nCubeAfter;
+        nCubeBefore = ESOP.size();
         p0 = AIGCOF(pNtk, minIdx, 0);
         DivideConquerRecur(p0, nCofVar-1, CofVarList, ESOP);
         Abc_NtkDelete(p0); p0 = NULL;
+        nCubeAfter = ESOP.size();
+        for(size_t i = nCubeBefore, end_i = nCubeAfter; i < end_i; ++i)
+        {
+            assert(ESOP[i][minIdx] == '-');
+            ESOP[i][minIdx] = '0';
+        }
+
+        nCubeBefore = ESOP.size();
         p1 = AIGCOF(pNtk, minIdx, 1);
         DivideConquerRecur(p1, nCofVar-1, CofVarList, ESOP);
         Abc_NtkDelete(p1); p1 = NULL;
+        nCubeAfter = ESOP.size();
+        for(size_t i = nCubeBefore, end_i = nCubeAfter; i < end_i; ++i)
+        {
+            assert(ESOP[i][minIdx] == '-');
+            ESOP[i][minIdx] = '1';
+        }
+        
         CofVarList[minIdx] = false;
             
     }
@@ -75,5 +95,25 @@ void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename
         std::cout << "ESOP: " << '\n';
         for(auto& cube: ESOP)
             std::cout << cube << '\n';
+    }
+
+    if(filename)
+    {
+        std::fstream outFile;
+        outFile.open(filename, std::ios::out);
+
+        if(!outFile.is_open())
+            std::cerr << "Output file failed to be opened." << std::endl;
+        else
+        {
+            outFile << ".i " << Abc_NtkPiNum(pNtk) << '\n';
+            outFile << ".o 1\n";
+            outFile << ".type esop\n";
+            for(auto& cube: ESOP)
+                outFile << cube << " 1\n";
+            outFile << ".e\n";
+        }
+        
+        outFile.close();
     }
 }
