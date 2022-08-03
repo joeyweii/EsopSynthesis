@@ -11,7 +11,7 @@ extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
 extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
-extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, char* filename);
+extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 
 extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
 /**Function*************************************************************
@@ -651,11 +651,12 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   int iPo;
   int c;
   int fOutput = -1;
+  int fVerbose = 0;
   int fNumCofVar = 8;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "ho")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "hovn")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -667,6 +668,16 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
         fOutput = atoi(argv[globalUtilOptind]);
         globalUtilOptind++;
         if ( fOutput < 0 )
+            goto usage;
+        break;
+      case 'v':
+        if ( globalUtilOptind >= argc ){
+            Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+            goto usage;
+        }
+        fVerbose = atoi(argv[globalUtilOptind]);
+        globalUtilOptind++;
+        if ( fVerbose < 0  || fVerbose > 1)
             goto usage;
         break;
       case 'n':
@@ -706,16 +717,17 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
     std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
     std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-    DcExtractMain(pSubNtk, fNumCofVar, pFileNameOut);
+    DcExtractMain(pSubNtk, fNumCofVar, fVerbose, pFileNameOut);
 
     Abc_NtkDelete(pSubNtk);
   }
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: arextract [-h][-n <int>] [-o <int>]\n");
+  Abc_Print(-2, "usage: dcextract [-h] [-v <0/1>] [-n <int>] [-o <int>]\n");
   Abc_Print(-2, "\t        synthesis ESOP with DC extract\n");
   Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 8\n");
+  Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed. Default: All outputs\n");
   Abc_Print(-2, "\t-h    : print the command usage.\n");
   return 1;
