@@ -12,10 +12,10 @@
 
 using namespace psdkro;
 
-class ARExtractManager {
+class ArExtractManager {
 public:
 
-	ARExtractManager(DdManager*, std::uint32_t, std::uint32_t);
+	ArExtractManager(DdManager*, std::uint32_t, std::uint32_t);
 
 	void printResult() const;
     void printESOPwithOrder(int nPi, std::vector<int>& ordering) const;

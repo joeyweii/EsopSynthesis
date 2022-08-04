@@ -1,5 +1,6 @@
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
+#include "memory_measure.h"
 
 #include <iostream>
 #include <fstream>
@@ -78,7 +79,7 @@ void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarL
 
 void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename)
 {
-    assert(fNumCofVar <= Abc_NtkPiNum(pNtk)); 
+    assert(fNumCofVar <= Abc_NtkPiNum(pNtk));
 
     std::vector<std::string> ESOP; // final ESOP
     std::vector<bool> CofVarList(Abc_NtkPiNum(pNtk), false); // Variables that have been cofactored
@@ -87,7 +88,10 @@ void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename
 
     DivideConquerRecur(pNtk, fNumCofVar, CofVarList, ESOP);
 
-	std::cout << "Time used: " <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	std::cout << "Time used: " << runtime << " sec" << std::endl;
+    std::cout << "Memory used: " << memory << " GB" << std::endl;
     std::cout << "Number of terms: " << ESOP.size() << std::endl;
 
     if(fVerbose)

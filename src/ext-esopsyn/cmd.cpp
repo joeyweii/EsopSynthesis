@@ -9,8 +9,7 @@ extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
 extern void AigPSDKROMain(Abc_Ntk_t* pNtk);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
-extern void PrunedExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
-extern void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose);
+extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 
 extern void CleanUnusedPi(Abc_Ntk_t* pNtk);
@@ -397,7 +396,7 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [Pruned Extract command function.]
+  Synopsis    [ArExtract command function.]
 
   Description []
                
@@ -406,19 +405,20 @@ usage:
   SeeAlso     []
 
 ***********************************************************************/
-int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
+int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
   Abc_Obj_t* pPo;
   int iPo;
   int c;
   int fOutput = -1;
   int fVerbose = 0;
+  int fRefine = 1;
   int fLevel = 1;
   int fLUT = 0;
   char* pFileNameOut = NULL;
 
   Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hovlu")) != EOF) {
+  while ((c = Extra_UtilGetopt(argc, argv, "holvru")) != EOF) {
     switch (c) {
       case 'h':
         goto usage;
@@ -452,125 +452,8 @@ int EsopSyn_CommandPrunedExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
         if ( fVerbose < 0  || fVerbose > 1)
             goto usage;
         break;
-      case 'u':
-        fLUT ^= 1;
-        break;
-      default:
-        goto usage;
-    }
-  }
-
-  if ( argc == globalUtilOptind + 1 ){
-      pFileNameOut = argv[globalUtilOptind];
-  }
-
-  if (!pNtk) {
-    Abc_Print(-1, "Empty network.\n");
-    return 1;
-  }
-
-  if(fLUT)
-  {
-    Abc_NtkForEachNode( pNtk, pPo, iPo)
-    {
-      if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
-      Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
-      std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
-
-      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
-      Abc_NtkDelete(pSubNtk);
-    }
-  }
-  else
-  {
-    Abc_NtkForEachPo(pNtk, pPo, iPo){
-      if(fOutput != -1 && iPo != fOutput) continue;
-
-      // create cone for the current PO
-      Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
-
-      if( Abc_ObjFaninC0(pPo) )
-        Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
-
-      std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-      std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
-
-      PrunedExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
-      
-
-      Abc_NtkDelete(pSubNtk);
-    }
-  }
-  return 0;
-
-usage:
-  Abc_Print(-2, "usage: prunedextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]]\n");
-  Abc_Print(-2, "\t        synthesis ESOP with Pruned extract\n");
-  Abc_Print(-2, "\t-o    : specify the output to be processed\n");
-  Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
-  Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 1\n");
-  Abc_Print(-2, "\t-h    : print the command usage\n");
-  return 1;
-  
-}
-
-/**Function*************************************************************
-
-  Synopsis    [AR Extract command function.]
-
-  Description []
-               
-  SideEffects []
-
-  SeeAlso     []
-
-***********************************************************************/
-int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
-  Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
-  Abc_Obj_t* pPo;
-  int iPo;
-  int c;
-  int fOutput = -1;
-  int fVerbose = 0;
-  int fLevel = 1;
-  int fLUT = 0;
-  char* pFileNameOut = NULL;
-
-  Extra_UtilGetoptReset();
-  while ((c = Extra_UtilGetopt(argc, argv, "hovlu")) != EOF) {
-    switch (c) {
-      case 'h':
-        goto usage;
-      case 'o':
-        if ( globalUtilOptind >= argc ){
-            Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
-            goto usage;
-        }
-        fOutput = atoi(argv[globalUtilOptind]);
-        globalUtilOptind++;
-        if ( fOutput < 0 )
-            goto usage;
-        break;
-      case 'l':
-        if ( globalUtilOptind >= argc ){
-            Abc_Print( -1, "Command line switch \"-l\" should be followed by an integer.\n" );
-            goto usage;
-        }
-        fLevel = atoi(argv[globalUtilOptind]);
-        globalUtilOptind++;
-        if ( fLevel < 0 )
-            goto usage;
-        break;
-      case 'v':
-        if ( globalUtilOptind >= argc ){
-            Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
-            goto usage;
-        }
-        fVerbose = atoi(argv[globalUtilOptind]);
-        globalUtilOptind++;
-        if ( fVerbose < 0  || fVerbose > 1)
-            goto usage;
+      case 'r':
+        fRefine ^= 1;
         break;
       case 'u':
         fLUT ^= 1;
@@ -598,7 +481,7 @@ int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
+      ArExtractMain(pSubNtk, pFileNameOut, fLevel, fRefine, fVerbose);
       Abc_NtkDelete(pSubNtk);
     }
   }
@@ -616,7 +499,7 @@ int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
       std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
       std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-      ARExtractMain(pSubNtk, pFileNameOut, fLevel, fVerbose);
+      ArExtractMain(pSubNtk, pFileNameOut, fLevel, fRefine, fVerbose);
 
       Abc_NtkDelete(pSubNtk);
     }
@@ -624,11 +507,13 @@ int EsopSyn_CommandARExtract(Abc_Frame_t* pAbc, int argc, char** argv) {
   return 0;
 
 usage:
-  Abc_Print(-2, "usage: arextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]]\n");
-  Abc_Print(-2, "\t        synthesis ESOP with AR extract\n");
+  Abc_Print(-2, "usage: arextract [-h][-l <level>] [-o <ith PO>] [-v [0/1]] [-ru]\n");
+  Abc_Print(-2, "\t        synthesis ESOP with ArExtract\n");
   Abc_Print(-2, "\t-o    : specify the output to be processed\n");
   Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
   Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 1\n");
+  Abc_Print(-2, "\t-r    : toggle refinement or not. Default: 0\n");
+  Abc_Print(-2, "\t-u    : toggle LUT synthesis or not. Default: 0\n");
   Abc_Print(-2, "\t-h    : print the command usage\n");
   return 1;
   
@@ -741,8 +626,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "aigpsdkro", EsopSyn_CommandAigPSDKRO, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
-    Cmd_CommandAdd( pAbc, "esopsyn", "prunedextract", EsopSyn_CommandPrunedExtract, 0);
-    Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandARExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandArExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
 }
 

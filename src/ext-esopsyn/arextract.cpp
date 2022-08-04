@@ -1,17 +1,17 @@
 #include "arextract.h"
 
-ARExtractManager::ARExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
+ArExtractManager::ArExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
 	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED), _level(fLevel)
 { }
 
-void ARExtractManager::init()
+void ArExtractManager::init()
 {
 	_exp_cost.clear();
 	_esop.clear();
 	std::fill(_values.begin(), _values.end(), UNUSED);
 }
 
-void ARExtractManager::generate_psdkro(DdNode *f)
+void ArExtractManager::generate_psdkro(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
@@ -70,7 +70,7 @@ void ARExtractManager::generate_psdkro(DdNode *f)
 	
 }
 
-uint32_t ARExtractManager::refine(DdNode *f)
+uint32_t ArExtractManager::refine(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
@@ -180,7 +180,7 @@ uint32_t ARExtractManager::refine(DdNode *f)
 	return 0;
 }
 
-std::uint32_t ARExtractManager::starting_cover(DdNode *f)
+std::uint32_t ArExtractManager::starting_cover(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddmanager))
@@ -228,11 +228,11 @@ std::uint32_t ARExtractManager::starting_cover(DdNode *f)
 	return ret.second;
 }
 
-uint32_t ARExtractManager::CostFunction(DdNode* p){ 
+uint32_t ArExtractManager::CostFunction(DdNode* p){ 
     return CostFunctionLevel(p, _level-1);
 }
 
-uint32_t ARExtractManager::CostFunctionLevel(DdNode* f, int level){ 
+uint32_t ArExtractManager::CostFunctionLevel(DdNode* f, int level){ 
 	if (f == Cudd_ReadLogicZero(_ddmanager))
 		return 0;
 	if (f == Cudd_ReadOne(_ddmanager))
@@ -258,7 +258,7 @@ uint32_t ARExtractManager::CostFunctionLevel(DdNode* f, int level){
 	return s0 + s1 + s2 - std::max(s0, std::max(s1, s2));
 }
 
-void ARExtractManager::printResult() const
+void ArExtractManager::printResult() const
 {
 	std::cout << "Resulting PSDKRO:" << std::endl;
 	for (auto &cube : _esop)
@@ -267,7 +267,7 @@ void ARExtractManager::printResult() const
 	}
 }
 
-void ARExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) const
+void ArExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) const
 {
     assert(ordering.size() == _nVars);
 	std::cout << "Resulting PSDKRO (with order):" << std::endl;
@@ -281,7 +281,7 @@ void ARExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) 
     }   
 }
 
-void ARExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, char* filename) const
+void ArExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, char* filename) const
 {
     assert(ordering.size() == _nVars);
     assert(filename);
@@ -306,12 +306,12 @@ void ARExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, c
     outFile.close();
 }
 
-uint32_t ARExtractManager::getNumTerms() const
+uint32_t ArExtractManager::getNumTerms() const
 {
     return _esop.size();
 }
 
-void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose){
+void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose){
     Abc_Ntk_t* pNtkBdd = NULL;
     int fReorder = 1; // use reordering or not
     int fBddMaxSize = ABC_INFINITY; // the max size of BDD
@@ -351,7 +351,7 @@ void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose){
 		return;
 	}
 
-    ARExtractManager m(ddmanager, nVars, fLevel);   
+    ArExtractManager m(ddmanager, nVars, fLevel);   
 
     // extract algorithm
 	m.init();
@@ -366,18 +366,22 @@ void ARExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fVerbose){
 	std::cout << "Time used: \t\t" <<  runtime_start << " sec" << std::endl;
 	std::cout << "Memory used: \t" << memory_start << " GB" << std::endl;
 	std::cout << "nTerms: \t\t" << nTerms_start << std::endl;
-	
-	clk = Abc_Clock();
-    uint32_t nTerms_refine = m.refine(ddnode);
+
+    if(fRefine)
+    {   
+        clk = Abc_Clock();
+        uint32_t nTerms_refine = m.refine(ddnode);
+
+        double runtime_refine = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+        double memory_refine = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+
+        std::cout << "---- Refinement ----" << std::endl;
+        std::cout << "Time used: \t\t" <<  runtime_refine << " sec" << std::endl;
+        std::cout << "Memory used: \t" << memory_refine << " GB" << std::endl;
+        std::cout << "nTerms: \t\t" << nTerms_refine << std::endl;
+    }   
+
 	m.generate_psdkro(ddnode);
-
-	double runtime_refine = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory_refine = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
-
-	std::cout << "---- Refinement ----" << std::endl;
-	std::cout << "Time used: \t\t" <<  runtime_refine << " sec" << std::endl;
-	std::cout << "Memory used: \t" << memory_refine << " GB" << std::endl;
-	std::cout << "nTerms: \t\t" << nTerms_refine << std::endl;
 
     // dump ordering. ordering[i] indicates the order of variable i in PIs.
     std::vector<int> ordering;
