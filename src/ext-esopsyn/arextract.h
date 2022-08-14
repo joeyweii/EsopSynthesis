@@ -1,3 +1,6 @@
+#ifndef _AREXTRACT_H_
+#define _AREXTRACT_H_
+
 #include "base/main/main.h"
 #ifdef ABC_USE_CUDD
 #include "bdd/extrab/extraBdd.h"
@@ -15,40 +18,41 @@ using namespace psdkro;
 class ArExtractManager {
 public:
 
-	ArExtractManager(DdManager*, std::uint32_t, std::uint32_t);
+    // Constructor and Destructor
+	ArExtractManager(DdManager *ddManager, std::uint32_t level, bool refine, DdNode* _rootNode, std::uint32_t nVars);
+    ~ArExtractManager() {}
 
-	void printResult() const;
-    void printESOPwithOrder(int nPi, std::vector<int>& ordering) const;
-    void writePLAwithOrder(int nPi, std::vector<int>& ordering, char* filename) const;
+    void extract();
+
+    void getESOP(std::vector<std::string> &ret) const;
     uint32_t getNumTerms() const;
-
-	// initialize data structure 
-	void init();
-		
-	// find the starting cover
-	std::uint32_t starting_cover(DdNode *);
-
-	// refinement
-	std::uint32_t refine(DdNode *);
-
-	// generate the psdkro
-	void generate_psdkro(DdNode *);
-	
 private:
+	// Find the starting cover
+	std::uint32_t startingCover(DdNode *f);
+
+	// Refinement
+	std::uint32_t refine(DdNode *f);
+
+	// Generate the psdkro
+	void generatePSDKRO(DdNode *f);
 
 	//  Cost Functions
     // uint32_t BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited);
     // uint32_t Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>&);
-    uint32_t CostFunction(DdNode*);
-	uint32_t CostFunctionLevel(DdNode*, int);
+    uint32_t CostFunction(DdNode* f);
+	uint32_t CostFunctionLevel(DdNode* f, int level);
 
 private:
-	DdManager* _ddmanager; // cudd manager
-	uint32_t _nVars; // the number of variables
-	std::vector<std::uint32_t> _vars; // for generating psdkro 
-	std::vector<var_value> _values; // for generating psdkro
-	std::unordered_map<DdNode *, std::pair<exp_type, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
-	std::vector<cube> _esop; // storing the resulting esop
-	uint32_t _level; // k level look ahead
+	DdManager* _ddManager;              // cudd manager
+    DdNode* _rootNode;                  // root node of function to be extracted 
+	uint32_t _level;                    // k level cost look ahead
+	uint32_t _nVars;                    // the number of variables
+    bool     _refine;                   // conduct refinement or not
+	std::vector<VarValue> _values;     // for generating psdkro
+	std::vector<std::uint32_t> _vars;   // for generating psdkro 
+	std::unordered_map<DdNode *, std::pair<ExpType, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
+	std::vector<cube> _esop;            // storing the resulting esop
     
 };
+
+#endif

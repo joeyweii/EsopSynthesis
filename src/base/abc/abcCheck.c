@@ -266,7 +266,7 @@ int Abc_NtkCheckNames( Abc_Ntk_t * pNtk )
         pObj = Abc_ObjFanin0Ntk(pObj);
         if ( Nm_ManFindNameById(pObj->pNtk->pManName, pObj->Id) == NULL )
         {
-            fprintf( stdout, "NetworkCheck: CO with ID %d is in the network but not in the name table.\n", pObj->Id );
+            // fprintf( stdout, "NetworkCheck: CO with ID %d is in the network but not in the name table.\n", pObj->Id );
             return 0;
         }
     }

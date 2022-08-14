@@ -1,35 +1,36 @@
 #include "arextract.h"
 
-ArExtractManager::ArExtractManager(DdManager* _ddmanager, uint32_t nVars, uint32_t fLevel)
-	: _ddmanager(_ddmanager), _nVars(nVars) , _values(nVars, UNUSED), _level(fLevel)
+ArExtractManager::ArExtractManager(DdManager* ddManager, std::uint32_t level, bool refine, DdNode* rootNode, std::uint32_t nVars)
+	: _ddManager(ddManager), _rootNode(rootNode), _level(level), _nVars(nVars), _refine(refine), _values(nVars, VarValue::DONTCARE)
 { }
 
-void ArExtractManager::init()
+void ArExtractManager::extract()
 {
-	_exp_cost.clear();
-	_esop.clear();
-	std::fill(_values.begin(), _values.end(), UNUSED);
+    startingCover(_rootNode);
+    if(_refine)
+        refine(_rootNode);
+    generatePSDKRO(_rootNode);
 }
 
-void ArExtractManager::generate_psdkro(DdNode *f)
+void ArExtractManager::generatePSDKRO(DdNode *f)
 {
 	// Reach constant 0/1
-	if (f == Cudd_ReadLogicZero(_ddmanager))
+	if (f == Cudd_ReadLogicZero(_ddManager))
 		return;
-
-	if (f == Cudd_ReadOne(_ddmanager)) {
-		cube c; // mask & polarity initialized 0
-		for (auto var : _vars) {
-			if(_values[var] != UNUSED) c.mask.set(var);
-			if(_values[var] == POSITIVE) c.polarity.set(var);
+	if (f == Cudd_ReadOne(_ddManager))
+    {
+		cube c;
+		for (auto var : _vars) 
+        {
+			if(_values[var] != VarValue::DONTCARE) c._iscare.set(var);
+			if(_values[var] == VarValue::POSITIVE) c._polarity.set(var);
 		}
-
 		_esop.push_back(c);
 		return;
 	}
 
 	// Find the best expansion by a cache lookup
-	exp_type expansion = _exp_cost[f].first;
+	ExpType expansion = _exp_cost[f].first;
 
 	// Determine the top-most variable
 	auto idx = Cudd_NodeReadIndex(f);
@@ -38,44 +39,46 @@ void ArExtractManager::generate_psdkro(DdNode *f)
     DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
     DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
 
-    if (expansion == POSITIVE_DAVIO) {  
-        DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
+    if (expansion == ExpType::pD)
+    {  
+        DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1);
 
-		_values[idx] = UNUSED;
-		generate_psdkro(f0);
-		_values[idx] = POSITIVE;
-		generate_psdkro(f2);
+		_values[idx] = VarValue::DONTCARE;
+		generatePSDKRO(f0);
+		_values[idx] = VarValue::POSITIVE;
+		generatePSDKRO(f2);
 
-        Cudd_RecursiveDeref(_ddmanager, f2);
+        Cudd_RecursiveDeref(_ddManager, f2);
 	}
-    else if (expansion == NEGATIVE_DAVIO) {
-        DdNode *f2 = Cudd_bddXor(_ddmanager, f0, f1);
+    else if (expansion == ExpType::nD)
+    {
+        DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1);
 
-		_values[idx] = UNUSED;
-		generate_psdkro(f1);
-		_values[idx] = NEGATIVE;
-		generate_psdkro(f2);
+		_values[idx] = VarValue::DONTCARE;
+		generatePSDKRO(f1);
+		_values[idx] = VarValue::NEGATIVE;
+		generatePSDKRO(f2);
 
-        Cudd_RecursiveDeref(_ddmanager, f2);
+        Cudd_RecursiveDeref(_ddManager, f2);
 	}
-    else{
-        _values[idx] = NEGATIVE;
-		generate_psdkro(f0);
-		_values[idx] = POSITIVE;
-		generate_psdkro(f1);
+    else
+    {
+        _values[idx] = VarValue::NEGATIVE;
+		generatePSDKRO(f0);
+		_values[idx] = VarValue::POSITIVE;
+		generatePSDKRO(f1);
     }
 
     _vars.pop_back();
-	_values[idx] = UNUSED;
-	
+	_values[idx] = VarValue::DONTCARE;
 }
 
 uint32_t ArExtractManager::refine(DdNode *f)
 {
 	// Reach constant 0/1
-	if (f == Cudd_ReadLogicZero(_ddmanager))
+	if (f == Cudd_ReadLogicZero(_ddManager))
 		return 0u;
-	if (f == Cudd_ReadOne(_ddmanager))
+	if (f == Cudd_ReadOne(_ddManager))
 		return 1u;
         
 	auto iter_f = _exp_cost.find(f);
@@ -83,159 +86,162 @@ uint32_t ArExtractManager::refine(DdNode *f)
 	// Calculate f0, f1, f2
 	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode* f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
-	DdNode* f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2); 
+	DdNode* f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2); 
 
-	if(iter_f->second.first == NEGATIVE_DAVIO)
+	if(iter_f->second.first == ExpType::nD)
 	{
-		auto cost_f1 = _exp_cost[f1].second;
-		auto cost_f2 = _exp_cost[f2].second;
+		auto c1 = _exp_cost[f1].second;
+		auto c2 = _exp_cost[f2].second;
 
-		uint32_t cost_f0 = starting_cover(f0);
-		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+		uint32_t c0 = startingCover(f0);
+		uint32_t cmax = std::max(std::max(c0, c1), c2);
 
-		if(cost_max == cost_f0)
+		if(cmax == c0)
 		{
-			cost_f1 = refine(f1);
-			cost_f2 = refine(f2);
-			iter_f->second.second = cost_f1 + cost_f2;
-			return cost_f1 + cost_f2;
+			c1 = refine(f1);
+			c2 = refine(f2);
+			iter_f->second.second = c1 + c2;
+			return c1 + c2;
 		}
-		else if(cost_max == cost_f1)
+		else if(cmax == c1)
 		{
-			cost_f0 = refine(f0);
-			cost_f2 = refine(f2);
-			iter_f->second = std::make_pair(POSITIVE_DAVIO, cost_f0 + cost_f2);
-			return cost_f0 + cost_f2;
+			c0 = refine(f0);
+			c2 = refine(f2);
+			iter_f->second = std::make_pair(ExpType::pD, c0 + c2);
+			return c0 + c2;
 		}
-		else if(cost_max == cost_f2)
+		else if(cmax == c2)
 		{
-			cost_f0 = refine(f0);
-			cost_f1 = refine(f1);
-			iter_f->second = std::make_pair(SHANNON, cost_f0 + cost_f1);
-			return cost_f0 + cost_f1;
+			c0 = refine(f0);
+			c1 = refine(f1);
+			iter_f->second = std::make_pair(ExpType::S, c0 + c1);
+			return c0 + c1;
 		}
 	}
-	else if(iter_f->second.first == POSITIVE_DAVIO)
+	else if(iter_f->second.first == ExpType::pD)
 	{
-		auto cost_f0 = _exp_cost[f0].second;
-		auto cost_f2 = _exp_cost[f2].second;
+		auto c0 = _exp_cost[f0].second;
+		auto c2 = _exp_cost[f2].second;
 
-		uint32_t cost_f1 = starting_cover(f1);
-		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+		uint32_t c1 = startingCover(f1);
+		uint32_t cmax = std::max(std::max(c0, c1), c2);
 
-		if(cost_max == cost_f1)
+		if(cmax == c1)
 		{
-			cost_f0 = refine(f0);
-			cost_f1 = refine(f2);
-			iter_f->second.second = cost_f0 + cost_f1;
-			return cost_f0 + cost_f1;
+			c0 = refine(f0);
+			c1 = refine(f2);
+			iter_f->second.second = c0 + c1;
+			return c0 + c1;
 		}
-		else if(cost_max == cost_f0)
+		else if(cmax == c0)
 		{
-			cost_f1 = refine(f1);
-			cost_f2 = refine(f2);
-			iter_f->second = std::make_pair(NEGATIVE_DAVIO, cost_f1 + cost_f2);
-			return cost_f1 + cost_f2;
+			c1 = refine(f1);
+			c2 = refine(f2);
+			iter_f->second = std::make_pair(ExpType::nD, c1 + c2);
+			return c1 + c2;
 		}
-		else if(cost_max == cost_f2)
+		else if(cmax == c2)
 		{
-			cost_f0 = refine(f0);
-			cost_f1 = refine(f1);
-			iter_f->second = std::make_pair(SHANNON, cost_f0 + cost_f1);
-			return cost_f0 + cost_f1;
+			c0 = refine(f0);
+			c1 = refine(f1);
+			iter_f->second = std::make_pair(ExpType::S, c0 + c1);
+			return c0 + c1;
 		}
 	}
 	// SHANNON
 	else
 	{
-		auto cost_f0 = _exp_cost[f0].second;
-		auto cost_f1 = _exp_cost[f1].second;
+		auto c0 = _exp_cost[f0].second;
+		auto c1 = _exp_cost[f1].second;
 
-		uint32_t cost_f2 = starting_cover(f2);
-		uint32_t cost_max = std::max(std::max(cost_f0, cost_f1), cost_f2);
+		uint32_t c2 = startingCover(f2);
+		uint32_t cmax = std::max(std::max(c0, c1), c2);
 
-		if(cost_max == cost_f2)
+		if(cmax == c2)
 		{
-			cost_f0 = refine(f0);
-			cost_f1 = refine(f1);
-			iter_f->second.second = cost_f0 + cost_f1;
-			return cost_f0 + cost_f1;
+			c0 = refine(f0);
+			c1 = refine(f1);
+			iter_f->second.second = c0 + c1;
+			return c0 + c1;
 		}
-		else if(cost_max == cost_f0)
+		else if(cmax == c0)
 		{
-			cost_f1 = refine(f1);
-			cost_f2 = refine(f2);
-			iter_f->second = std::make_pair(NEGATIVE_DAVIO, cost_f1 + cost_f2);
-			return cost_f1 + cost_f2;
+			c1 = refine(f1);
+			c2 = refine(f2);
+			iter_f->second = std::make_pair(ExpType::nD, c1 + c2);
+			return c1 + c2;
 		}
-		else if(cost_max == cost_f1)
+		else if(cmax == c1)
 		{
-			cost_f0 = refine(f0);
-			cost_f2 = refine(f2);
-			iter_f->second = std::make_pair(POSITIVE_DAVIO, cost_f0 + cost_f2);
-			return cost_f0 + cost_f2;
+			c0 = refine(f0);
+			c2 = refine(f2);
+			iter_f->second = std::make_pair(ExpType::pD, c0 + c2);
+			return c0 + c2;
 		}
 	}
-
 	return 0;
 }
 
-std::uint32_t ArExtractManager::starting_cover(DdNode *f)
+std::uint32_t ArExtractManager::startingCover(DdNode *f)
 {
 	// Reach constant 0/1
-	if (f == Cudd_ReadLogicZero(_ddmanager))
+	if (f == Cudd_ReadLogicZero(_ddManager))
 		return 0u;
-	if (f == Cudd_ReadOne(_ddmanager))
+	if (f == Cudd_ReadOne(_ddManager))
 		return 1u;
         
 	auto it = _exp_cost.find(f);
-	if (it != _exp_cost.end()) {
+	if (it != _exp_cost.end())
 		return it->second.second;
-	}
 
 	// Calculate f0, f1, f2
 	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode* f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
-	DdNode* f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2);
+	DdNode* f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
 
     // Calculate cost
-    uint32_t s0 = CostFunction(f0); 
-    uint32_t s1 = CostFunction(f1); 
-    uint32_t s2 = CostFunction(f2);
+    uint32_t c0 = CostFunction(f0); 
+    uint32_t c1 = CostFunction(f1); 
+    uint32_t c2 = CostFunction(f2);
 
     // Recursive calls
-    uint32_t smax = std::max(std::max(s0, s1), s2);
+    uint32_t cmax = std::max(std::max(c0, c1), c2);
 
-    std::pair<exp_type, std::uint32_t> ret;
-    if(s0 == smax){
-        std::uint32_t n1 = starting_cover(f1);
-	    std::uint32_t n2 = starting_cover(f2);
-        ret = std::make_pair(NEGATIVE_DAVIO, n1 + n2);
+    std::pair<ExpType, std::uint32_t> ret;
+    if(c0 == cmax)
+    {
+        std::uint32_t n1 = startingCover(f1);
+	    std::uint32_t n2 = startingCover(f2);
+        ret = std::make_pair(ExpType::nD, n1 + n2);
     }
-    else if(s1 == smax){
-        std::uint32_t n0 = starting_cover(f0);
-        std::uint32_t n2 = starting_cover(f2);
-        ret = std::make_pair(POSITIVE_DAVIO, n0 + n2);
+    else if(c1 == cmax)
+    {
+        std::uint32_t n0 = startingCover(f0);
+        std::uint32_t n2 = startingCover(f2);
+        ret = std::make_pair(ExpType::pD, n0 + n2);
     }
-    else{
-        // Cudd_RecursiveDeref(_ddmanager, f2);
-        std::uint32_t n0 = starting_cover(f0);
-	    std::uint32_t n1 = starting_cover(f1);
-        ret = std::make_pair(SHANNON, n0 + n1);
+    else
+    {
+        // Cudd_RecursiveDeref(_ddManager, f2);
+        std::uint32_t n0 = startingCover(f0);
+	    std::uint32_t n1 = startingCover(f1);
+        ret = std::make_pair(ExpType::S, n0 + n1);
     }
 
 	_exp_cost[f] = ret;
 	return ret.second;
 }
 
-uint32_t ArExtractManager::CostFunction(DdNode* p){ 
-    return CostFunctionLevel(p, _level-1);
+uint32_t ArExtractManager::CostFunction(DdNode* f)
+{ 
+    return CostFunctionLevel(f, _level-1);
 }
 
-uint32_t ArExtractManager::CostFunctionLevel(DdNode* f, int level){ 
-	if (f == Cudd_ReadLogicZero(_ddmanager))
+uint32_t ArExtractManager::CostFunctionLevel(DdNode* f, int level)
+{ 
+	if (f == Cudd_ReadLogicZero(_ddManager))
 		return 0;
-	if (f == Cudd_ReadOne(_ddmanager))
+	if (f == Cudd_ReadOne(_ddManager))
 		return 1;
 
 	// Path Approximation
@@ -249,61 +255,19 @@ uint32_t ArExtractManager::CostFunctionLevel(DdNode* f, int level){
 	// Calculate f0, f1, f2
 	DdNode* f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode* f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
-	DdNode* f2 = Cudd_bddXor(_ddmanager, f0, f1); Cudd_Ref(f2);
+	DdNode* f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
 
-    uint32_t s0 = CostFunctionLevel(f0, level-1); 
-    uint32_t s1 = CostFunctionLevel(f1, level-1); 
-    uint32_t s2 = CostFunctionLevel(f2, level-1);
+    uint32_t c0 = CostFunctionLevel(f0, level-1); 
+    uint32_t c1 = CostFunctionLevel(f1, level-1); 
+    uint32_t c2 = CostFunctionLevel(f2, level-1);
 
-	return s0 + s1 + s2 - std::max(s0, std::max(s1, s2));
+	return c0 + c1 + c2 - std::max(c0, std::max(c1, c2));
 }
 
-void ArExtractManager::printResult() const
+void ArExtractManager::getESOP(std::vector<std::string>& ret) const
 {
-	std::cout << "Resulting PSDKRO:" << std::endl;
-	for (auto &cube : _esop)
-    {
-		std::cout << cube.str(_nVars) << std::endl;
-	}
-}
-
-void ArExtractManager::printESOPwithOrder( int nPi, std::vector<int>& ordering) const
-{
-    assert(ordering.size() == _nVars);
-	std::cout << "Resulting PSDKRO (with order):" << std::endl;
     for(auto &cube : _esop) 
-    {
-        std::string e(nPi, '-');
-        for(uint32_t i = 0; i < _nVars; ++i)
-          e[ordering[i]] = cube.lit(i);
-
-        std::cout << e << std::endl; 
-    }   
-}
-
-void ArExtractManager::writePLAwithOrder( int nPi, std::vector<int>& ordering, char* filename) const
-{
-    assert(ordering.size() == _nVars);
-    assert(filename);
-    std::ofstream outFile;
-    outFile.open(filename, std::ios::out);
-    
-    outFile << ".i " << nPi << '\n';
-    outFile << ".o 1\n";
-    outFile << ".type esop\n";
-
-    for(auto &cube : _esop) 
-    {
-        std::string e(nPi, '-');
-        for(uint32_t i = 0; i < _nVars; ++i)
-          e[ordering[i]] = cube.lit(i);
-
-        outFile << e << " 1" << '\n';
-    }   
-    
-    outFile << ".e\n" << std::endl;
-
-    outFile.close();
+        ret.push_back(cube.str(_nVars));
 }
 
 uint32_t ArExtractManager::getNumTerms() const
@@ -311,102 +275,76 @@ uint32_t ArExtractManager::getNumTerms() const
     return _esop.size();
 }
 
-void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose){
-    Abc_Ntk_t* pNtkBdd = NULL;
-    int fReorder = 1; // use reordering or not
-    int fBddMaxSize = ABC_INFINITY; // the max size of BDD
+// extract ESOP using ArExtract algorithm and store the resulting ESOP into ret 
+void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string>& ret)
+{   
+    int fReorder = 1;               // Use reordering or not
+    int fBddMaxSize = ABC_INFINITY; // The maximum #node in BDD
 
-	// number of variables in Ntk
-	int nPi = Abc_NtkPiNum(pNtk);
+	// Number of variables(Pis) in pNtk
+    int nVars = Abc_NtkPiNum(pNtk);
 
-	abctime clk = Abc_Clock();
+    DdManager* ddManager = (DdManager*) Abc_NtkBuildGlobalBdds(pNtk, fBddMaxSize, 1, fReorder, 0, 0);
 
-	// Build BDD
-    if ( Abc_NtkIsStrash(pNtk) )
-        pNtkBdd = Abc_NtkCollapse( pNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
-    else{
-        Abc_Ntk_t* pStrNtk;
-        pStrNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
-        pNtkBdd = Abc_NtkCollapse( pStrNtk, fBddMaxSize, 0, fReorder, 0, 1, 0);
-        Abc_NtkDelete( pStrNtk );
-    }
-
-	std::cout << "BDD construction time used: \t" <<  static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC << " sec" << std::endl;
-
-	// get CUDD manager
-    DdManager* ddmanager = (DdManager*) pNtkBdd->pManFunc;
-
-	// get the root node of the BDD
-    Abc_Obj_t* pObj = Abc_ObjFanin0(Abc_NtkPo(pNtkBdd, 0));
-    DdNode* ddnode = (DdNode *) pObj->pData; 
-
-    // number of used variables in BDD
-    int nVars = Cudd_SupportSize(ddmanager, ddnode); 
-
-    char** pVarNames = (char **)(Abc_NodeGetFaninNames(pObj))->pArray;
+    Abc_Obj_t* pPo = Abc_NtkPo(pNtk, 0);
+    DdNode* rootNode = (DdNode*) Abc_ObjGlobalBdd(pPo);
    
-	// check the numPI is smaller than the bitwidth of a cube in psdkro
+	// Check the numPI is smaller than the bitwidth of a cube in psdkro
 	if (nVars > psdkro::bitwidth) {
 		std::cout << "Cannot support nVars > " << psdkro::bitwidth << " cases. Please modify the bitwidth." << std::endl;
 		return;
 	}
 
-    ArExtractManager m(ddmanager, nVars, fLevel);   
+    ArExtractManager m(ddManager, level, fRefine, rootNode, nVars); 
 
-    // extract algorithm
-	m.init();
+    // Extract
+    m.extract();	
 
-	clk = Abc_Clock();
-    uint32_t nTerms_start = m.starting_cover(ddnode);
+    m.getESOP(ret);
 
-	double runtime_start = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-	double memory_start = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+    // Delete global BDD
+    Abc_NtkFreeGlobalBdds( pNtk, 0);
+    Cudd_Quit(ddManager);
+}
 
-	std::cout << "---- Staring Cover ----" << std::endl;
-	std::cout << "Time used: \t\t" <<  runtime_start << " sec" << std::endl;
-	std::cout << "Memory used: \t" << memory_start << " GB" << std::endl;
-	std::cout << "nTerms: \t\t" << nTerms_start << std::endl;
+void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose)
+{
+    std::vector<std::string> ESOP;
 
-    if(fRefine)
-    {   
-        clk = Abc_Clock();
-        uint32_t nTerms_refine = m.refine(ddnode);
+    abctime clk = Abc_Clock();
 
-        double runtime_refine = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
-        double memory_refine = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+    ArExtractSingleOutput(pNtk, fLevel, fRefine, ESOP);
 
-        std::cout << "---- Refinement ----" << std::endl;
-        std::cout << "Time used: \t\t" <<  runtime_refine << " sec" << std::endl;
-        std::cout << "Memory used: \t" << memory_refine << " GB" << std::endl;
-        std::cout << "nTerms: \t\t" << nTerms_refine << std::endl;
-    }   
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	std::cout << "Time used: \t\t" << runtime << " sec" << std::endl;
+	std::cout << "Memory used: \t\t" << memory << " GB" << std::endl;
+    std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
 
-	m.generate_psdkro(ddnode);
-
-    // dump ordering. ordering[i] indicates the order of variable i in PIs.
-    std::vector<int> ordering;
-    ordering.resize(nPi);
-    for(int i = 0; i < nVars; ++i)
-    {
-        for(int j = 0; j < nPi; ++j)
-        {
-            if(!strcmp(pVarNames[i], Abc_ObjName(Abc_NtkPi(pNtkBdd, j))))
-            {
-                ordering[i] = j;
-                break;
-            }
-        }
-    }
-  
-    // print ESOP and write PLA file
     if(fVerbose)
-    { 
-        m.printESOPwithOrder(nPi, ordering); 
-    }
+    {
+        std::cout << "ESOP:" << '\n';
+        for(auto& cube: ESOP)
+            std::cout << cube << '\n';
+    } 
+
     if(filename)
     {
-        m.writePLAwithOrder(nPi, ordering, filename);
+        std::fstream outFile;
+        outFile.open(filename, std::ios::out);
+
+        if(!outFile.is_open())
+            std::cerr << "Output file failed to be opened." << std::endl;
+        else
+        {
+            outFile << ".i " << Abc_NtkPiNum(pNtk) << '\n';
+            outFile << ".o 1\n";
+            outFile << ".type esop\n";
+            for(auto& cube: ESOP)
+                outFile << cube << " 1\n";
+            outFile << ".e\n";
+        }
+        outFile.close();
     }
 
-    Abc_NtkDelete(pNtkBdd);
 }

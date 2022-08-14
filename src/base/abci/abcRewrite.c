@@ -182,7 +182,7 @@ Rwr_ManAddTimeTotal( pManRwr, Abc_Clock() - clkStart );
     // check
     if ( !Abc_NtkCheck( pNtk ) )
     {
-        printf( "Abc_NtkRewrite: The network check has failed.\n" );
+        // printf( "Abc_NtkRewrite: The network check has failed.\n" );
         return 0;
     }
     return 1;
