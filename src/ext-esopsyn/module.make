@@ -1,11 +1,10 @@
 SRC += \
     src/ext-esopsyn/cmd.cpp \
-    src/ext-esopsyn/mintesop.cpp \
-    src/ext-esopsyn/xorbidec.cpp \
-    src/ext-esopsyn/bidecesop.cpp \
-    src/ext-esopsyn/aigpsdkro.cpp \
-    src/ext-esopsyn/bddextract.cpp \
-    src/ext-esopsyn/arextract.cpp \
-    src/ext-esopsyn/dcextract.cpp \
-    src/ext-esopsyn/testextract.cpp \
-    src/ext-esopsyn/memory_measure.cpp
+    src/ext-esopsyn/aigOpe.cpp \
+    src/ext-esopsyn/xorBidec.cpp \
+    src/ext-esopsyn/bidecEsop.cpp \
+    src/ext-esopsyn/bddExtract.cpp \
+    src/ext-esopsyn/arExtract.cpp \
+    src/ext-esopsyn/dcExtract.cpp \
+    src/ext-esopsyn/testExtract.cpp \
+    src/ext-esopsyn/memMeasure.cpp

@@ -1,4 +1,4 @@
-#include "arextract.h"
+#include "arExtract.h"
 
 ArExtractManager::ArExtractManager(DdManager* ddManager, std::uint32_t level, bool refine, DdNode* rootNode, std::uint32_t nVars)
 	: _ddManager(ddManager), _rootNode(rootNode), _level(level), _nVars(nVars), _refine(refine), _values(nVars, VarValue::DONTCARE)
@@ -276,7 +276,7 @@ uint32_t ArExtractManager::getNumTerms() const
 }
 
 // extract ESOP using ArExtract algorithm and store the resulting ESOP into ret 
-void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string>& ret)
+void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string> &ESOP)
 {   
     int fReorder = 1;               // Use reordering or not
     int fBddMaxSize = ABC_INFINITY; // The maximum #node in BDD
@@ -300,7 +300,7 @@ void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::ve
     // Extract
     m.extract();	
 
-    m.getESOP(ret);
+    m.getESOP(ESOP);
 
     // Delete global BDD
     Abc_NtkFreeGlobalBdds( pNtk, 0);

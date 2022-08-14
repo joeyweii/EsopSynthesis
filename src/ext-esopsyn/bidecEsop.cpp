@@ -1,6 +1,6 @@
 #include "base/main/main.h"
 #include "aig/aig/aig.h"
-#include "xorbidec.h"
+#include "xorBidec.h"
 
 #include <iostream>
 #include <vector>
@@ -11,11 +11,14 @@ extern "C" Gia_Man_t * Eso_ManCompute( Gia_Man_t * pGia, int fVerbose, Vec_Wec_t
 
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 
-void CleanUnusedPi(Abc_Ntk_t* pNtk){
+void CleanUnusedPi(Abc_Ntk_t* pNtk)
+{
     Abc_Obj_t* pObj;
     int i;
-    Abc_NtkForEachPi( pNtk, pObj, i){
-        if (Abc_ObjFanoutNum(pObj) == 0){
+    Abc_NtkForEachPi( pNtk, pObj, i)
+    {
+        if (Abc_ObjFanoutNum(pObj) == 0)
+        {
             Abc_NtkDeleteObj(pObj);
             i--;
         }
@@ -33,7 +36,8 @@ void CleanUnusedPi(Abc_Ntk_t* pNtk){
   SeeAlso     []
 
 ***********************************************************************/
-void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
+void BidecEsopSingleOutput(Abc_Ntk_t* pNtk)
+{
     std::vector<Abc_Ntk_t*> Q;
     std::vector<Abc_Ntk_t*> subNtks;
 
@@ -41,17 +45,18 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     Q.push_back(pNtk);
     std::cout << "#PI: " << Abc_NtkPiNum(pNtk) << std::endl;
 
-    while(!Q.empty()){
+    while(!Q.empty())
+    {
         std::vector<enum Set> vParti;
         Abc_Ntk_t* subNtk = Q.back();
         Q.pop_back();
 
         int result = NtkXorBidecSingleOutput(subNtk, vParti);
   
-        if(!result){
+        if(!result)
             subNtks.push_back(subNtk);
-        }
-        else{
+        else
+        {
             Abc_Ntk_t *fA = NULL, *fB = NULL;
             NtkXorBidecSynthesis(subNtk, vParti, fA, fB);
             CleanUnusedPi(fA);
@@ -65,14 +70,11 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     std::cout << "#subNtks: " << subNtks.size() << std::endl;
     Abc_PrintTime( 1, "Decompose Time", Abc_Clock() - clk );
 
-    for(int i = 0; i < subNtks.size(); i++){
+    for(int i = 0; i < subNtks.size(); i++)
         std::cout << "subNtk[" << i << "] #PI: " << Abc_NtkPiNum(subNtks[i]) << std::endl;
-    }
 
     for(int i = 0, end_i = subNtks.size(); i < end_i; ++i)
-    {
         BddExtractMain(subNtks[i], 0, 0);
-    }
 
     /*
     clk = Abc_Clock();
@@ -94,16 +96,17 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk){
     Abc_PrintTime( 1, "Starting Cover Compute Time", Abc_Clock() - clk );
     */
 
-    for(int i = 0; i < subNtks.size(); i++){
+    for(int i = 0; i < subNtks.size(); i++)
         Abc_NtkDelete(subNtks[i]);
-    }
 }
 
-void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput){
+void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput)
+{
     Abc_Obj_t* pPo;
     int iPo;
 
-    Abc_NtkForEachPo(pNtk, pPo, iPo){
+    Abc_NtkForEachPo(pNtk, pPo, iPo)
+    {
         if(fOutput != -1 && iPo != fOutput) continue;
         // create cone for the current PO
         Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);

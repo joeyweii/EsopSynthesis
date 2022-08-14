@@ -1,6 +1,6 @@
-#include "xorbidec.h"
 #include "sat/cnf/cnf.h"
 #include "sat/bsat/satSolver.h"
+#include "xorBidec.h"
 
 #include <iostream>
 #include <climits>

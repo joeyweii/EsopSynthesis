@@ -1,4 +1,4 @@
-#include "bddextract.h"
+#include "bddExtract.h"
 
 BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* rootNode, uint32_t nVars)
 : _ddManager(ddManager), _rootNode(rootNode), _nVars(nVars) , _values(nVars, VarValue::DONTCARE)

@@ -6,7 +6,7 @@
 #include "bdd/extrab/extraBdd.h"
 #endif
 #include "utils.h"
-#include "memory_measure.h"
+#include "memMeasure.h"
 
 #include <iostream>
 #include <fstream>

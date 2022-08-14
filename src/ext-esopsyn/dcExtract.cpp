@@ -1,6 +1,6 @@
 #include "base/main/main.h"
 #include "base/main/mainInt.h"
-#include "memory_measure.h"
+#include "memMeasure.h"
 
 #include <iostream>
 #include <fstream>
@@ -11,17 +11,14 @@
 
 extern Abc_Ntk_t* AIGCOF(Abc_Ntk_t* pNtk, int var, int phase);
 extern void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ESOP);
+extern void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string>& ESOP);
 
 // Recursively dividing problem using shannon expansion and BddExtract  
 static void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarList, std::vector<std::string>& ESOP)
 {
     if(nCofVar == 0)
-    {
-        std::cout << "***" << std::endl;
-        std::cout << getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0) << std::endl;
         BddExtractSingleOutput(pNtk, ESOP);
-        std::cout << getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0) << std::endl;
-    }
+        // ArExtractSingleOutput(pNtk, 4, true, ESOP);
     else
     {
         size_t minNode = std::numeric_limits<size_t>::max();
