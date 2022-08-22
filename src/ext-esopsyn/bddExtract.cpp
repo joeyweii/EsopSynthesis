@@ -153,7 +153,7 @@ void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret)
 
     // Delete global BDD
     Abc_NtkFreeGlobalBdds( pNtk, 0);
-    Cudd_Quit(ddManager);
+    Extra_StopManager(ddManager);
 }
 
 
