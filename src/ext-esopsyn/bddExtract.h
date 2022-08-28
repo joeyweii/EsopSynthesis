@@ -42,7 +42,6 @@ private:
 
 private:
 	DdManager* _ddManager;              // cudd manager
-	DdManager* _zddManager;             // zdd manager
     DdNode*    _rootNode;               // root node of function to be extracted
 	uint32_t _nVars;                    // the number of variables
     bool    _useZdd;                    // use ZDD implicit representation or not
