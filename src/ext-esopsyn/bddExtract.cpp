@@ -1,8 +1,36 @@
 #include "bddExtract.h"
 
-BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* rootNode, uint32_t nVars)
-: _ddManager(ddManager), _rootNode(rootNode), _nVars(nVars) , _values(nVars, VarValue::DONTCARE)
-{ }
+extern "C" DdNode * extraComposeCover (DdManager* dd, DdNode * zC0, DdNode * zC1, DdNode * zC2, int TopVar);
+
+BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* rootNode, uint32_t nVars, bool useZdd)
+: _ddManager(ddManager), _zddManager(nullptr), _rootNode(rootNode), _nVars(nVars), _useZdd(useZdd) , _values(nVars, VarValue::DONTCARE)
+{
+    if(_useZdd)
+    {    
+        _zddManager = Cudd_Init( _nVars, 0, CUDD_UNIQUE_SLOTS, CUDD_CACHE_SLOTS, 0 );
+        Cudd_ShuffleHeap(_zddManager, _ddManager->invperm);
+        Cudd_zddVarsFromBddVars( _zddManager, 2 );
+        // Dump permutation (ordering) of bdd manager into zdd manager
+        Cudd_AutodynDisable(_zddManager);
+        for(int i = 0; i < _nVars; ++i)
+            std::cout << Cudd_ReadPerm(_ddManager, i) << std::endl;
+        std::cout << "---------" << std::endl;
+        for(int i = 0; i < 2*_nVars; ++i)
+            std::cout << Cudd_ReadPermZdd(_zddManager, i) << std::endl;
+        /*
+        int *permList = new int(2*_nVars);
+        for(int i = 0; i < _nVars; ++i)
+        {
+            //permList[Cudd_ReadPerm(_ddManager, i)*2] = i*2;
+            //permList[Cudd_ReadPerm(_ddManager, i)*2+1] = i*2+1;
+            permList[i*2] = Cudd_ReadPerm(_ddManager, i)*2;
+            permList[i*2+1] = Cudd_ReadPerm(_ddManager, i)*2+1;
+        }
+        Cudd_ShuffleHeap(_zddManager, permList);
+        delete [] permList;
+        */
+    }    
+}
 
 BddExtractManager::~BddExtractManager()
 { }
@@ -14,8 +42,85 @@ void BddExtractManager::extract()
 	_exp_cost.clear();
 	_esop.clear();
 
+    Cudd_bddPrintCover(_ddManager, _rootNode, _rootNode);
 	bestExpansion(_rootNode);
-    generatePSDKRO(_rootNode);
+    if(_useZdd)
+    {
+        DdNode* zddRootNode = generatePSDKROZdd(_rootNode);
+        Cudd_zddPrintCover(_zddManager, zddRootNode);
+    }
+    else
+        generatePSDKRO(_rootNode);
+    
+}
+
+DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
+{
+	// Reach constant 0/1
+	if (f == Cudd_ReadLogicZero(_ddManager))
+		return Cudd_ReadZero(_zddManager);
+	if (f == Cudd_ReadOne(_ddManager)) 
+		return Cudd_ReadOne(_zddManager);
+
+    //int varIdx = Cudd_ReadPerm(_ddManager, Cudd_NodeReadIndex(f)); 
+    int varIdx = Cudd_NodeReadIndex(f);
+
+	// Find the best expansion by a cache lookup
+	assert(_exp_cost.find(f) != _exp_cost.end());
+	ExpType expansion = _exp_cost[f].first;
+
+	// Calculate f0, f1, f2
+	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
+	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); 
+	
+    DdNode *zRes = nullptr;
+	// Generate psdkro of the branches 
+	if (expansion == ExpType::pD)
+    {
+        DdNode *zf0, *zf2;
+		zf0 = generatePSDKROZdd(f0);
+        assert(zf0 != nullptr);
+        Cudd_Ref(zf0);
+		zf2 = generatePSDKROZdd(f2);
+        assert(zf2 != nullptr);
+        Cudd_Ref(zf2);
+        
+        zRes = cuddZddGetNode( _zddManager, varIdx*2, zf2, zf0);
+        assert(zRes != nullptr);
+        cuddDeref(zf0);
+        cuddDeref(zf2);
+	} 
+    else if (expansion == ExpType::nD)
+    {
+        DdNode *zf1, *zf2;
+		zf1 = generatePSDKROZdd(f1);
+        assert(zf1 != nullptr);
+        Cudd_Ref(zf1);
+		zf2 = generatePSDKROZdd(f2);
+        assert(zf2 != nullptr);
+        Cudd_Ref(zf2);
+        
+        zRes = cuddZddGetNode( _zddManager, varIdx*2+1, zf2, zf1);
+        assert(zRes != nullptr);
+        cuddDeref(zf1);
+        cuddDeref(zf2);
+	} 
+    else 
+    { 
+        DdNode *zf0, *zf1;
+		zf0 = generatePSDKROZdd(f0);
+        assert(zf0 != nullptr);
+        Cudd_Ref(zf0);
+		zf1 = generatePSDKROZdd(f1);
+        assert(zf1 != nullptr);
+        Cudd_Ref(zf1);
+        Cudd_Ref(Cudd_ReadZero(_zddManager));
+        zRes = extraComposeCover( _zddManager, zf0, zf1, Cudd_ReadZero(_zddManager), varIdx);
+        assert(zRes != nullptr);
+	}
+
+    return zRes;
 }
 
 void BddExtractManager::generatePSDKRO(DdNode *f)
@@ -125,7 +230,7 @@ uint32_t BddExtractManager::getNumTerms() const
 }
 
 // extract ESOP using BddExtract algorithm and store the resulting ESOP into ret 
-void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret)
+void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret, bool fUseZdd)
 {   
     int fReorder = 1;               // Use reordering or not
     int fBddMaxSize = ABC_INFINITY; // The maximum #node in BDD
@@ -144,7 +249,7 @@ void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret)
 		return;
 	}
 
-    BddExtractManager m(ddManager, ddroot, nVars); 
+    BddExtractManager m(ddManager, ddroot, nVars, fUseZdd); 
 
     // Extract
     m.extract();	
@@ -157,13 +262,13 @@ void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret)
 }
 
 
-void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose)
+void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd)
 {
     std::vector<std::string> ESOP;
 
     abctime clk = Abc_Clock();
 
-    BddExtractSingleOutput(pNtk, ESOP);
+    BddExtractSingleOutput(pNtk, ESOP, fUseZdd);
 
 	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
 	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);

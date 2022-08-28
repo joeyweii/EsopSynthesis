@@ -21,7 +21,7 @@ class BddExtractManager
 public:
 
     // Constructor and Destructor 
-	BddExtractManager(DdManager* ddManager, DdNode* rootNode, std::uint32_t nVars);
+	BddExtractManager(DdManager* ddManager, DdNode* rootNode, std::uint32_t nVars, bool useZdd);
 	~BddExtractManager();
     
     // extract algorithm
@@ -38,11 +38,14 @@ private:
 
 	// Second pass: generate PSDKRO 
 	void generatePSDKRO(DdNode* f);
+	DdNode* generatePSDKROZdd(DdNode* f);
 
 private:
 	DdManager* _ddManager;              // cudd manager
+	DdManager* _zddManager;             // zdd manager
     DdNode*    _rootNode;               // root node of function to be extracted
 	uint32_t _nVars;                    // the number of variables
+    bool    _useZdd;                    // use ZDD implicit representation or not
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
 	std::vector<VarValue> _values;      // for generating psdkro
 	std::unordered_map<DdNode*, std::pair<ExpType, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 

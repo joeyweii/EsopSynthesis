@@ -9,7 +9,7 @@ extern "C" Aig_Man_t *  Abc_NtkToDar( Abc_Ntk_t * pNtk, int fExors, int fRegiste
 extern "C" Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p );
 extern "C" Gia_Man_t * Eso_ManCompute( Gia_Man_t * pGia, int fVerbose, Vec_Wec_t ** pvRes );
 
-extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd);
 
 void CleanUnusedPi(Abc_Ntk_t* pNtk)
 {
@@ -74,7 +74,7 @@ void BidecEsopSingleOutput(Abc_Ntk_t* pNtk)
         std::cout << "subNtk[" << i << "] #PI: " << Abc_NtkPiNum(subNtks[i]) << std::endl;
 
     for(int i = 0, end_i = subNtks.size(); i < end_i; ++i)
-        BddExtractMain(subNtks[i], 0, 0);
+        BddExtractMain(subNtks[i], 0, 0, 0);
 
     /*
     clk = Abc_Clock();

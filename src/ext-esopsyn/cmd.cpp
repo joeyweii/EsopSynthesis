@@ -7,7 +7,7 @@
 
 extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
-extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd);
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void TestExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
@@ -177,11 +177,12 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int c;
     int fOutput = -1;
     int fVerbose = 0;
+    bool fUseZdd = false;
     int fLUT = 0;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "hovu")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hovuz")) != EOF)
     {
         switch (c)
         {
@@ -212,6 +213,9 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             case 'u':
                 fLUT ^= 1;
                 break;
+            case 'z':
+                fUseZdd = true;
+                break;
             default:
                 goto usage;
         }
@@ -240,7 +244,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
+            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
             Abc_NtkDelete(pSubNtk);
         }
     }
@@ -259,7 +263,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
+            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
 
             Abc_NtkDelete(pSubNtk);
         }
