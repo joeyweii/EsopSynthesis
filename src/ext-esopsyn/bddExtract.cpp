@@ -3,12 +3,10 @@
 extern "C" DdNode * extraComposeCover (DdManager* dd, DdNode * zC0, DdNode * zC1, DdNode * zC2, int TopVar);
 
 BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* rootNode, uint32_t nVars, bool useZdd)
-: _ddManager(ddManager), _rootNode(rootNode), _nVars(nVars), _useZdd(useZdd) , _values(nVars, VarValue::DONTCARE)
+: _ddManager(ddManager), _rootNode(rootNode), _zddNode(nullptr), _nVars(nVars), _useZdd(useZdd) , _values(nVars, VarValue::DONTCARE)
 {
     if(_useZdd)
-    {    
         Cudd_zddVarsFromBddVars( _ddManager, 2 );
-    }    
 }
 
 BddExtractManager::~BddExtractManager()
@@ -23,15 +21,13 @@ void BddExtractManager::extract()
 
 	bestExpansion(_rootNode);
     if(_useZdd)
-    {
-        DdNode* zddRootNode = generatePSDKROZdd(_rootNode);
-        Cudd_zddPrintCover(_ddManager, zddRootNode);
-    }
+        _zddNode = genPSDKROZdd(_rootNode);
     else
-        generatePSDKRO(_rootNode);
+        genPSDKROBitStr(_rootNode);
 }
 
-DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
+DdNode* dummyGenPSDKROZdd(DdManager *m, DdNode *f){ return NULL;};
+DdNode* BddExtractManager::genPSDKROZdd(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddManager))
@@ -39,8 +35,11 @@ DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
 	if (f == Cudd_ReadOne(_ddManager)) 
 		return Cudd_ReadOne(_ddManager);
 
-    //int varIdx = Cudd_ReadPerm(_ddManager, Cudd_NodeReadIndex(f)); 
     int varIdx = Cudd_NodeReadIndex(f);
+    DdNode *zRes = nullptr;
+    zRes = cuddCacheLookup1Zdd(_ddManager, dummyGenPSDKROZdd, f);
+    if(zRes)
+		return zRes;
 
 	// Find the best expansion by a cache lookup
 	assert(_exp_cost.find(f) != _exp_cost.end());
@@ -51,17 +50,17 @@ DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
 	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
 	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); 
 	
-    DdNode *zRes = nullptr;
 	// Generate psdkro of the branches 
 	if (expansion == ExpType::pD)
     {
         DdNode *zf0, *zf2;
-		zf0 = generatePSDKROZdd(f0);
+		zf0 = genPSDKROZdd(f0);
         assert(zf0 != nullptr);
         Cudd_Ref(zf0);
-		zf2 = generatePSDKROZdd(f2);
+		zf2 = genPSDKROZdd(f2);
         assert(zf2 != nullptr);
         Cudd_Ref(zf2);
+    
         
         zRes = cuddZddGetNode( _ddManager, varIdx*2, zf2, zf0);
         assert(zRes != nullptr);
@@ -71,10 +70,10 @@ DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
     else if (expansion == ExpType::nD)
     {
         DdNode *zf1, *zf2;
-		zf1 = generatePSDKROZdd(f1);
+		zf1 = genPSDKROZdd(f1);
         assert(zf1 != nullptr);
         Cudd_Ref(zf1);
-		zf2 = generatePSDKROZdd(f2);
+		zf2 = genPSDKROZdd(f2);
         assert(zf2 != nullptr);
         Cudd_Ref(zf2);
         
@@ -86,21 +85,23 @@ DdNode* BddExtractManager::generatePSDKROZdd(DdNode *f)
     else 
     { 
         DdNode *zf0, *zf1;
-		zf0 = generatePSDKROZdd(f0);
+		zf0 = genPSDKROZdd(f0);
         assert(zf0 != nullptr);
         Cudd_Ref(zf0);
-		zf1 = generatePSDKROZdd(f1);
+		zf1 = genPSDKROZdd(f1);
         assert(zf1 != nullptr);
         Cudd_Ref(zf1);
         Cudd_Ref(Cudd_ReadZero(_ddManager));
+        // zf0, zf1, Cudd_ReadZero(_ddManager) will be deref in extraComposeCover function
         zRes = extraComposeCover( _ddManager, zf0, zf1, Cudd_ReadZero(_ddManager), varIdx);
         assert(zRes != nullptr);
 	}
 
+    cuddCacheInsert1( _ddManager, dummyGenPSDKROZdd, f, zRes );
     return zRes;
 }
 
-void BddExtractManager::generatePSDKRO(DdNode *f)
+void BddExtractManager::genPSDKROBitStr(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddManager))
@@ -134,23 +135,23 @@ void BddExtractManager::generatePSDKRO(DdNode *f)
 	if (expansion == ExpType::pD)
     {
 		_values[idx] = VarValue::DONTCARE;
-		generatePSDKRO(f0);
+		genPSDKROBitStr(f0);
 		_values[idx] = VarValue::POSITIVE;
-		generatePSDKRO(f2);
+		genPSDKROBitStr(f2);
 	} 
     else if (expansion == ExpType::nD)
     {
 		_values[idx] = VarValue::DONTCARE;
-		generatePSDKRO(f1);
+		genPSDKROBitStr(f1);
 		_values[idx] = VarValue::NEGATIVE;
-		generatePSDKRO(f2);
+		genPSDKROBitStr(f2);
 	} 
     else 
     { 
 		_values[idx] = VarValue::NEGATIVE;
-		generatePSDKRO(f0);
+		genPSDKROBitStr(f0);
 		_values[idx] = VarValue::POSITIVE;
-		generatePSDKRO(f1);
+		genPSDKROBitStr(f1);
 	}
 
 	Cudd_RecursiveDeref(_ddManager, f2);
@@ -195,7 +196,7 @@ std::pair<ExpType, std::uint32_t> BddExtractManager::bestExpansion(DdNode *f)
 	return ret;
 }
 
-void BddExtractManager::getESOP(std::vector<std::string>& ret) const
+void BddExtractManager::getBitStr(std::vector<std::string>& ret) const
 {
     for(auto &cube : _esop) 
         ret.push_back(cube.str(_nVars));
@@ -203,7 +204,10 @@ void BddExtractManager::getESOP(std::vector<std::string>& ret) const
 
 uint32_t BddExtractManager::getNumTerms() const
 {
-    return _esop.size();
+    if(_useZdd)
+        return Cudd_CountPathsToNonZero(_zddNode); 
+    else
+        return _esop.size();
 }
 
 // extract ESOP using BddExtract algorithm and store the resulting ESOP into ret 
@@ -231,7 +235,8 @@ void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret, bool
     // Extract
     m.extract();	
 
-    m.getESOP(ret);
+    if(!fUseZdd)
+        m.getBitStr(ret);
 
     // Delete global BDD
     Abc_NtkFreeGlobalBdds( pNtk, 0);
@@ -251,9 +256,10 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd)
 	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
 	std::cout << "Time used: \t\t" << runtime << " sec" << std::endl;
 	std::cout << "Memory used: \t\t" << memory << " GB" << std::endl;
-    std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
+    if(!fUseZdd) 
+        std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
 
-    if(fVerbose)
+    if(fVerbose && !fUseZdd)
     {
         std::cout << "ESOP:" << '\n';
         for(auto& cube: ESOP)

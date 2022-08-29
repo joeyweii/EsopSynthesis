@@ -28,21 +28,22 @@ public:
 	void extract();
 
     // get the final ESOP and number of terms
-    void getESOP(std::vector<std::string>& ret) const;
+    void getBitStr(std::vector<std::string>& ret) const;
     uint32_t getNumTerms() const;
 
+	DdNode* genPSDKROZdd(DdNode* f);
 private:
 
 	// First pass: dicide the best expansion and calculate the cost 
 	std::pair<ExpType, std::uint32_t> bestExpansion(DdNode* f);
 
 	// Second pass: generate PSDKRO 
-	void generatePSDKRO(DdNode* f);
-	DdNode* generatePSDKROZdd(DdNode* f);
+	void genPSDKROBitStr(DdNode* f);
 
 private:
 	DdManager* _ddManager;              // cudd manager
     DdNode*    _rootNode;               // root node of function to be extracted
+    DdNode*    _zddNode;                // root node of ZDD implicit representation 
 	uint32_t _nVars;                    // the number of variables
     bool    _useZdd;                    // use ZDD implicit representation or not
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
