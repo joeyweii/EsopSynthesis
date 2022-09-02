@@ -11,6 +11,7 @@ extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool f
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void TestExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
+extern void IsfExtractMain(Abc_Ntk_t* pNtk);
 
 /**Function*************************************************************
 
@@ -636,6 +637,46 @@ usage:
     return 1;
 }
 
+int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
+{
+    Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
+    int c;
+
+    Extra_UtilGetoptReset();
+    while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF)
+    {
+        switch (c)
+        {
+            case 'h':
+                goto usage;
+            default:
+                goto usage;
+        }
+    }
+
+    if (!pNtk)
+    {
+        Abc_Print(-1, "Empty network.\n");
+        return 1;
+    }
+
+    if(!Abc_NtkIsStrash(pNtk))
+        pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
+
+    IsfExtractMain(pNtk);
+
+    return 0;
+
+usage:
+    Abc_Print(-2, "usage: bddextract [-hl] [-o <ith PO>] [-v [0/1]]\n");
+    Abc_Print(-2, "\t        synthesis ESOP with BDD extract\n");
+    Abc_Print(-2, "\t-o    : specify the output to be processed\n");
+    Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
+    Abc_Print(-2, "\t-u    : toggle using LUT mapping. Default: 0\n");
+    Abc_Print(-2, "\t-h    : print the command usage\n");
+    return 1;
+}
+
 // called during ABC startup
 void init(Abc_Frame_t* pAbc)
 {
@@ -645,6 +686,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandArExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "testextract", EsopSyn_CommandTestExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "isfextract", EsopSyn_CommandIsfExtract, 0);
 }
 
 // called during ABC termination

@@ -60,7 +60,6 @@ DdNode* BddExtractManager::genPSDKROZdd(DdNode *f)
 		zf2 = genPSDKROZdd(f2);
         assert(zf2 != nullptr);
         Cudd_Ref(zf2);
-    
         
         zRes = cuddZddGetNode( _ddManager, varIdx*2, zf2, zf0);
         assert(zRes != nullptr);
