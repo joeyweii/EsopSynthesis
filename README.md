@@ -49,13 +49,13 @@
 
 ### Random Benchmark Generator
 1. random_esop
-./random_esop <out.pla> <#variable> <#cube> <#max_literals_per_cube> <random_seed>
+./random_esop <out.pla> <#inVar> <#cube> <#max_literals_per_cube> <random_seed>
 
 2. random function
-./random_function <numPI> <out.pla> <random seed>
+./random_function <out.pla> <#inVar> <#outVar> <random seed>
 
 3. random sop
- ./random_sop <out.pla> <#variable> <#cube> <random_seed>
+ ./random_sop <out.pla> <#inVar> <#cube> <random_seed>
 
 ### ESOP verification
 1. verify_pla

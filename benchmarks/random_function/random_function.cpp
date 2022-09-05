@@ -8,7 +8,7 @@
 using namespace std;
 
 /***** Usage ***** 
-./random_function <numPI> <out.pla> <random seed>
+./random_function <out.pla> <num_PI> <num_PO> <random seed>
 ******************/
 
 int pow(int num){
@@ -29,25 +29,30 @@ void i2minterm(int num, int numPI, string& minterm){
 }
 
 int main(int argc, char* argv[]){
-    assert(argc == 4);
+    assert(argc == 5);
 
-    int numPI = atoi(argv[1]);
+    int numPI = atoi(argv[2]);
+    int numPO = atoi(argv[3]);
 
     fstream f;
-    f.open(argv[2], ios::out);
+    f.open(argv[1], ios::out);
     f << ".i " << numPI << endl;
-    f << ".o 1" << endl;
+    f << ".o " << numPO << endl;
 
-    int seed = atoi(argv[3]);
+    int seed = atoi(argv[4]);
     srand(seed);
 
     int nMinterms = pow(numPI); 
     for(int i = 0; i < nMinterms; i++){
-        if(rand()%2) continue;
         string minterm;
         i2minterm(i, numPI, minterm);
-        f << minterm << " 1" << endl;
+        f << minterm << ' ';
+        for(int j = 0; j < numPO; ++j)
+            f << rand()%2;
+        f << '\n';
     }
+
+    f << ".e";
 
     return 0;
 }
