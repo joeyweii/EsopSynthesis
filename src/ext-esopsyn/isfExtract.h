@@ -28,6 +28,6 @@ private:
     std::unordered_map<DdNode*, std::pair<ExpType, std::uint32_t>> _exp_cost;
 	std::vector<cube> _esop;            // storing the resulting esop
 
-    DdNode* bestExpansion(DdNode* f, DdNode* fc);
+    std::pair<DdNode*, DdNode*> bestExpansion(DdNode* f, DdNode* fc);
     void generatePSDKRO(DdNode* f);
 };
