@@ -15,8 +15,163 @@ IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* fRoot, DdNode
 
 void IsfExtractManager::extract()
 {
-    _zRoot = expandRecur(_fRoot, _fcRoot).second;
+    _zRoot = expandExactRecur(_fRoot, _fcRoot).second;
     Cudd_Ref(_zRoot);
+}
+
+// Argument - f: function   fc: careset
+// Return   - first: new function   second: ZDD node of cover
+std::pair<DdNode*, DdNode*> IsfExtractManager::expandExactRecur(DdNode* f, DdNode* fc)
+{
+    assert(fc != Cudd_ReadLogicZero(_ddManager));
+
+	// Reach constant 0/1
+    if (f == Cudd_ReadLogicZero(_ddManager))
+		return std::make_pair(Cudd_ReadLogicZero(_ddManager), Cudd_ReadZero(_ddManager));
+	if (f == Cudd_ReadOne(_ddManager))
+		return std::make_pair(Cudd_ReadOne(_ddManager), Cudd_ReadOne(_ddManager));
+		
+    int varIdx = Cudd_NodeReadIndex(f);
+    DdNode *zRes = nullptr, *fRes = nullptr, *tem = nullptr, *tem2 = nullptr;
+
+    DdNode *fc0 = Cudd_Cofactor(_ddManager, fc, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(fc0);
+    DdNode *fc1 = Cudd_Cofactor(_ddManager, fc, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(fc1);
+
+    assert(fc0 != Cudd_ReadLogicZero(_ddManager) || fc1 != Cudd_ReadLogicZero(_ddManager));
+
+	// Calculate f0, f1, f2
+	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
+	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
+	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
+    
+    if(fc0 == Cudd_ReadLogicZero(_ddManager))
+    {
+        return expandExactRecur(f1, fc1); 
+    }
+    if(fc1 == Cudd_ReadLogicZero(_ddManager))
+    {
+        return expandExactRecur(f0, fc0); 
+    }
+
+    DdNode *f0_new, *f1_new, *f2_0c_new, *f2_1c_new, *zf0, *zf1, *zf2_0c, *zf2_1c;
+    DdNode *f2_prime;
+	    
+    std::pair<DdNode*, DdNode*> res;
+    res = expandExactRecur(f0, fc0);
+    f0_new = res.first;
+    zf0 = res.second;
+    res = expandExactRecur(f1, fc1);
+    f1_new = res.first;
+    zf1 = res.second;
+    
+	f2_prime = Cudd_bddXor(_ddManager, f0_new, f1_new); Cudd_Ref(f2_prime);
+    
+    res = expandExactRecur(f2_prime, fc0);
+    f2_0c_new = res.first;
+    zf2_0c = res.second;
+    res = expandExactRecur(f2_prime, fc1);
+    f2_1c_new = res.first;
+    zf2_1c = res.second;
+   
+    uint32_t c0, c1, c2_0c, c2_1c;     
+    c0 = Cudd_CountPathsToNonZero(zf0);
+    c1 = Cudd_CountPathsToNonZero(zf1);
+    c2_0c = Cudd_CountPathsToNonZero(zf2_0c);
+    c2_1c = Cudd_CountPathsToNonZero(zf2_1c);
+
+    uint32_t c_pD, c_nD, c_Sh, c_min;
+    c_pD = c0 + c2_1c;
+    c_nD = c1 + c2_0c;
+    c_Sh = c0 + c1;
+    c_min = std::min( std::min( c_pD, c_nD), c_Sh);
+
+	if (c_min == c_nD) 
+    {
+        if(f1_new == f2_0c_new)
+        {
+            assert(zf1 == zf2_0c);
+            zRes = cuddZddGetNode(_ddManager, varIdx*2, zf1, Cudd_ReadZero(_ddManager));
+        }
+        else 
+            zRes = cuddZddGetNode(_ddManager, varIdx*2+1, zf2_0c, zf1);
+
+        assert(zRes != nullptr);
+
+        if(f1_new == f2_0c_new)
+        {
+            fRes = Cudd_bddAnd(_ddManager, f1_new, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(fRes);
+        }
+        else
+        {
+            tem = Cudd_bddAnd(_ddManager, f2_0c_new, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(tem);
+            fRes = Cudd_bddXor(_ddManager, tem, f1_new); Cudd_Ref(fRes);
+            Cudd_RecursiveDeref(_ddManager, tem); 
+        }
+    }
+	else if (c_min == c_pD)
+    {
+        if(f0_new == f2_1c_new)
+        {
+            assert(zf0 == zf2_1c);
+            zRes = cuddZddGetNode( _ddManager, varIdx*2, zf0, Cudd_ReadZero(_ddManager));
+        }
+        else
+            zRes = cuddZddGetNode( _ddManager, varIdx*2, zf2_1c, zf0);
+
+        assert(zRes != nullptr);
+
+        if(f0_new == f2_1c_new)
+        {
+            fRes = Cudd_bddAnd(_ddManager, f0_new, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(fRes);
+        }
+        else
+        { 
+            tem = Cudd_bddAnd(_ddManager, f2_1c_new, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(tem);
+            fRes = Cudd_bddXor(_ddManager, tem, f0_new); Cudd_Ref(fRes);
+            Cudd_RecursiveDeref(_ddManager, tem); 
+        }
+    }
+	else
+    {
+        if(f0_new == f1_new)
+        {   
+            assert(zf0 == zf1);
+            zRes = zf0; 
+        }
+        else
+        {
+            // zf0, zf1, Cudd_ReadZero(_ddManager) will be deref in extraComposeCover function
+            Cudd_Ref(Cudd_ReadZero(_ddManager));
+            zRes = extraComposeCover( _ddManager, zf0, zf1, Cudd_ReadZero(_ddManager), varIdx);
+        }
+        assert(zRes != nullptr);
+        
+        if(f0_new == f1_new)
+        {
+            fRes = f0_new;
+        }
+        else
+        {
+            tem = Cudd_bddAnd(_ddManager, f0_new, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(tem);
+            tem2 = Cudd_bddAnd(_ddManager, f1_new, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(tem2);
+            fRes = Cudd_bddXor(_ddManager, tem, tem2);
+            Cudd_RecursiveDeref(_ddManager, tem);
+            Cudd_RecursiveDeref(_ddManager, tem2);
+        }
+    }
+    /*
+    Cudd_RecursiveDeref(_ddManager, f0_new);
+    Cudd_RecursiveDeref(_ddManager, f1_new);
+    Cudd_RecursiveDeref(_ddManager, f2_0c_new);
+    Cudd_RecursiveDeref(_ddManager, f2_1c_new);
+    Cudd_Deref(zf0);
+    Cudd_Deref(zf1);
+    Cudd_Deref(zf2_0c);
+    Cudd_Deref(zf2_1c);
+    */
+    Cudd_Ref(fRes);
+    Cudd_Ref(zRes);    
+	return std::make_pair(fRes, zRes);
 }
 
 std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc)
@@ -32,22 +187,22 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
     int varIdx = Cudd_NodeReadIndex(f);
     DdNode *zRes = nullptr, *fRes = nullptr, *tem = nullptr, *tem2 = nullptr;
 
-    DdNode *f0c = Cudd_Cofactor(_ddManager, fc, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(f0c);
-    DdNode *f1c = Cudd_Cofactor(_ddManager, fc, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(f1c);
+    DdNode *fc0 = Cudd_Cofactor(_ddManager, fc, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(fc0);
+    DdNode *fc1 = Cudd_Cofactor(_ddManager, fc, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(fc1);
 
-    assert(f0c != Cudd_ReadLogicZero(_ddManager) || f1c != Cudd_ReadLogicZero(_ddManager));
+    assert(fc0 != Cudd_ReadLogicZero(_ddManager) || fc1 != Cudd_ReadLogicZero(_ddManager));
 
 	// Calculate f0, f1, f2
 	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
 	DdNode *f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
     
-    if(f0c == Cudd_ReadLogicZero(_ddManager))
+    if(fc0 == Cudd_ReadLogicZero(_ddManager))
     {
-        return expandRecur(f1, f1c); 
+        return expandRecur(f1, fc1); 
     }
-    if(f1c == Cudd_ReadLogicZero(_ddManager))
+    if(fc1 == Cudd_ReadLogicZero(_ddManager))
     {
-        return expandRecur(f0, f0c); 
+        return expandRecur(f0, fc0); 
     }
 
 	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
@@ -64,7 +219,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf1, *zf2, *f1new, *f2new, *f2prime;
         std::pair<DdNode*, DdNode*> res;
 
-        res = expandRecur(f1, f1c);
+        res = expandRecur(f1, fc1);
         zf1 = res.second;
         f1new = res.first;
         assert(zf1 != nullptr);
@@ -72,7 +227,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
 
 	    f2prime = Cudd_bddXor(_ddManager, f0, f1new); Cudd_Ref(f2prime);
 
-	    res = expandRecur(f2prime, f0c);
+	    res = expandRecur(f2prime, fc0);
         zf2 = res.second;
         f2new = res.first;
         assert(zf2 != nullptr);
@@ -108,7 +263,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf0, *zf2, *f0new, *f2new, *f2prime;
         std::pair<DdNode*, DdNode*> res;
 
-		res = expandRecur(f0, f0c);
+		res = expandRecur(f0, fc0);
         zf0 = res.second;
         f0new = res.first;
         assert(zf0 != nullptr);
@@ -116,7 +271,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
 
 	    f2prime = Cudd_bddXor(_ddManager, f1, f0new); Cudd_Ref(f2prime);
 
-		res = expandRecur(f2prime, f1c);
+		res = expandRecur(f2prime, fc1);
         zf2 = res.second;
         f2new = res.first;
         assert(zf2 != nullptr);
@@ -152,14 +307,14 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf0, *zf1, *f0new, *f1new;
         std::pair<DdNode*, DdNode*> res;
 
-		res = expandRecur(f0, f0c);
+		res = expandRecur(f0, fc0);
         zf0 = res.second;
         f0new = res.first;
 
         assert(zf0 != nullptr);
         Cudd_Ref(zf0);
 
-		res = expandRecur(f1, f1c);
+		res = expandRecur(f1, fc1);
         zf1 = res.second;
         f1new = res.first;
         assert(zf1 != nullptr);
@@ -232,7 +387,7 @@ void IsfExtractMain(Abc_Ntk_t* pNtk)
     DdNode *fRoot = (DdNode*) Abc_ObjGlobalBdd(f);
     DdNode *fcRoot = (DdNode*) Abc_ObjGlobalBdd(fc);
 
-    fRoot = Cudd_bddRestrict(ddManager, fRoot, fcRoot);
+    //fRoot = Cudd_bddRestrict(ddManager, fRoot, fcRoot);
     IsfExtractManager m(ddManager, fRoot, fcRoot, nVars);
     // BddExtractManager m(ddManager, fRoot, nVars, 0);
     m.extract();

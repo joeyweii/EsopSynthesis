@@ -31,6 +31,7 @@ private:
     uint32_t    _nVars;
 
     std::pair<DdNode*, DdNode*> expandRecur(DdNode* f, DdNode* fc);
+    std::pair<DdNode*, DdNode*> expandExactRecur(DdNode* f, DdNode* fc);
 };
 
 #endif
