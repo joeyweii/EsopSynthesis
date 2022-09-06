@@ -2,8 +2,8 @@
 
 extern "C" DdNode * extraComposeCover (DdManager* dd, DdNode * zC0, DdNode * zC1, DdNode * zC2, int TopVar);
 
-BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* rootNode, uint32_t nVars, bool useZdd)
-: _ddManager(ddManager), _rootNode(rootNode), _zddNode(nullptr), _nVars(nVars), _useZdd(useZdd) , _values(nVars, VarValue::DONTCARE)
+BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* fRoot, uint32_t nVars, bool useZdd)
+: _ddManager(ddManager), _fRoot(fRoot), _zRoot(nullptr), _nVars(nVars), _useZdd(useZdd) , _values(nVars, VarValue::DONTCARE)
 {
     if(_useZdd)
         Cudd_zddVarsFromBddVars( _ddManager, 2 );
@@ -14,16 +14,16 @@ BddExtractManager::~BddExtractManager()
 
 void BddExtractManager::extract()
 {
-	if (_rootNode == NULL) return;
+	if (_fRoot == NULL) return;
 
 	_exp_cost.clear();
 	_esop.clear();
 
-	bestExpansion(_rootNode);
+	bestExpansion(_fRoot);
     if(_useZdd)
-        _zddNode = genPSDKROZdd(_rootNode);
+        _zRoot = genPSDKROZdd(_fRoot);
     else
-        genPSDKROBitStr(_rootNode);
+        genPSDKROBitStr(_fRoot);
 }
 
 DdNode* dummyGenPSDKROZdd(DdManager *m, DdNode *f){ return NULL;};
@@ -195,16 +195,49 @@ std::pair<ExpType, std::uint32_t> BddExtractManager::bestExpansion(DdNode *f)
 	return ret;
 }
 
-void BddExtractManager::getBitStr(std::vector<std::string>& ret) const
+void BddExtractManager::getESOP(std::vector<std::string>& ret) const
 {
-    for(auto &cube : _esop) 
-        ret.push_back(cube.str(_nVars));
+    if(!_useZdd)
+    {
+        for(auto &cube : _esop) 
+            ret.push_back(cube.str(_nVars));
+    }
+    else
+    {
+        DdGen* gen = nullptr;
+        int*   cube = nullptr;
+        std::string s;
+
+        Cudd_zddForeachPath(_ddManager, _zRoot, gen, cube)
+        {
+            s = "";
+
+            for(int i = 0; i < 2*_nVars; i += 2)
+            {
+                if(cube[i] != 1 && cube[i+1] != 1)
+                    s += '-';
+                else if(cube[i+1] != 1)
+                {
+                    assert(cube[i] == 1);
+                    s += '1';
+                }
+                else
+                {
+                    assert(cube[i] != 1);
+                    assert(cube[i+1] == 1);
+                    s += '0';
+                }
+            } 
+
+            ret.push_back(s);
+        }
+    }
 }
 
 uint32_t BddExtractManager::getNumTerms() const
 {
     if(_useZdd)
-        return Cudd_CountPathsToNonZero(_zddNode); 
+        return Cudd_CountPathsToNonZero(_zRoot); 
     else
         return _esop.size();
 }
@@ -234,8 +267,7 @@ void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ret, bool
     // Extract
     m.extract();	
 
-    if(!fUseZdd)
-        m.getBitStr(ret);
+    m.getESOP(ret);
 
     // Delete global BDD
     Abc_NtkFreeGlobalBdds( pNtk, 0);
@@ -255,14 +287,13 @@ void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd)
 	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
 	std::cout << "Time used: \t\t" << runtime << " sec" << std::endl;
 	std::cout << "Memory used: \t\t" << memory << " GB" << std::endl;
-    if(!fUseZdd) 
-        std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
+    std::cout << "Number of terms: \t\t" << ESOP.size() << std::endl;
 
-    if(fVerbose && !fUseZdd)
+    if(fVerbose)
     {
         std::cout << "ESOP:" << '\n';
         for(auto& cube: ESOP)
-            std::cout << cube << '\n';
+            std::cout << cube << " 1\n";
     } 
 
     if(filename)

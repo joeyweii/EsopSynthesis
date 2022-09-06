@@ -21,14 +21,14 @@ class BddExtractManager
 public:
 
     // Constructor and Destructor 
-	BddExtractManager(DdManager* ddManager, DdNode* rootNode, std::uint32_t nVars, bool useZdd);
+	BddExtractManager(DdManager* ddManager, DdNode* fRoot, std::uint32_t nVars, bool useZdd);
 	~BddExtractManager();
     
     // extract algorithm
 	void extract();
 
     // get the final ESOP and number of terms
-    void getBitStr(std::vector<std::string>& ret) const;
+    void getESOP(std::vector<std::string>& ret) const;
     uint32_t getNumTerms() const;
 
 	DdNode* genPSDKROZdd(DdNode* f);
@@ -42,8 +42,8 @@ private:
 
 private:
 	DdManager* _ddManager;              // cudd manager
-    DdNode*    _rootNode;               // root node of function to be extracted
-    DdNode*    _zddNode;                // root node of ZDD implicit representation 
+    DdNode*    _fRoot;               // root node of function to be extracted
+    DdNode*    _zRoot;                // root node of ZDD implicit representation 
 	uint32_t _nVars;                    // the number of variables
     bool    _useZdd;                    // use ZDD implicit representation or not
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
