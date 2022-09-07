@@ -11,7 +11,7 @@ extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool f
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void TestExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
-extern void IsfExtractMain(Abc_Ntk_t* pNtk);
+extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename);
 
 /**Function*************************************************************
 
@@ -640,18 +640,35 @@ usage:
 int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
 {
     Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
-    int c;
+    int c, fVerbose = 0;
+    char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hv")) != EOF)
     {
         switch (c)
         {
             case 'h':
                 goto usage;
+            case 'v':
+                if ( globalUtilOptind >= argc )
+                {
+                    Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+                    goto usage;
+                }
+                fVerbose = atoi(argv[globalUtilOptind]);
+                globalUtilOptind++;
+                if ( fVerbose < 0  || fVerbose > 1)
+                    goto usage;
+                break;
             default:
                 goto usage;
         }
+    }
+
+    if ( argc == globalUtilOptind + 1 )
+    {
+        pFileNameOut = argv[globalUtilOptind];
     }
 
     if (!pNtk)
@@ -663,16 +680,14 @@ int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     if(!Abc_NtkIsStrash(pNtk))
         pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
 
-    IsfExtractMain(pNtk);
+    IsfExtractMain(pNtk, fVerbose, pFileNameOut);
 
     return 0;
 
 usage:
-    Abc_Print(-2, "usage: bddextract [-hl] [-o <ith PO>] [-v [0/1]]\n");
-    Abc_Print(-2, "\t        synthesis ESOP with BDD extract\n");
-    Abc_Print(-2, "\t-o    : specify the output to be processed\n");
+    Abc_Print(-2, "usage: isfextract [-h] [-v [0/1]]\n");
+    Abc_Print(-2, "\t        synthesis ESOP for incompletely specified function\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
-    Abc_Print(-2, "\t-u    : toggle using LUT mapping. Default: 0\n");
     Abc_Print(-2, "\t-h    : print the command usage\n");
     return 1;
 }

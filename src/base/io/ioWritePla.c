@@ -82,14 +82,6 @@ int Io_WritePlaOne( FILE * pFile, Abc_Ntk_t * pNtk )
     // write the header
     fprintf( pFile, ".i %d\n", nInputs );
     fprintf( pFile, ".o %d\n", nOutputs );
-    fprintf( pFile, ".ilb" );
-    Abc_NtkForEachCi( pNtk, pNode, i )
-        fprintf( pFile, " %s", Abc_ObjName(Abc_ObjFanout0(pNode)) );
-    fprintf( pFile, "\n" );
-    fprintf( pFile, ".ob" );
-    Abc_NtkForEachCo( pNtk, pNode, i )
-        fprintf( pFile, " %s", Abc_ObjName(Abc_ObjFanin0(pNode)) );
-    fprintf( pFile, "\n" );
     fprintf( pFile, ".p %d\n", nProducts );
 
     // mark the CI nodes

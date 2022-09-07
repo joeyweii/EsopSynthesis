@@ -8,7 +8,6 @@ extern "C" void Abc_ShowFile( char * FileNameDot );
 
 IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* fRoot, DdNode* fcRoot, std::uint32_t nVars)
 : _ddManager(ddManager), _fRoot(fRoot), _fcRoot(fcRoot), _zRoot(nullptr), _nVars(nVars) 
-
 {
     Cudd_zddVarsFromBddVars( _ddManager, 2 );
 }
@@ -16,7 +15,6 @@ IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* fRoot, DdNode
 void IsfExtractManager::extract()
 {
     _zRoot = expandExactRecur(_fRoot, _fcRoot).second;
-    Cudd_Ref(_zRoot);
 }
 
 // Argument - f: function   fc: careset
@@ -174,7 +172,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandExactRecur(DdNode* f, DdNod
 	return std::make_pair(fRes, zRes);
 }
 
-std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc)
+std::pair<DdNode*, DdNode*> IsfExtractManager::expandHeuristicRecur(DdNode* f, DdNode* fc)
 {
     assert(fc != Cudd_ReadLogicZero(_ddManager));
 
@@ -198,11 +196,11 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
     
     if(fc0 == Cudd_ReadLogicZero(_ddManager))
     {
-        return expandRecur(f1, fc1); 
+        return expandHeuristicRecur(f1, fc1); 
     }
     if(fc1 == Cudd_ReadLogicZero(_ddManager))
     {
-        return expandRecur(f0, fc0); 
+        return expandHeuristicRecur(f0, fc0); 
     }
 
 	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
@@ -219,7 +217,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf1, *zf2, *f1new, *f2new, *f2prime;
         std::pair<DdNode*, DdNode*> res;
 
-        res = expandRecur(f1, fc1);
+        res = expandHeuristicRecur(f1, fc1);
         zf1 = res.second;
         f1new = res.first;
         assert(zf1 != nullptr);
@@ -227,7 +225,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
 
 	    f2prime = Cudd_bddXor(_ddManager, f0, f1new); Cudd_Ref(f2prime);
 
-	    res = expandRecur(f2prime, fc0);
+	    res = expandHeuristicRecur(f2prime, fc0);
         zf2 = res.second;
         f2new = res.first;
         assert(zf2 != nullptr);
@@ -263,7 +261,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf0, *zf2, *f0new, *f2new, *f2prime;
         std::pair<DdNode*, DdNode*> res;
 
-		res = expandRecur(f0, fc0);
+		res = expandHeuristicRecur(f0, fc0);
         zf0 = res.second;
         f0new = res.first;
         assert(zf0 != nullptr);
@@ -271,7 +269,7 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
 
 	    f2prime = Cudd_bddXor(_ddManager, f1, f0new); Cudd_Ref(f2prime);
 
-		res = expandRecur(f2prime, fc1);
+		res = expandHeuristicRecur(f2prime, fc1);
         zf2 = res.second;
         f2new = res.first;
         assert(zf2 != nullptr);
@@ -307,14 +305,14 @@ std::pair<DdNode*, DdNode*> IsfExtractManager::expandRecur(DdNode* f, DdNode* fc
         DdNode *zf0, *zf1, *f0new, *f1new;
         std::pair<DdNode*, DdNode*> res;
 
-		res = expandRecur(f0, fc0);
+		res = expandHeuristicRecur(f0, fc0);
         zf0 = res.second;
         f0new = res.first;
 
         assert(zf0 != nullptr);
         Cudd_Ref(zf0);
 
-		res = expandRecur(f1, fc1);
+		res = expandHeuristicRecur(f1, fc1);
         zf1 = res.second;
         f1new = res.first;
         assert(zf1 != nullptr);
@@ -364,6 +362,7 @@ void IsfExtractManager::dumpZddDot()
 
 void IsfExtractManager::printZddCubes()
 {
+    std::cout << "ESOP:" << '\n';
     Cudd_zddPrintCover(_ddManager, _zRoot);
 }
 
@@ -372,7 +371,53 @@ void IsfExtractManager::printZddNumCubes()
     std::cout << "#cubes: " << Cudd_CountPathsToNonZero(_zRoot) << std::endl;
 }
 
-void IsfExtractMain(Abc_Ntk_t* pNtk)
+void IsfExtractManager::writePlaFile(char* filename)
+{
+    std::fstream outFile;
+    outFile.open(filename, std::ios::out);
+
+    if(!outFile.is_open())
+    {
+        std::cerr << "Output file cannot be opened." << std::endl;
+        return;
+    }
+
+    outFile << ".i " << _nVars << '\n';
+    outFile << ".o 1\n";
+    outFile << ".type esop\n";
+
+    DdGen* gen = nullptr;
+    int*   cube = nullptr;
+    std::string s;
+
+    Cudd_zddForeachPath(_ddManager, _zRoot, gen, cube)
+    {
+        s = "";
+        for(int i = 0; i < 2*_nVars; i += 2)
+        {
+            if(cube[i] != 1 && cube[i+1] != 1)
+                s += '-';
+            else if(cube[i+1] != 1)
+            {
+                assert(cube[i] == 1);
+                s += '1';
+            }
+            else
+            {
+                assert(cube[i] != 1);
+                assert(cube[i+1] == 1);
+                s += '0';
+            }
+        } 
+
+        outFile << s << " 1\n";
+    }
+
+    outFile << ".e\n";
+    outFile.close();
+}
+
+void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename)
 {
     assert(Abc_NtkPoNum(pNtk) == 2);
 
@@ -387,14 +432,15 @@ void IsfExtractMain(Abc_Ntk_t* pNtk)
     DdNode *fRoot = (DdNode*) Abc_ObjGlobalBdd(f);
     DdNode *fcRoot = (DdNode*) Abc_ObjGlobalBdd(fc);
 
-    //fRoot = Cudd_bddRestrict(ddManager, fRoot, fcRoot);
     IsfExtractManager m(ddManager, fRoot, fcRoot, nVars);
-    // BddExtractManager m(ddManager, fRoot, nVars, 0);
     m.extract();
 
-    //std::cout << "#cubes: " << m.getNumTerms() << std::endl;
-    //m.printZddCubes();
-    m.printZddNumCubes();
+    if(fVerbose)
+        m.printZddCubes();
 
+    if(filename)
+        m.writePlaFile(filename);
+
+    m.printZddNumCubes();
     return;
 }
