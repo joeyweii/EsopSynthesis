@@ -368,7 +368,7 @@ void IsfExtractManager::printZddCubes()
 
 void IsfExtractManager::printZddNumCubes()
 {
-    std::cout << "#cubes: " << Cudd_CountPathsToNonZero(_zRoot) << std::endl;
+    std::cout << "Number of terms: \t\t" << Cudd_CountPathsToNonZero(_zRoot) << std::endl;
 }
 
 void IsfExtractManager::writePlaFile(char* filename)
@@ -425,6 +425,9 @@ void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename)
     int fBddMaxSize = ABC_INFINITY; // The maximum #node in BDD
 
     int nVars = Abc_NtkPiNum(pNtk);
+
+    abctime clk = Abc_Clock();
+
     DdManager *ddManager = (DdManager*) Abc_NtkBuildGlobalBdds(pNtk, fBddMaxSize, 1, fReorder, 0, 0);
     
     Abc_Obj_t *f = Abc_NtkPo(pNtk, 0);
@@ -434,6 +437,11 @@ void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename)
 
     IsfExtractManager m(ddManager, fRoot, fcRoot, nVars);
     m.extract();
+
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);
+	std::cout << "Time used: \t\t" << runtime << " sec" << std::endl;
+	std::cout << "Memory used: \t\t" << memory << " GB" << std::endl;
 
     if(fVerbose)
         m.printZddCubes();
