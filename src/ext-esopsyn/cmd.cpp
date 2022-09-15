@@ -233,24 +233,34 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
         return 1;
     }
 
-    if(!Abc_NtkIsStrash(pNtk))
-        pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
-
     if(fLUT)
     {
         Abc_NtkForEachNode( pNtk, pPo, iPo)
         {
             if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
-            Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
-            std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-            std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+            if(fOutput != -1 && iPo != fOutput) continue;
 
-            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
+            Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
+
+            if(!Abc_NtkIsStrash(pSubNtk))
+                pSubNtk = Abc_NtkStrash(pSubNtk, 0, 0, 0 );
+
+
+            if(Abc_NtkPiNum(pSubNtk) > 15)
+            {
+                std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+                std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+                BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
+            }
+
             Abc_NtkDelete(pSubNtk);
         }
     }
     else 
     {
+        if(!Abc_NtkIsStrash(pNtk))
+            pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
+
         Abc_NtkForEachPo(pNtk, pPo, iPo)
         {
             if(fOutput != -1 && iPo != fOutput) continue;
@@ -300,7 +310,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int c;
     int fOutput = -1;
     int fVerbose = 0;
-    int fRefine = 1;
+    int fRefine = 0;
     int fLevel = 1;
     int fLUT = 0;
     char* pFileNameOut = NULL;
@@ -367,18 +377,19 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
         return 1;
     }
 
-    if(!Abc_NtkIsStrash(pNtk))
-    {
-        pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
-        Abc_FrameReplaceCurrentNetwork( pAbc, pNtk);
-    }
 
     if(fLUT)
     {
         Abc_NtkForEachNode( pNtk, pPo, iPo)
         {
             if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
+            if(fOutput != -1 && iPo != fOutput) continue;
+
             Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
+
+            if(!Abc_NtkIsStrash(pSubNtk))
+                pSubNtk = Abc_NtkStrash(pSubNtk, 0, 0, 0 );
+
             std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
@@ -388,6 +399,9 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     }
     else
     {
+        if(!Abc_NtkIsStrash(pNtk))
+            pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
+
         Abc_NtkForEachPo(pNtk, pPo, iPo)
         {
             if(fOutput != -1 && iPo != fOutput) continue;
