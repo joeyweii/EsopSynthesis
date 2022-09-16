@@ -31,14 +31,14 @@ public:
     void getESOP(std::vector<std::string>& ret) const;
     uint32_t getNumTerms() const;
 
-	DdNode* genPSDKROZdd(DdNode* f);
 private:
 
 	// First pass: dicide the best expansion and calculate the cost 
-	std::pair<ExpType, std::uint32_t> bestExpansion(DdNode* f);
+	std::uint32_t bestExpansion(DdNode* f);
 
 	// Second pass: generate PSDKRO 
 	void genPSDKROBitStr(DdNode* f);
+	DdNode* genPSDKROZdd(DdNode* f);
 
 private:
 	DdManager* _ddManager;              // cudd manager

@@ -16,10 +16,14 @@ void BddExtractManager::extract()
 {
 	if (_fRoot == NULL) return;
 
-	_exp_cost.clear();
-	_esop.clear();
+    if(!_useZdd)
+    {
+	    _exp_cost.clear();
+	    _esop.clear();
+    }
 
 	bestExpansion(_fRoot);
+
     if(_useZdd)
         _zRoot = genPSDKROZdd(_fRoot);
     else
@@ -158,17 +162,17 @@ void BddExtractManager::genPSDKROBitStr(DdNode *f)
 	_values[idx] = VarValue::DONTCARE;
 }
 
-std::pair<ExpType, std::uint32_t> BddExtractManager::bestExpansion(DdNode *f)
+std::uint32_t BddExtractManager::bestExpansion(DdNode *f)
 {
 	// Reach constant 0/1
 	if (f == Cudd_ReadLogicZero(_ddManager))
-		return std::make_pair(ExpType::pD, 0u);
+		return 0u;
 	if (f == Cudd_ReadOne(_ddManager))
-		return std::make_pair(ExpType::pD, 1u);
+		return 1u;
 		
 	auto it = _exp_cost.find(f);
 	if (it != _exp_cost.end())
-		return it->second;
+		return it->second.second;
 
 	// Calculate f0, f1, f2
 	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
@@ -176,9 +180,9 @@ std::pair<ExpType, std::uint32_t> BddExtractManager::bestExpansion(DdNode *f)
 	DdNode *f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2);
 
 	// Recusive calls on f0, f1, f2
-	std::uint32_t c0 = bestExpansion(f0).second;
-	std::uint32_t c1 = bestExpansion(f1).second;
-	std::uint32_t c2 = bestExpansion(f2).second;
+	std::uint32_t c0 = bestExpansion(f0);
+	std::uint32_t c1 = bestExpansion(f1);
+	std::uint32_t c2 = bestExpansion(f2);
 
 	// Choose the least costly expansion 
 	std::uint32_t cmax = std::max(std::max(c0, c1), c2);
@@ -192,7 +196,7 @@ std::pair<ExpType, std::uint32_t> BddExtractManager::bestExpansion(DdNode *f)
 		ret = std::make_pair(ExpType::S, c0 + c1);
 	
 	_exp_cost[f] = ret;
-	return ret;
+	return ret.second;
 }
 
 void BddExtractManager::getESOP(std::vector<std::string>& ret) const
