@@ -19,7 +19,7 @@ class ArExtractManager {
 public:
 
     // Constructor and Destructor
-	ArExtractManager(DdManager *ddManager, std::uint32_t level, bool refine, DdNode* _rootNode, std::uint32_t nVars);
+	ArExtractManager(DdManager *ddManager, std::uint32_t level, std::uint32_t costType, bool refine, DdNode* _rootNode, std::uint32_t nVars);
     ~ArExtractManager() {}
 
     void extract();
@@ -46,9 +46,10 @@ private:
 	DdManager* _ddManager;              // cudd manager
     DdNode* _rootNode;                  // root node of function to be extracted 
 	uint32_t _level;                    // k level cost look ahead
+	uint32_t _costType;                 // type of cost function.  0: path 1: node 2: hybrid
 	uint32_t _nVars;                    // the number of variables
     bool     _refine;                   // conduct refinement or not
-	std::vector<VarValue> _values;     // for generating psdkro
+	std::vector<VarValue> _values;      // for generating psdkro
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
 	std::unordered_map<DdNode *, std::pair<ExpType, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop;            // storing the resulting esop
