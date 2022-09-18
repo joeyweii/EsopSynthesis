@@ -20,7 +20,6 @@ class IsfExtractManager
 public:
     IsfExtractManager(DdManager* ddManager, DdNode* fRoot, DdNode* fcRoot, std::uint32_t nVars);
     void extract();
-    void dumpZddDot();
     void printZddCubes();
     void printZddNumCubes();
     void writePlaFile(char* filename);
@@ -31,7 +30,6 @@ private:
     DdNode*     _zRoot;
     uint32_t    _nVars;
 
-    std::pair<DdNode*, DdNode*> expandHeuristicRecur(DdNode* f, DdNode* fc);
     std::pair<DdNode*, DdNode*> expandExactRecur(DdNode* f, DdNode* fc);
 };
 
