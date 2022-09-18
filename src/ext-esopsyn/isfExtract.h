@@ -30,7 +30,7 @@ private:
     DdNode*     _zRoot;
     uint32_t    _nVars;
 
-    std::pair<DdNode*, DdNode*> expandExactRecur(DdNode* f, DdNode* fc);
+    std::tuple<DdNode*, DdNode*, uint32_t> expandExactRecur(DdNode* f, DdNode* fc);
 };
 
 #endif
