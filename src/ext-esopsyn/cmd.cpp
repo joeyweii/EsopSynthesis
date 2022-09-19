@@ -245,13 +245,10 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             if(!Abc_NtkIsStrash(pSubNtk))
                 pSubNtk = Abc_NtkStrash(pSubNtk, 0, 0, 0 );
 
-
-            if(Abc_NtkPiNum(pSubNtk) > 15)
-            {
-                std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-                std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
-                BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
-            }
+            std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+            std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+            
+            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
 
             Abc_NtkDelete(pSubNtk);
         }
@@ -465,12 +462,13 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int iPo;
     int c;
     int fOutput = -1;
+    int fLUT = 0;
     int fVerbose = 0;
     int fNumCofVar = 8;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "hovn")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hovnu")) != EOF)
     {
         switch (c)
         {
@@ -509,6 +507,9 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv)
                 if ( fNumCofVar < 0 )
                     goto usage;
                 break;
+            case 'u':
+                fLUT ^= 1;
+                break;
             default:
                 goto usage;
         }
@@ -525,34 +526,57 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv)
         return 1;
     }
 
-    if(!Abc_NtkIsStrash(pNtk))
-        pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
-
-    Abc_NtkForEachPo(pNtk, pPo, iPo)
+    if(fLUT)
     {
-        if(fOutput != -1 && iPo != fOutput) continue;
+        Abc_NtkForEachNode( pNtk, pPo, iPo)
+        {
+            if(Abc_ObjIsPi(pPo) || Abc_ObjIsPo(pPo)) continue;
+            if(fOutput != -1 && iPo != fOutput) continue;
 
-        // create cone for the current PO
-        Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+            Abc_Ntk_t* pSubNtk = Abc_NtkCreateFromNode(pNtk, pPo);
 
-        if( Abc_ObjFaninC0(pPo) )
-            Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+            if(!Abc_NtkIsStrash(pSubNtk))
+                pSubNtk = Abc_NtkStrash(pSubNtk, 0, 0, 0 );
 
-        std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-        std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+            std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+            std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-        DcExtractMain(pSubNtk, fNumCofVar, fVerbose, pFileNameOut);
+            DcExtractMain(pSubNtk, fNumCofVar, fVerbose, pFileNameOut);
+            Abc_NtkDelete(pSubNtk);
+        }
+    }
+    else
+    {
+        if(!Abc_NtkIsStrash(pNtk))
+            pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
 
-        Abc_NtkDelete(pSubNtk);
+        Abc_NtkForEachPo(pNtk, pPo, iPo)
+        {
+            if(fOutput != -1 && iPo != fOutput) continue;
+
+            // create cone for the current PO
+            Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
+
+            if( Abc_ObjFaninC0(pPo) )
+                Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
+
+            std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
+            std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
+
+            DcExtractMain(pSubNtk, fNumCofVar, fVerbose, pFileNameOut);
+
+            Abc_NtkDelete(pSubNtk);
+        }
     }
     return 0;
 
 usage:
-    Abc_Print(-2, "usage: dcextract [-h] [-v <0/1>] [-n <int>] [-o <int>]\n");
+    Abc_Print(-2, "usage: dcextract [-h] [-v <0/1>] [-n <int>] [-o <int>] [-u]\n");
     Abc_Print(-2, "\t        synthesis ESOP with DC extract\n");
     Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 8\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
     Abc_Print(-2, "\t-o    : specify the output to be processed. Default: All outputs\n");
+    Abc_Print(-2, "\t-u    : toggle using LUT mapping. Default: 0\n");
     Abc_Print(-2, "\t-h    : print the command usage.\n");
     return 1;
 }

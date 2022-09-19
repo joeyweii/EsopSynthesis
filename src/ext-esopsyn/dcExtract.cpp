@@ -18,7 +18,6 @@ static void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& 
 {
     if(nCofVar == 0)
         BddExtractSingleOutput(pNtk, ESOP, 0);
-        // ArExtractSingleOutput(pNtk, 4, true, ESOP);
     else
     {
         size_t minNode = std::numeric_limits<size_t>::max();
