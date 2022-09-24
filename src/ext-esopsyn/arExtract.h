@@ -19,7 +19,16 @@ class ArExtractManager {
 public:
 
     // Constructor and Destructor
-	ArExtractManager(DdManager *ddManager, std::uint32_t level, std::uint32_t costType, bool refine, DdNode* _rootNode, std::uint32_t nVars);
+	ArExtractManager
+    (
+        DdManager *ddManager, 
+        std::uint32_t level, 
+        std::uint32_t costType, 
+        std::uint32_t bound,
+        bool refine, 
+        DdNode* _rootNode, 
+        std::uint32_t nVars
+    );
     ~ArExtractManager() {}
 
     void extract();
@@ -28,7 +37,8 @@ public:
     uint32_t getNumTerms() const;
 private:
 	// Find the starting cover
-	std::uint32_t startingCover(DdNode *f);
+	std::uint32_t partialExpand(DdNode *f);
+	std::uint32_t fullExpand(DdNode *f);
 
 	// Refinement
 	std::uint32_t refine(DdNode *f);
@@ -37,8 +47,6 @@ private:
 	void generatePSDKRO(DdNode *f);
 
 	//  Cost Functions
-    // uint32_t BddNodeNum(DdNode* p, std::unordered_set<DdNode*>& visited);
-    // uint32_t Const1Path(DdNode* p, std::unordered_map<DdNode *, uint32_t>&);
     uint32_t CostFunction(DdNode* f);
 	uint32_t CostFunctionLevel(DdNode* f, int level);
 
@@ -47,6 +55,7 @@ private:
     DdNode* _rootNode;                  // root node of function to be extracted 
 	uint32_t _level;                    // k level cost look ahead
 	uint32_t _costType;                 // type of cost function.  0: path 1: node 2: hybrid
+    uint32_t _bound;                    // the decision bound (BDD size) of full/partial expansion
 	uint32_t _nVars;                    // the number of variables
     bool     _refine;                   // conduct refinement or not
 	std::vector<VarValue> _values;      // for generating psdkro
