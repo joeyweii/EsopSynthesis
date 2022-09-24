@@ -38,7 +38,7 @@ void ArExtractManager::generatePSDKRO(DdNode *f)
 	}
 
 	// Find the best expansion by a cache lookup
-	ExpType expansion = _exp_cost[f].first;
+	ExpType expansion = std::get<0>(_exp_cost_refined[f]);
 
 	// Determine the top-most variable
 	auto idx = Cudd_NodeReadIndex(f);
@@ -86,7 +86,9 @@ uint32_t ArExtractManager::refine(DdNode *f)
 	if (f == Cudd_ReadOne(_ddManager))
 		return 1u;
         
-	auto it = _exp_cost.find(f);
+	auto it = _exp_cost_refined.find(f);
+    if(std::get<2>(it->second) == 1)
+        return std::get<1>(it->second);
 
 	// Calculate f0, f1, f2
     DdNode *f0, *f1, *f2;
@@ -94,11 +96,11 @@ uint32_t ArExtractManager::refine(DdNode *f)
     f1 = Cudd_NotCond(Cudd_T(f), Cudd_IsComplement(f));
 	f2 = Cudd_bddXor(_ddManager, f0, f1); Cudd_Ref(f2); 
 
-	if(it->second.first == ExpType::nD)
+	if(std::get<0>(it->second) == ExpType::nD)
 	{
         uint32_t c1, c2, c0, cmax;
-		c1 = _exp_cost[f1].second;
-	    c2 = _exp_cost[f2].second;
+		c1 = std::get<1>(_exp_cost_refined[f1]);
+	    c2 = std::get<1>(_exp_cost_refined[f2]);
 		c0 = partialExpand(f0);
 		cmax = std::max(std::max(c0, c1), c2);
 
@@ -106,29 +108,30 @@ uint32_t ArExtractManager::refine(DdNode *f)
 		{
 			c1 = refine(f1);
 			c2 = refine(f2);
-			it->second.second = c1 + c2;
+            std::get<1>(it->second) = c1 + c2;
+            std::get<2>(it->second) = 1; 
 			return c1 + c2;
 		}
 		else if(cmax == c1)
 		{
 			c0 = refine(f0);
 			c2 = refine(f2);
-			it->second = std::make_pair(ExpType::pD, c0 + c2);
+            it->second = std::make_tuple(ExpType::pD, c0 + c2, 1);
 			return c0 + c2;
 		}
 		else if(cmax == c2)
 		{
 			c0 = refine(f0);
 			c1 = refine(f1);
-			it->second = std::make_pair(ExpType::S, c0 + c1);
+			it->second = std::make_tuple(ExpType::S, c0 + c1, 1);
 			return c0 + c1;
 		}
 	}
-	else if(it->second.first == ExpType::pD)
+	else if(std::get<0>(it->second) == ExpType::pD)
 	{
         uint32_t c0, c2, c1, cmax;
-		c0 = _exp_cost[f0].second;
-		c2 = _exp_cost[f2].second;
+		c0 = std::get<1>(_exp_cost_refined[f0]);
+		c2 = std::get<1>(_exp_cost_refined[f2]);
 		c1 = partialExpand(f1);
 		cmax = std::max(std::max(c0, c1), c2);
 
@@ -136,21 +139,22 @@ uint32_t ArExtractManager::refine(DdNode *f)
 		{
 			c0 = refine(f0);
 			c1 = refine(f2);
-			it->second.second = c0 + c1;
+            std::get<1>(it->second) = c0 + c1;
+            std::get<2>(it->second) = 1; 
 			return c0 + c1;
 		}
 		else if(cmax == c0)
 		{
 			c1 = refine(f1);
 			c2 = refine(f2);
-			it->second = std::make_pair(ExpType::nD, c1 + c2);
+			it->second = std::make_tuple(ExpType::nD, c1 + c2, 1);
 			return c1 + c2;
 		}
 		else if(cmax == c2)
 		{
 			c0 = refine(f0);
 			c1 = refine(f1);
-			it->second = std::make_pair(ExpType::S, c0 + c1);
+			it->second = std::make_tuple(ExpType::S, c0 + c1, 1);
 			return c0 + c1;
 		}
 	}
@@ -158,8 +162,8 @@ uint32_t ArExtractManager::refine(DdNode *f)
 	else
 	{
         uint32_t c0, c1, c2, cmax;
-		c0 = _exp_cost[f0].second;
-		c1 = _exp_cost[f1].second;
+		c0 = std::get<1>(_exp_cost_refined[f0]);
+		c1 = std::get<1>(_exp_cost_refined[f1]);
 		c2 = partialExpand(f2);
 		cmax = std::max(std::max(c0, c1), c2);
 
@@ -167,21 +171,22 @@ uint32_t ArExtractManager::refine(DdNode *f)
 		{
 			c0 = refine(f0);
 			c1 = refine(f1);
-			it->second.second = c0 + c1;
+            std::get<1>(it->second) = c0 + c1;
+            std::get<2>(it->second) = 1; 
 			return c0 + c1;
 		}
 		else if(cmax == c0)
 		{
 			c1 = refine(f1);
 			c2 = refine(f2);
-			it->second = std::make_pair(ExpType::nD, c1 + c2);
+			it->second = std::make_tuple(ExpType::nD, c1 + c2, 1);
 			return c1 + c2;
 		}
 		else if(cmax == c1)
 		{
 			c0 = refine(f0);
 			c2 = refine(f2);
-			it->second = std::make_pair(ExpType::pD, c0 + c2);
+			it->second = std::make_tuple(ExpType::pD, c0 + c2, 1);
 			return c0 + c2;
 		}
 	}
@@ -196,9 +201,9 @@ std::uint32_t ArExtractManager::partialExpand(DdNode *f)
 	if (f == Cudd_ReadOne(_ddManager))
 		return 1u;
         
-	auto it = _exp_cost.find(f);
-	if (it != _exp_cost.end())
-		return it->second.second;
+	auto it = _exp_cost_refined.find(f);
+	if (it != _exp_cost_refined.end())
+		return std::get<1>(it->second);
 
     if(Cudd_DagSize(f) <= _bound) return fullExpand(f);
 
@@ -216,28 +221,28 @@ std::uint32_t ArExtractManager::partialExpand(DdNode *f)
     cmax = std::max(std::max(c0, c1), c2);
 
     // Recursive calls
-    std::pair<ExpType, std::uint32_t> ret;
+    std::tuple<ExpType, std::uint32_t, bool> ret;
     if(c0 == cmax)
     {
         std::uint32_t n1 = partialExpand(f1);
 	    std::uint32_t n2 = partialExpand(f2);
-        ret = std::make_pair(ExpType::nD, n1 + n2);
+        ret = std::make_tuple(ExpType::nD, n1 + n2, 0);
     }
     else if(c1 == cmax)
     {
         std::uint32_t n0 = partialExpand(f0);
         std::uint32_t n2 = partialExpand(f2);
-        ret = std::make_pair(ExpType::pD, n0 + n2);
+        ret = std::make_tuple(ExpType::pD, n0 + n2, 0);
     }
     else
     {
         std::uint32_t n0 = partialExpand(f0);
 	    std::uint32_t n1 = partialExpand(f1);
-        ret = std::make_pair(ExpType::S, n0 + n1);
+        ret = std::make_tuple(ExpType::S, n0 + n1, 0);
     }
 
-	_exp_cost[f] = ret;
-	return ret.second;
+	_exp_cost_refined[f] = ret;
+	return std::get<1>(ret);
 }
 
 std::uint32_t ArExtractManager::fullExpand(DdNode *f)
@@ -248,9 +253,9 @@ std::uint32_t ArExtractManager::fullExpand(DdNode *f)
 	if (f == Cudd_ReadOne(_ddManager))
 		return 1u;
 		
-	auto it = _exp_cost.find(f);
-	if (it != _exp_cost.end())
-		return it->second.second;
+	auto it = _exp_cost_refined.find(f);
+	if (it != _exp_cost_refined.end())
+		return std::get<1>(it->second);
 
 	// Calculate f0, f1, f2
 	DdNode *f0 = Cudd_NotCond(Cudd_E(f), Cudd_IsComplement(f));
@@ -265,16 +270,16 @@ std::uint32_t ArExtractManager::fullExpand(DdNode *f)
 	// Choose the least costly expansion 
 	std::uint32_t cmax = std::max(std::max(c0, c1), c2);
 
-	std::pair<ExpType, std::uint32_t> ret;
+	std::tuple<ExpType, std::uint32_t, bool> ret;
 	if (cmax == c0) 
-		ret = std::make_pair(ExpType::nD, c1 + c2);
+		ret = std::make_tuple(ExpType::nD, c1 + c2, 1);
 	else if (cmax == c1)
-		ret = std::make_pair(ExpType::pD, c0 + c2);
+		ret = std::make_tuple(ExpType::pD, c0 + c2, 1);
 	else
-		ret = std::make_pair(ExpType::S, c0 + c1);
+		ret = std::make_tuple(ExpType::S, c0 + c1, 1);
 	
-	_exp_cost[f] = ret;
-	return ret.second;
+	_exp_cost_refined[f] = ret;
+	return std::get<1>(ret);
 }
 
 uint32_t ArExtractManager::CostFunction(DdNode* f)

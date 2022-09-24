@@ -60,7 +60,7 @@ private:
     bool     _refine;                   // conduct refinement or not
 	std::vector<VarValue> _values;      // for generating psdkro
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
-	std::unordered_map<DdNode *, std::pair<ExpType, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
+	std::unordered_map<DdNode *, std::tuple<ExpType, std::uint32_t, bool>> _exp_cost_refined; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop;            // storing the resulting esop
     
 };
