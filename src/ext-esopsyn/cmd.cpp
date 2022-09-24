@@ -308,10 +308,10 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int c;
     int fOutput = -1;
     int fVerbose = 0;
-    int fLevel = 1;
+    int fLevel = 4;
     int fType = 1;
-    int fBound = 600;
-    int fRefine = 0;
+    int fBound = 300;
+    int fRefine = 1;
     int fLUT = 0;
     char* pFileNameOut = NULL;
 
@@ -449,10 +449,10 @@ usage:
     Abc_Print(-2, "\t        synthesis ESOP with ArExtract\n");
     Abc_Print(-2, "\t-o    : specify the output to be processed\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
-    Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 1\n");
+    Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 4\n");
     Abc_Print(-2, "\t-t    : specify the type of cost function. 0/1/2 -> path/node/hybrid. Default: 1\n");
-    Abc_Print(-2, "\t-b    : specify the bound (BDD size) of full/partial expansion. Default: 600\n");
-    Abc_Print(-2, "\t-r    : toggle refinement or not. Default: 0\n");
+    Abc_Print(-2, "\t-b    : specify the bound (BDD size) of full/partial expansion. Default: 300\n");
+    Abc_Print(-2, "\t-r    : toggle refinement or not. Default: 1\n");
     Abc_Print(-2, "\t-u    : toggle LUT synthesis or not. Default: 0\n");
     Abc_Print(-2, "\t-h    : print the command usage\n");
     return 1;
