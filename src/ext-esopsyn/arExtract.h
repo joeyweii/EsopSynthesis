@@ -34,7 +34,7 @@ public:
     void extract();
 
     void getESOP(std::vector<std::string> &ret) const;
-    uint32_t getNumTerms() const;
+    int getNumTerms() const;
 private:
 	// Find the starting cover
 	int partialExpand(DdNode *F);
@@ -47,15 +47,15 @@ private:
 	void genPSDKRO(DdNode *F);
 
 	//  Cost Functions
-    uint32_t CostEstimate(DdNode* F);
-	uint32_t CostLookAhead(DdNode* F, int level);
+    int CostEstimate(DdNode* F);
+	int CostLookAhead(DdNode* F, int level);
 
 private:
 	DdManager* _ddManager;              // cudd manager
     DdNode* _FRoot;                     // root node of function to be extracted 
-	uint32_t _level;                    // k level cost look ahead
-    uint32_t _bound;                    // the decision bound (BDD size) of full/partial expansion
-	uint32_t _nVars;                    // the number of variables
+	int _level;                    // k level cost look ahead
+    int _bound;                    // the decision bound (BDD size) of full/partial expansion
+	int _nVars;                    // the number of variables
     bool     _refine;                   // conduct refinement or not
 	std::vector<VarValue> _values;      // for generating psdkro
 	std::vector<int> _vars;   // for generating psdkro 

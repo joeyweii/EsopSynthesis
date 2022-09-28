@@ -41,7 +41,7 @@ namespace psdkro
 		}
 
         // Return this cube in string type. '0'/'1'/'-'
-		std::string str(const std::uint32_t nVar) const
+		std::string str(const int nVar) const
 		{
 			std::string s;
 			for (auto i = 0; i < nVar; ++i)

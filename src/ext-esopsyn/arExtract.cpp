@@ -98,7 +98,7 @@ int ArExtractManager::refine(DdNode *F)
 
 	if(std::get<0>(it->second) == ExpType::nD)
 	{
-        uint32_t cost1, cost2, cost0, costmax;
+        int cost1, cost2, cost0, costmax;
 		cost1 = std::get<1>(_hash[F1]);
 	    cost2 = std::get<1>(_hash[F2]);
 		cost0 = partialExpand(F0);
@@ -129,7 +129,7 @@ int ArExtractManager::refine(DdNode *F)
 	}
 	else if(std::get<0>(it->second) == ExpType::pD)
 	{
-        uint32_t cost0, cost2, cost1, costmax;
+        int cost0, cost2, cost1, costmax;
 		cost0 = std::get<1>(_hash[F0]);
 		cost2 = std::get<1>(_hash[F2]);
 		cost1 = partialExpand(F1);
@@ -161,7 +161,7 @@ int ArExtractManager::refine(DdNode *F)
 	// SHANNON
 	else
 	{
-        uint32_t cost0, cost1, cost2, costmax;
+        int cost0, cost1, cost2, costmax;
 		cost0 = std::get<1>(_hash[F0]);
 		cost1 = std::get<1>(_hash[F1]);
 		cost2 = partialExpand(F2);
@@ -214,7 +214,7 @@ int ArExtractManager::partialExpand(DdNode *F)
 	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
 
     // Calculate cost
-    uint32_t cost0, cost1, cost2, costmax;
+    int cost0, cost1, cost2, costmax;
     cost0 = CostEstimate(F0); 
     cost1 = CostEstimate(F1); 
     cost2 = CostEstimate(F2);
@@ -280,12 +280,12 @@ int ArExtractManager::fullExpand(DdNode *F)
 	return std::get<1>(ret);
 }
 
-uint32_t ArExtractManager::CostEstimate(DdNode* F)
+int ArExtractManager::CostEstimate(DdNode* F)
 { 
     return CostLookAhead(F, _level);
 }
 
-uint32_t ArExtractManager::CostLookAhead(DdNode* F, int level)
+int ArExtractManager::CostLookAhead(DdNode* F, int level)
 { 
 	if (F == Cudd_ReadLogicZero(_ddManager))
 		return 0;
@@ -300,7 +300,7 @@ uint32_t ArExtractManager::CostLookAhead(DdNode* F, int level)
 	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
 	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
 
-    uint32_t cost0, cost1, cost2;
+    int cost0, cost1, cost2;
     cost0 = CostLookAhead(F0, level-1); 
     cost1 = CostLookAhead(F1, level-1); 
     cost2 = CostLookAhead(F2, level-1);
@@ -314,7 +314,7 @@ void ArExtractManager::getESOP(std::vector<std::string>& ret) const
         ret.push_back(cube.str(_nVars));
 }
 
-uint32_t ArExtractManager::getNumTerms() const
+int ArExtractManager::getNumTerms() const
 {
     return _esop.size();
 }

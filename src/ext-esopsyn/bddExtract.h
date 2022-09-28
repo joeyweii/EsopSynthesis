@@ -44,8 +44,8 @@ private:
 private:
 	DdManager* _ddManager;              // cudd manager
     DdNode*    _FRoot;                  // root node of function to be extracted
-	uint32_t _nVars;                    // the number of variables
-	std::vector<int> _vars;   // for generating psdkro 
+	int _nVars;                         // the number of variables
+	std::vector<int> _vars;             // for generating psdkro 
 	std::vector<VarValue> _values;      // for generating psdkro
 	std::unordered_map<DdNode*, std::pair<ExpType, int>> _hash; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop;            // storing the resulting esop
