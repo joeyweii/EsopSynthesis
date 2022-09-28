@@ -21,7 +21,7 @@ class BddExtractManager
 public:
 
     // Constructor and Destructor 
-	BddExtractManager(DdManager* ddManager, DdNode* fRoot, std::uint32_t nVars, bool useZdd);
+	BddExtractManager(DdManager* ddManager, DdNode* FRoot, std::uint32_t nVars);
 	~BddExtractManager();
     
     // extract algorithm
@@ -29,26 +29,25 @@ public:
 
     // get the final ESOP and number of terms
     void getESOP(std::vector<std::string>& ret) const;
-    uint32_t getNumTerms() const;
+    uint32_t getNumCubes() const;
 
 private:
 
 	// First pass: dicide the best expansion and calculate the cost 
-	std::uint32_t bestExpansion(DdNode* f);
+	std::uint32_t fullExpand(DdNode* F);
 
 	// Second pass: generate PSDKRO 
-	void genPSDKROBitStr(DdNode* f);
-	DdNode* genPSDKROZdd(DdNode* f);
+	void genPSDKRO(DdNode* F);
+
+    //DdNode* genPSDKROZdd(DdNode* f);
 
 private:
 	DdManager* _ddManager;              // cudd manager
-    DdNode*    _fRoot;               // root node of function to be extracted
-    DdNode*    _zRoot;                // root node of ZDD implicit representation 
+    DdNode*    _FRoot;                  // root node of function to be extracted
 	uint32_t _nVars;                    // the number of variables
-    bool    _useZdd;                    // use ZDD implicit representation or not
 	std::vector<std::uint32_t> _vars;   // for generating psdkro 
 	std::vector<VarValue> _values;      // for generating psdkro
-	std::unordered_map<DdNode*, std::pair<ExpType, std::uint32_t>> _exp_cost; // the mapping between 1) BDD node and 2) expansion type & cost 
+	std::unordered_map<DdNode*, std::pair<ExpType, std::uint32_t>> _hash; // the mapping between 1) BDD node and 2) expansion type & cost 
 	std::vector<cube> _esop;            // storing the resulting esop
 };
 

@@ -10,14 +10,14 @@
 #include <climits>
 
 extern Abc_Ntk_t* AIGCOF(Abc_Ntk_t* pNtk, int var, int phase);
-extern void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ESOP, bool fUseZdd);
+extern void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ESOP);
 extern void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string>& ESOP);
 
-// Recursively dividing problem using shannon expansion and BddExtract  
+// Recursively dividing problem using shannon expansion
 static void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarList, std::vector<std::string>& ESOP)
 {
-    if(nCofVar == 0)
-        BddExtractSingleOutput(pNtk, ESOP, 0);
+    if(nCofVar == 0) // Solving subproblems
+        BddExtractSingleOutput(pNtk, ESOP);
     else
     {
         size_t minNode = std::numeric_limits<size_t>::max();

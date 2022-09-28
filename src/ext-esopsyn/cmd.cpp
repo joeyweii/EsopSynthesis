@@ -7,11 +7,9 @@
 #include <climits>
 
 extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
-extern void BidecEsopMain(Abc_Ntk_t* pNtk, int fOutput);
-extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose, bool fUseZdd);
-extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fType, int fBound, int fRefine, int fVerbose);
+extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
+extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
-extern void TestExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename);
 
 /**Function*************************************************************
@@ -95,73 +93,6 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [BidecEsop command function.]
-
-  Description []
-               
-  SideEffects []
-
-  SeeAlso     []
-
-***********************************************************************/
-int EsopSyn_CommandBidecEsop(Abc_Frame_t* pAbc, int argc, char** argv)
-{
-    Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
-    int c;
-    int fOutput = -1;
-
-    Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "ho")) != EOF)
-    {
-        switch (c)
-        {
-            case 'h':
-                goto usage;
-            case 'o':
-                if ( globalUtilOptind >= argc )
-                {
-                    Abc_Print( -1, "Command line switch \"-C\" should be followed by an integer.\n" );
-                    goto usage;
-                }
-                fOutput = atoi(argv[globalUtilOptind]);
-                globalUtilOptind++;
-                if ( fOutput < 0 )
-                    goto usage;
-                break;
-            default:
-                goto usage;
-        }
-    }
-
-    if (!pNtk)
-    {
-        Abc_Print(-1, "Empty network.\n");
-        return 1;
-    }
-
-    if(fOutput != -1 && fOutput >= Abc_NtkPoNum(pNtk))
-    {
-        Abc_Print( -1, "PO's idx out of range.\n" );
-        return 0;
-    }
-
-    if(!Abc_NtkIsStrash(pNtk))
-        pNtk = Abc_NtkStrash(pNtk, 0, 0, 0);
-
-    BidecEsopMain(pNtk, fOutput);
-
-    return 0;
-
-usage:
-    Abc_Print(-2, "usage: bidecesop [-h] [-o ith] \n");
-    Abc_Print(-2, "\t        for each PO, recursively do xor bidecomposition and synthesis esop\n");
-    Abc_Print(-2, "\t-h    : print the command usage\n");
-    Abc_Print(-2, "\t-o ith   : specify the PO to be processed \n");
-    return 1;
-}
-
-/**Function*************************************************************
-
   Synopsis    [BDD Extract command function.]
 
   Description []
@@ -179,12 +110,11 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int c;
     int fOutput = -1;
     int fVerbose = 0;
-    bool fUseZdd = false;
     int fLUT = 0;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "hovuz")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hovu")) != EOF)
     {
         switch (c)
         {
@@ -214,9 +144,6 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
                 break;
             case 'u':
                 fLUT ^= 1;
-                break;
-            case 'z':
-                fUseZdd = true;
                 break;
             default:
                 goto usage;
@@ -249,7 +176,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
             
-            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
+            BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
 
             Abc_NtkDelete(pSubNtk);
         }
@@ -272,7 +199,7 @@ int EsopSyn_CommandBddExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            BddExtractMain(pSubNtk, pFileNameOut, fVerbose, fUseZdd);
+            BddExtractMain(pSubNtk, pFileNameOut, fVerbose);
 
             Abc_NtkDelete(pSubNtk);
         }
@@ -309,14 +236,13 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int fOutput = -1;
     int fVerbose = 0;
     int fLevel = 4;
-    int fType = 1;
     int fBound = 300;
     int fRefine = 1;
     int fLUT = 0;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "holtbvru")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "holbvru")) != EOF)
     {
         switch (c)
         {
@@ -342,17 +268,6 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
                 fLevel = atoi(argv[globalUtilOptind]);
                 globalUtilOptind++;
                 if ( fLevel < 0 )
-                    goto usage;
-                break;
-            case 't':
-                if ( globalUtilOptind >= argc )
-                {
-                    Abc_Print( -1, "Command line switch \"-l\" should be followed by an integer.\n" );
-                    goto usage;
-                }
-                fType = atoi(argv[globalUtilOptind]);
-                globalUtilOptind++;
-                if ( fType < 0 || fType > 2 )
                     goto usage;
                 break;
             case 'b':
@@ -415,7 +330,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fType, fBound, fRefine, fVerbose);
+            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
             Abc_NtkDelete(pSubNtk);
         }
     }
@@ -437,7 +352,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fType, fBound, fRefine, fVerbose);
+            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
 
             Abc_NtkDelete(pSubNtk);
         }
@@ -450,7 +365,6 @@ usage:
     Abc_Print(-2, "\t-o    : specify the output to be processed\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
     Abc_Print(-2, "\t-l    : specify the level of cost function. Default: 4\n");
-    Abc_Print(-2, "\t-t    : specify the type of cost function. 0/1/2 -> path/node/hybrid. Default: 1\n");
     Abc_Print(-2, "\t-b    : specify the bound (BDD size) of full/partial expansion. Default: 300\n");
     Abc_Print(-2, "\t-r    : toggle refinement or not. Default: 1\n");
     Abc_Print(-2, "\t-u    : toggle LUT synthesis or not. Default: 0\n");
@@ -478,7 +392,7 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     int fOutput = -1;
     int fLUT = 0;
     int fVerbose = 0;
-    int fNumCofVar = 8;
+    int fNumCofVar = 4;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
@@ -587,117 +501,10 @@ int EsopSyn_CommandDcExtract(Abc_Frame_t* pAbc, int argc, char** argv)
 usage:
     Abc_Print(-2, "usage: dcextract [-h] [-v <0/1>] [-n <int>] [-o <int>] [-u]\n");
     Abc_Print(-2, "\t        synthesis ESOP with DC extract\n");
-    Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 8\n");
+    Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 4\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
     Abc_Print(-2, "\t-o    : specify the output to be processed. Default: All outputs\n");
     Abc_Print(-2, "\t-u    : toggle using LUT mapping. Default: 0\n");
-    Abc_Print(-2, "\t-h    : print the command usage.\n");
-    return 1;
-}
-
-/**Function*************************************************************
-
-  Synopsis    [TestExtract command function.]
-
-  Description []
-
-  SideEffects []
-
-  SeeAlso     []
-
- ***********************************************************************/
-int EsopSyn_CommandTestExtract(Abc_Frame_t* pAbc, int argc, char** argv)
-{
-    Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
-    Abc_Obj_t* pPo;
-    int iPo;
-    int c;
-    int fOutput = -1;
-    int fVerbose = 0;
-    int fNumCofVar = 8;
-    char* pFileNameOut = NULL;
-
-    Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "hovn")) != EOF)
-    {
-        switch (c) 
-        {
-            case 'h':
-                goto usage;
-            case 'o':
-                if ( globalUtilOptind >= argc )
-                {
-                    Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
-                    goto usage;
-                }
-                fOutput = atoi(argv[globalUtilOptind]);
-                globalUtilOptind++;
-                if ( fOutput < 0 )
-                    goto usage;
-                break;
-            case 'v':
-                if ( globalUtilOptind >= argc )
-                {
-                    Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
-                    goto usage;
-                }
-                fVerbose = atoi(argv[globalUtilOptind]);
-                globalUtilOptind++;
-                if ( fVerbose < 0  || fVerbose > 1)
-                    goto usage;
-                break;
-            case 'n':
-                if ( globalUtilOptind >= argc )
-                {
-                    Abc_Print( -1, "Command line switch \"-o\" should be followed by an integer.\n" );
-                    goto usage;
-                }
-                fNumCofVar = atoi(argv[globalUtilOptind]);
-                globalUtilOptind++;
-                if ( fNumCofVar < 0 )
-                    goto usage;
-                break;
-            default:
-                goto usage;
-        }
-    }
-
-    if ( argc == globalUtilOptind + 1 )
-    {
-        pFileNameOut = argv[globalUtilOptind];
-    }
-
-    if (!pNtk)
-    {
-        Abc_Print(-1, "Empty network.\n");
-        return 1;
-    }
-
-    Abc_NtkForEachPo(pNtk, pPo, iPo)
-    {
-        if(fOutput != -1 && iPo != fOutput) continue;
-
-        // create cone for the current PO
-        Abc_Ntk_t* pSubNtk = Abc_NtkCreateCone(pNtk, Abc_ObjFanin0(pPo), Abc_ObjName(pPo), 0);
-
-        if( Abc_ObjFaninC0(pPo) )
-            Abc_ObjXorFaninC( Abc_NtkPo(pSubNtk, 0), 0 );
-
-        std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
-        std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
-
-        TestExtractMain(pSubNtk, fNumCofVar, fVerbose, pFileNameOut);
-
-        Abc_NtkDelete(pSubNtk);
-    }
-    return 0;
-
-usage:
-    Abc_Print(-2, "usage: testextract [-h] [-v <0/1>] [-n <int>] [-o <int>]\n");
-    Abc_Print(-2, "\t        synthesis ESOP with test extract\n");
-    Abc_Print(-2, "\t-n    : specify the number of variable to be cofactored. Default: 8\n");
-    Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
-    Abc_Print(-2, "\t-o    : specify the output to be processed. Default: All outputs\n");
     Abc_Print(-2, "\t-h    : print the command usage.\n");
     return 1;
 }
@@ -742,6 +549,12 @@ int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
         return 1;
     }
 
+    if (Abc_NtkPoNum(pNtk) != 2)
+    {
+        Abc_Print(-1, "#PO != 2,\n");
+        return 1;
+    }
+
     if(!Abc_NtkIsStrash(pNtk))
         pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
 
@@ -761,11 +574,9 @@ usage:
 void init(Abc_Frame_t* pAbc)
 {
     Cmd_CommandAdd( pAbc, "esopsyn", "xorbidec", EsopSyn_CommandXorBidec, 0);
-    Cmd_CommandAdd( pAbc, "esopsyn", "bidecesop", EsopSyn_CommandBidecEsop, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandArExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
-    Cmd_CommandAdd( pAbc, "esopsyn", "testextract", EsopSyn_CommandTestExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "isfextract", EsopSyn_CommandIsfExtract, 0);
 }
 

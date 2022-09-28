@@ -21,7 +21,12 @@ namespace psdkro
     {
 		pD,         // Positive Davio
         nD,         // Negative Davio
-		S           // Shannon
+		Sh,         // Shannon
+        
+        // for incompletely specified function
+        C0,         // case C0 = 0
+        C1,         // case C1 = 0
+        F0          // case F' = 0
 	};
 
 	struct cube
