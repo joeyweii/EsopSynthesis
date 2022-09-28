@@ -3,11 +3,11 @@
 ArExtractManager::ArExtractManager
 (
     DdManager* ddManager, 
-    std::uint32_t level, 
-    std::uint32_t bound,
+    int level, 
+    int bound,
     bool refine, 
     DdNode* FRoot, 
-    std::uint32_t nVars
+    int nVars
 )
 	: _ddManager(ddManager), _FRoot(FRoot), _level(level), _bound(bound), _nVars(nVars), _refine(refine), _values(nVars, VarValue::DONTCARE)
 { }
@@ -78,7 +78,7 @@ void ArExtractManager::genPSDKRO(DdNode *F)
 	_values[varIdx] = VarValue::DONTCARE;
 }
 
-uint32_t ArExtractManager::refine(DdNode *F)
+int ArExtractManager::refine(DdNode *F)
 {
 	// Reach constant 0/1
 	if (F == Cudd_ReadLogicZero(_ddManager))
@@ -193,7 +193,7 @@ uint32_t ArExtractManager::refine(DdNode *F)
 	return 0;
 }
 
-std::uint32_t ArExtractManager::partialExpand(DdNode *F)
+int ArExtractManager::partialExpand(DdNode *F)
 {
 	// Reach constant 0/1
 	if (F == Cudd_ReadLogicZero(_ddManager))
@@ -221,23 +221,23 @@ std::uint32_t ArExtractManager::partialExpand(DdNode *F)
     costmax = std::max(std::max(cost0, cost1), cost2);
 
     // Recursive calls
-    std::tuple<ExpType, std::uint32_t, bool> ret;
+    std::tuple<ExpType, int, bool> ret;
     if(cost0 == costmax)
     {
-        std::uint32_t n1 = partialExpand(F1);
-	    std::uint32_t n2 = partialExpand(F2);
+        int n1 = partialExpand(F1);
+	    int n2 = partialExpand(F2);
         ret = std::make_tuple(ExpType::nD, n1 + n2, 0);
     }
     else if(cost1 == costmax)
     {
-        std::uint32_t n0 = partialExpand(F0);
-        std::uint32_t n2 = partialExpand(F2);
+        int n0 = partialExpand(F0);
+        int n2 = partialExpand(F2);
         ret = std::make_tuple(ExpType::pD, n0 + n2, 0);
     }
     else
     {
-        std::uint32_t n0 = partialExpand(F0);
-	    std::uint32_t n1 = partialExpand(F1);
+        int n0 = partialExpand(F0);
+	    int n1 = partialExpand(F1);
         ret = std::make_tuple(ExpType::Sh, n0 + n1, 0);
     }
 
@@ -245,7 +245,7 @@ std::uint32_t ArExtractManager::partialExpand(DdNode *F)
 	return std::get<1>(ret);
 }
 
-std::uint32_t ArExtractManager::fullExpand(DdNode *F)
+int ArExtractManager::fullExpand(DdNode *F)
 {
 	if (F == Cudd_ReadLogicZero(_ddManager))
 		return 0u;
@@ -261,14 +261,14 @@ std::uint32_t ArExtractManager::fullExpand(DdNode *F)
 	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
 	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
 
-    std::uint32_t cost0, cost1, cost2;
+    int cost0, cost1, cost2;
 	cost0 = fullExpand(F0);
 	cost1 = fullExpand(F1);
 	cost2 = fullExpand(F2);
 
-	std::uint32_t costmax = std::max(std::max(cost0, cost1), cost2);
+	int costmax = std::max(std::max(cost0, cost1), cost2);
 
-	std::tuple<ExpType, std::uint32_t, bool> ret;
+	std::tuple<ExpType, int, bool> ret;
 	if (costmax == cost0) 
 		ret = std::make_tuple(ExpType::nD, cost1 + cost2, 1);
 	else if (costmax == cost1)

@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, std::uint32_t nVars)
+IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, int nVars)
 : _ddManager(ddManager), _FRoot(FRoot), _CRoot(CRoot), _nVars(nVars), _values(nVars, VarValue::DONTCARE)
 {
 }
@@ -13,7 +13,7 @@ void IsfExtractManager::extract()
     secondPass(_FRoot, _CRoot);
 }
 
-std::pair<DdNode*, uint32_t> IsfExtractManager::firstPass(DdNode* F, DdNode* C)
+std::pair<DdNode*, int> IsfExtractManager::firstPass(DdNode* F, DdNode* C)
 {
     if (F == Cudd_ReadLogicZero(_ddManager))
 		return std::make_pair(Cudd_ReadLogicZero(_ddManager), 0u);
@@ -36,7 +36,7 @@ std::pair<DdNode*, uint32_t> IsfExtractManager::firstPass(DdNode* F, DdNode* C)
 	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
     
     DdNode *F0_new, *F1_new;
-    uint32_t cost0, cost1;
+    int cost0, cost1;
     if(C0 == Cudd_ReadLogicZero(_ddManager))
     {
         std::tie(F1_new, cost1) = firstPass(F1, C1);
@@ -51,7 +51,7 @@ std::pair<DdNode*, uint32_t> IsfExtractManager::firstPass(DdNode* F, DdNode* C)
     }
 
     DdNode *FRet, *tem, *tem2, *F2, *F20_new, *F21_new;
-    uint32_t cost20, cost21, cost_pD, cost_nD, cost_Sh, costmin, costRet;
+    int cost20, cost21, cost_pD, cost_nD, cost_Sh, costmin, costRet;
 	    
     std::tie(F0_new, cost0) = firstPass(F0, C0);
     std::tie(F1_new, cost1) = firstPass(F1, C1);
@@ -196,7 +196,7 @@ void IsfExtractManager::secondPass(DdNode *F, DdNode* C)
 }
 
 
-uint32_t IsfExtractManager::getNumCubes() const
+int IsfExtractManager::getNumCubes() const
 {
     return _esop.size();
 }
@@ -231,7 +231,7 @@ void IsfExtractManager::writeESOPIntoPla(char* filename)
 }
 
 /*
-std::tuple<DdNode*, DdNode*, uint32_t> IsfExtractManager::expandExactRecur(DdNode* f, DdNode* fc)
+std::tuple<DdNode*, DdNode*, int> IsfExtractManager::expandExactRecur(DdNode* f, DdNode* fc)
 {
     if (f == Cudd_ReadLogicZero(_ddManager))
 		return std::make_tuple(Cudd_ReadLogicZero(_ddManager), Cudd_ReadZero(_ddManager), 0u);
@@ -254,7 +254,7 @@ std::tuple<DdNode*, DdNode*, uint32_t> IsfExtractManager::expandExactRecur(DdNod
         return expandExactRecur(f0, fc0); 
 
     DdNode *zRes, *fRet, *tem, *tem2, *f2, *f0_new, *f1_new, *f20_new, *f21_new, *zf0, *zf1, *zf20, *zf21;
-    uint32_t c0, c1, c20, c21, c_pD, c_nD, c_Sh, c_min, costRet;
+    int c0, c1, c20, c21, c_pD, c_nD, c_Sh, c_min, costRet;
 	    
     std::tie(f0_new, zf0, c0) = expandExactRecur(f0, fc0);
     std::tie(f1_new, zf1, c1) = expandExactRecur(f1, fc1);

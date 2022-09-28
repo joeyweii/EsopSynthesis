@@ -11,7 +11,7 @@
 
 extern Abc_Ntk_t* AIGCOF(Abc_Ntk_t* pNtk, int var, int phase);
 extern void BddExtractSingleOutput(Abc_Ntk_t* pNtk, std::vector<std::string>& ESOP);
-extern void ArExtractSingleOutput(Abc_Ntk_t* pNtk, uint32_t level, int fRefine, std::vector<std::string>& ESOP);
+extern void ArExtractSingleOutput(Abc_Ntk_t* pNtk, int level, int fRefine, std::vector<std::string>& ESOP);
 
 // Recursively dividing problem using shannon expansion
 static void DivideConquerRecur(Abc_Ntk_t* pNtk, int nCofVar, std::vector<bool>& CofVarList, std::vector<std::string>& ESOP)

@@ -1,6 +1,6 @@
 #include "bddExtract.h"
 
-BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* FRoot, uint32_t nVars)
+BddExtractManager::BddExtractManager(DdManager* ddManager, DdNode* FRoot, int nVars)
 : _ddManager(ddManager), _FRoot(FRoot), _nVars(nVars), _values(nVars, VarValue::DONTCARE)
 {}
 
@@ -78,7 +78,7 @@ void BddExtractManager::genPSDKRO(DdNode *F)
 	_values[varIdx] = VarValue::DONTCARE;
 }
 
-std::uint32_t BddExtractManager::fullExpand(DdNode *F)
+int BddExtractManager::fullExpand(DdNode *F)
 {
 	if (F == Cudd_ReadLogicZero(_ddManager))
 		return 0u;
@@ -94,14 +94,14 @@ std::uint32_t BddExtractManager::fullExpand(DdNode *F)
 	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
 	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
 
-    std::uint32_t cost0, cost1, cost2;
+    int cost0, cost1, cost2;
 	cost0 = fullExpand(F0);
 	cost1 = fullExpand(F1);
 	cost2 = fullExpand(F2);
 
-	std::uint32_t costmax = std::max(std::max(cost0, cost1), cost2);
+	int costmax = std::max(std::max(cost0, cost1), cost2);
 
-	std::pair<ExpType, std::uint32_t> ret;
+	std::pair<ExpType, int> ret;
 	if (costmax == cost0) 
 		ret = std::make_pair(ExpType::nD, cost1 + cost2);
 	else if (costmax == cost1)
@@ -119,7 +119,7 @@ void BddExtractManager::getESOP(std::vector<std::string>& ret) const
         ret.push_back(cube.str(_nVars));
 }
 
-uint32_t BddExtractManager::getNumCubes() const
+int BddExtractManager::getNumCubes() const
 {
     return _esop.size();
 }
