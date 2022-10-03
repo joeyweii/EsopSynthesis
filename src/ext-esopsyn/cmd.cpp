@@ -10,7 +10,7 @@ extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
-extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename);
+extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, int fNaive, char* filename);
 
 /**Function*************************************************************
 
@@ -512,11 +512,11 @@ usage:
 int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
 {
     Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
-    int c, fVerbose = 0;
+    int c, fVerbose = 0, fNaive = 0;
     char* pFileNameOut = NULL;
 
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "hv")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hvn")) != EOF)
     {
         switch (c)
         {
@@ -532,6 +532,9 @@ int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
                 globalUtilOptind++;
                 if ( fVerbose < 0  || fVerbose > 1)
                     goto usage;
+                break;
+            case 'n':
+                fNaive ^= 1;
                 break;
             default:
                 goto usage;
@@ -558,14 +561,15 @@ int EsopSyn_CommandIsfExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     if(!Abc_NtkIsStrash(pNtk))
         pNtk = Abc_NtkStrash(pNtk, 0, 0, 0 );
 
-    IsfExtractMain(pNtk, fVerbose, pFileNameOut);
+    IsfExtractMain(pNtk, fVerbose, fNaive, pFileNameOut);
 
     return 0;
 
 usage:
-    Abc_Print(-2, "usage: isfextract [-h] [-v [0/1]]\n");
+    Abc_Print(-2, "usage: isfextract [-hn] [-v [0/1]]\n");
     Abc_Print(-2, "\t        synthesis ESOP for incompletely specified function\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
+    Abc_Print(-2, "\t-n    : toggle using naive careset of F2 (C0 + C1). Default: 0\n");
     Abc_Print(-2, "\t-h    : print the command usage\n");
     return 1;
 }

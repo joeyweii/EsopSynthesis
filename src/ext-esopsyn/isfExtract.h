@@ -34,7 +34,7 @@ struct pair_hash
 class IsfExtractManager
 {
 public:
-    IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, int nVars);
+    IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, int nVars, int naive);
     void extract();
     int getNumCubes() const;
     void printESOP() const;
@@ -45,18 +45,21 @@ private:
     DdNode*     _FRoot;
     DdNode*     _CRoot;
     int    _nVars;
+    int    _naive;
 	std::vector<int> _vars;   // for generating psdkro 
 	std::vector<VarValue> _values;      // for generating psdkro
 	std::vector<cube> _esop;            // storing the resulting esop
     std::unordered_map
     <
         std::pair<DdNode*, DdNode*>,                        // F, C
-        std::tuple<DdNode*, DdNode*, ExpType, int>,    // F', F2, exp, cost 
+        std::tuple<DdNode*, DdNode*, ExpType, int>,         // F', F2, exp, cost 
         pair_hash                                           // hash for pair
     > _hash;
 
     std::pair<DdNode*, int> firstPass(DdNode* F, DdNode* C);
     void secondPass(DdNode* F, DdNode* C);
+    int firstPassNaive(DdNode* F, DdNode* C);
+    void secondPassNaive(DdNode* F, DdNode* C);
 };
 
 #endif

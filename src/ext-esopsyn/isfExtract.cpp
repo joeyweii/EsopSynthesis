@@ -2,15 +2,188 @@
 
 #include <fstream>
 
-IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, int nVars)
-: _ddManager(ddManager), _FRoot(FRoot), _CRoot(CRoot), _nVars(nVars), _values(nVars, VarValue::DONTCARE)
+IsfExtractManager::IsfExtractManager(DdManager* ddManager, DdNode* FRoot, DdNode* CRoot, int nVars, int naive)
+: 
+    _ddManager(ddManager), 
+    _FRoot(FRoot), 
+    _CRoot(CRoot), 
+    _nVars(nVars), 
+    _values(nVars, VarValue::DONTCARE), 
+    _naive(naive)
 {
 }
 
 void IsfExtractManager::extract()
 {
-    firstPass(_FRoot, _CRoot);
-    secondPass(_FRoot, _CRoot);
+    if(_naive == 1)
+    {
+        firstPassNaive(_FRoot, _CRoot);
+        secondPassNaive(_FRoot, _CRoot);
+    }
+    else
+    {
+        firstPass(_FRoot, _CRoot);
+        secondPass(_FRoot, _CRoot);
+    }
+}
+
+int IsfExtractManager::firstPassNaive(DdNode* F, DdNode* C)
+{
+    if (F == Cudd_ReadLogicZero(_ddManager))
+		return 0;
+	if (F == Cudd_ReadOne(_ddManager))
+		return 1;
+		
+    std::pair<DdNode*, DdNode*> F_C = std::make_pair(F, C);
+    auto it = _hash.find(F_C);
+    if(it != _hash.end())
+       return std::get<3>(it->second); 
+
+    int varIdx = Cudd_NodeReadIndex(F);
+
+    DdNode *C0, *C1, *F0, *F1;
+
+    C0 = Cudd_Cofactor(_ddManager, C, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(C0);
+    C1 = Cudd_Cofactor(_ddManager, C, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(C1);
+
+	F0 = Cudd_NotCond(Cudd_E(F), Cudd_IsComplement(F));
+	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
+    
+    int cost0, cost1;
+    if(C0 == Cudd_ReadLogicZero(_ddManager))
+    {
+        cost1 = firstPassNaive(F1, C1);
+        _hash[F_C] = std::make_tuple(nullptr, nullptr, ExpType::C0, cost1);
+        return cost1; 
+    }
+    if(C1 == Cudd_ReadLogicZero(_ddManager))
+    {
+        cost0 = firstPassNaive(F0, C0);
+        _hash[F_C] = std::make_tuple(nullptr, nullptr, ExpType::C1, cost0);
+        return cost0; 
+    }
+
+    DdNode *F2, *C2;
+
+	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
+    C2 = Cudd_bddOr(_ddManager, C0, C1); Cudd_Ref(C2);
+
+    int cost2, cost_pD, cost_nD, cost_Sh, costmin, costRet;
+	    
+    cost0 = firstPassNaive(F0, C0);
+    cost1 = firstPassNaive(F1, C1);
+    
+    if(cost0 == 0 && cost1 == 0) 
+    {
+        _hash[F_C] = std::make_tuple(nullptr, nullptr, ExpType::F0, 0); 
+        return 0;
+    }
+    
+    cost2 = firstPassNaive(F2, C2);
+
+    cost_pD = cost0 + cost2;
+    cost_nD = cost1 + cost2;
+    cost_Sh = cost0 + cost1;
+    costmin = std::min( std::min( cost_pD, cost_nD), cost_Sh);
+
+    ExpType typeRet;
+	if (costmin == cost_nD) 
+    {
+        typeRet =  ExpType::nD;
+        costRet = cost2 + cost1;
+    }
+	else if (costmin == cost_pD)
+    {
+        typeRet = ExpType::pD;
+        costRet = cost2 + cost0;
+    }
+	else
+    {
+        typeRet = ExpType::Sh;
+        costRet = cost0 + cost1;
+    }
+    _hash[F_C] = std::make_tuple(nullptr, nullptr, typeRet, costRet);
+	return costRet;
+}
+
+void IsfExtractManager::secondPassNaive(DdNode *F, DdNode* C)
+{
+	if (F == Cudd_ReadLogicZero(_ddManager))
+		return;
+	if (F == Cudd_ReadOne(_ddManager)) 
+    {
+		cube c; 
+		for (auto var : _vars) {
+			if(_values[var] != VarValue::DONTCARE) c._iscare.set(var);
+			if(_values[var] == VarValue::POSITIVE) c._polarity.set(var);
+		}
+
+		_esop.push_back(c);
+		return;
+	}
+
+    std::pair<DdNode*, DdNode*> F_C = std::make_pair(F, C);
+
+    auto it = _hash.find(F_C);
+	assert(it != _hash.end());
+
+	auto varIdx = Cudd_NodeReadIndex(F);
+
+	ExpType expansion = std::get<2>(it->second);
+
+    if(expansion == ExpType::F0) return;
+
+    DdNode *F0, *F1, *C0, *C1;
+
+    C0 = Cudd_Cofactor(_ddManager, C, Cudd_Not(Cudd_bddIthVar(_ddManager, varIdx))); Cudd_Ref(C0);
+    C1 = Cudd_Cofactor(_ddManager, C, Cudd_bddIthVar(_ddManager, varIdx)); Cudd_Ref(C1);
+
+	F0 = Cudd_NotCond(Cudd_E(F), Cudd_IsComplement(F));
+	F1 = Cudd_NotCond(Cudd_T(F), Cudd_IsComplement(F));
+
+    if(expansion == ExpType::C0)
+    {
+        secondPassNaive(F1, C1);
+        return;
+    }
+    if(expansion == ExpType::C1)
+    {
+        secondPassNaive(F0, C0);
+        return;
+    }
+
+	_vars.push_back(varIdx);
+
+    DdNode *F2, *C2;
+
+	F2 = Cudd_bddXor(_ddManager, F0, F1); Cudd_Ref(F2);
+    C2 = Cudd_bddOr(_ddManager, C0, C1); Cudd_Ref(C2);
+	
+	if (expansion == ExpType::nD)
+    {
+		_values[varIdx] = VarValue::DONTCARE;
+        secondPassNaive(F1, C1);
+		_values[varIdx] = VarValue::NEGATIVE;
+        secondPassNaive(F2, C2);
+	} 
+    else if (expansion == ExpType::pD)
+    {
+		_values[varIdx] = VarValue::DONTCARE;
+        secondPassNaive(F0, C0);
+		_values[varIdx] = VarValue::POSITIVE;
+        secondPassNaive(F2, C2);
+	} 
+    else 
+    { 
+        assert(expansion == ExpType::Sh);
+		_values[varIdx] = VarValue::NEGATIVE;
+        secondPassNaive(F0, C0);
+		_values[varIdx] = VarValue::POSITIVE;
+        secondPassNaive(F1, C1);
+	}
+
+	_vars.pop_back();
+	_values[varIdx] = VarValue::DONTCARE;
 }
 
 std::pair<DdNode*, int> IsfExtractManager::firstPass(DdNode* F, DdNode* C)
@@ -195,7 +368,6 @@ void IsfExtractManager::secondPass(DdNode *F, DdNode* C)
 	_values[varIdx] = VarValue::DONTCARE;
 }
 
-
 int IsfExtractManager::getNumCubes() const
 {
     return _esop.size();
@@ -378,7 +550,7 @@ void IsfExtractManager::writePlaFile(char* filename)
 }
 */
 
-void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename)
+void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, int fNaive, char* filename)
 {
     assert(Abc_NtkPoNum(pNtk) == 2);
 
@@ -396,7 +568,7 @@ void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, char* filename)
     DdNode *FRoot = (DdNode*) Abc_ObjGlobalBdd(f);
     DdNode *CRoot = (DdNode*) Abc_ObjGlobalBdd(fc);
 
-    IsfExtractManager m(ddManager, FRoot, CRoot, nVars);
+    IsfExtractManager m(ddManager, FRoot, CRoot, nVars, fNaive);
     m.extract();
 
 	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
