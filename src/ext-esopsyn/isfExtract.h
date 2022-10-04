@@ -58,7 +58,7 @@ private:
 
     std::pair<DdNode*, int> firstPass(DdNode* F, DdNode* C);
     void secondPass(DdNode* F, DdNode* C);
-    int firstPassNaive(DdNode* F, DdNode* C);
+    std::pair<DdNode*, int> firstPassNaive(DdNode* F, DdNode* C);
     void secondPassNaive(DdNode* F, DdNode* C);
 };
 
