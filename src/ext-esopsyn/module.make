@@ -6,4 +6,5 @@ SRC += \
     src/ext-esopsyn/arExtract.cpp \
     src/ext-esopsyn/dcExtract.cpp \
     src/ext-esopsyn/isfExtract.cpp \
+    src/ext-esopsyn/dcMinimize.cpp \
     src/ext-esopsyn/memMeasure.cpp

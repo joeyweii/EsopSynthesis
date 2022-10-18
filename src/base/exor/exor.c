@@ -783,6 +783,19 @@ int Exorcism( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut )
     int TotalWords;
     int MemTemp, MemTotal;
 
+    // ************
+    Vec_Int_t * vCube;
+    int Lit, c, k;
+    Vec_WecForEachLevel( vEsop, vCube, c )
+    {
+        Vec_IntForEachEntry( vCube, Lit, k )
+        {
+            printf("%d", Lit);
+        }
+        printf("\n");
+    }
+
+    // **************
     ///////////////////////////////////////////////////////////////////////
     // STEPS of HEURISTIC ESOP MINIMIZATION
     ///////////////////////////////////////////////////////////////////////

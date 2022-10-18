@@ -11,6 +11,7 @@ extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, int fNaive, char* filename);
+extern void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut);
 
 /**Function*************************************************************
 
@@ -574,6 +575,52 @@ usage:
     return 1;
 }
 
+/**Function*************************************************************
+
+  Synopsis    [DcMinimize command function.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int EsopSyn_CommandDcMinimize(Abc_Frame_t* pAbc, int argc, char** argv)
+{
+    int c;
+    char* pFileNameIn = NULL, *pFileNameOut = NULL;
+    Extra_UtilGetoptReset();
+    while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF)
+    {
+        switch (c) 
+        {
+            case 'h':
+                goto usage;
+          default:
+            goto usage;
+        }
+    }
+
+    assert(argc == globalUtilOptind + 2);
+
+    pFileNameIn = argv[globalUtilOptind];
+    pFileNameOut = argv[globalUtilOptind+1];
+
+    DcMinimizeMain(pFileNameIn, pFileNameOut);
+
+    return 0;
+
+usage:
+    Abc_Print(-2, "usage: xorbidec [-h] [-p] [-s] [-o ith]\n");
+    Abc_Print(-2, "\t        for each PO, print the xor bidecomposition result\n");
+    Abc_Print(-2, "\t-h    : print the command usage\n");
+    Abc_Print(-2, "\t-p    : print the partition result\n");
+    Abc_Print(-2, "\t-s    : synthesis fA, fB and print the result\n");
+    Abc_Print(-2, "\t-o    : specify the PO to be processed\n");
+    return 1;
+}
+
 // called during ABC startup
 void init(Abc_Frame_t* pAbc)
 {
@@ -582,6 +629,7 @@ void init(Abc_Frame_t* pAbc)
     Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandArExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "isfextract", EsopSyn_CommandIsfExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "dcmin", EsopSyn_CommandDcMinimize, 0);
 }
 
 // called during ABC termination
