@@ -46,10 +46,16 @@ int main(int argc, char* argv[]){
     for(int i = 0; i < nMinterms; i++){
         string minterm;
         i2minterm(i, numPI, minterm);
-        f << minterm << ' ';
+        bool outAllZero = true;
+        string output;
         for(int j = 0; j < numPO; ++j)
-            f << rand()%2;
-        f << '\n';
+        {   
+            char outvalue = '0' + rand()%2;
+            if(outvalue == '1') outAllZero = false;  
+            output += outvalue;
+        }
+        if(outAllZero) continue;
+        f << minterm << ' ' << output << '\n';
     }
 
     f << ".e";
