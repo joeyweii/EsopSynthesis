@@ -11,7 +11,7 @@ extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
 extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, int fNaive, char* filename);
-extern void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut);
+extern void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut, int fGroupSize, int fIteration);
 
 /**Function*************************************************************
 
@@ -589,35 +589,59 @@ usage:
 int EsopSyn_CommandDcMinimize(Abc_Frame_t* pAbc, int argc, char** argv)
 {
     int c;
+    int fGroupSize = 3000;
+    int fIteration = 2;
     char* pFileNameIn = NULL, *pFileNameOut = NULL;
     Extra_UtilGetoptReset();
-    while ((c = Extra_UtilGetopt(argc, argv, "h")) != EOF)
+    while ((c = Extra_UtilGetopt(argc, argv, "hgi")) != EOF)
     {
         switch (c) 
         {
             case 'h':
                 goto usage;
+            case 'g':
+                if ( globalUtilOptind >= argc )
+                {
+                    Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+                    goto usage;
+                }
+                fGroupSize = atoi(argv[globalUtilOptind]);
+                globalUtilOptind++;
+                if ( fGroupSize < 2 )
+                    goto usage;
+                break;
+            case 'i':
+                if ( globalUtilOptind >= argc )
+                {
+                    Abc_Print( -1, "Command line switch \"-v\" should be followed by an integer.\n" );
+                    goto usage;
+                }
+                fIteration = atoi(argv[globalUtilOptind]);
+                globalUtilOptind++;
+                if ( fGroupSize < 2 )
+                    goto usage;
+                break;
           default:
             goto usage;
         }
     }
 
-    assert(argc == globalUtilOptind + 2);
+    assert(argc == globalUtilOptind + 1 || argc == globalUtilOptind + 2);
 
     pFileNameIn = argv[globalUtilOptind];
-    pFileNameOut = argv[globalUtilOptind+1];
+    if(argc == globalUtilOptind + 2)
+        pFileNameOut = argv[globalUtilOptind+1];
 
-    DcMinimizeMain(pFileNameIn, pFileNameOut);
+    DcMinimizeMain(pFileNameIn, pFileNameOut, fGroupSize, fIteration);
 
     return 0;
 
 usage:
-    Abc_Print(-2, "usage: xorbidec [-h] [-p] [-s] [-o ith]\n");
-    Abc_Print(-2, "\t        for each PO, print the xor bidecomposition result\n");
+    Abc_Print(-2, "usage: dcmin [-h] [-g <groupSize>] [-i <iteration>]\n");
+    Abc_Print(-2, "\t        divide and conquer minimization using exorcism.\n");
     Abc_Print(-2, "\t-h    : print the command usage\n");
-    Abc_Print(-2, "\t-p    : print the partition result\n");
-    Abc_Print(-2, "\t-s    : synthesis fA, fB and print the result\n");
-    Abc_Print(-2, "\t-o    : specify the PO to be processed\n");
+    Abc_Print(-2, "\t-g    : specify the size of each group. Default:3000\n");
+    Abc_Print(-2, "\t-i    : specify the number of iterations. Default:2\n");
     return 1;
 }
 

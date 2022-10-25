@@ -132,6 +132,42 @@ int CountQCost()
 }
 
 
+Vec_Wec_t* WriteExorcismResultIntoWec()
+// nCubesAlloc is the number of allocated cubes 
+{
+    int v;
+    Cube * p;
+
+    assert(g_CoverInfo.nVarsOut == 1);
+    int nVars = g_CoverInfo.nVarsIn;
+
+    Vec_Wec_t* vEsop = Vec_WecAlloc(0);
+
+    for ( p = IterCubeSetStart( ); p; p = IterCubeSetNext() )
+    {
+        Vec_Int_t *vCube = Vec_WecPushLevel(vEsop);
+        Vec_IntGrow(vCube, nVars + 2);
+
+        assert( p->fMark == 0 );
+
+        // write the input variables
+        for ( v = 0; v < g_CoverInfo.nVarsIn; v++ )
+        {
+            int Value = GetVar( p, v );
+            if ( Value == VAR_NEG )
+                Vec_IntPush(vCube, 2*v+1);
+            else if ( Value == VAR_POS )
+                Vec_IntPush(vCube, 2*v);
+            else
+                assert(Value == VAR_ABS);
+        }
+
+        Vec_IntPush(vCube, -1);
+    }
+
+    return vEsop;
+}
+
 void WriteTableIntoFile( FILE * pFile )
 // nCubesAlloc is the number of allocated cubes 
 {

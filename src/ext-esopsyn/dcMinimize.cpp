@@ -2,10 +2,110 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <random>
 
 #include "misc/vec/vec.h"
 
-static Vec_Wec_t* readPlaIntoESOP(char* pFileName)
+extern "C" Vec_Wec_t* MyExorcism(Vec_Wec_t* vEsop, int nIns);
+
+static void freeESOPList(std::vector<Vec_Wec_t*>& vEsopList)
+{
+    for(Vec_Wec_t* vEsop: vEsopList)
+    {
+        Vec_WecFree(vEsop); 
+    }
+}
+
+static void splitESOPList(std::vector<Vec_Wec_t*>& vEsopList, std::vector<Vec_Wec_t*>& ret, int nVars, int groupSize)
+{
+
+    Vec_Int_t * vCube;
+    int c, k, Lit;
+
+    int count = 0;
+    Vec_Wec_t* esop = Vec_WecAlloc(groupSize);
+
+    for(Vec_Wec_t* vEsop : vEsopList)
+    {
+        Vec_WecForEachLevel( vEsop, vCube, c )
+        {
+            if(count == groupSize)
+            {
+                count = 0;
+                ret.push_back(esop);
+                esop = Vec_WecAlloc(groupSize);
+            }
+            
+            Vec_Int_t *cube = Vec_WecPushLevel(esop);
+            Vec_IntGrow(cube, nVars + 2);
+
+            Vec_IntForEachEntry( vCube, Lit, k )
+            {
+                Vec_IntPush(cube, Lit);
+            }
+            ++count;
+        }
+    }
+    ret.push_back(esop);
+    /*
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::vector<std::vector<int>> vecVec;
+
+    for(Vec_Wec_t* vEsop: vEsopList)
+    {
+        Vec_WecForEachLevel( vEsop, vCube, c)
+        {
+            std::vector<int> vec;
+            Vec_IntForEachEntry(vCube, Lit, k)
+            {
+                vec.push_back(Lit);
+            }
+            vecVec.push_back(vec);
+        }
+    }
+
+    for(auto& vec: vecVec)
+    {
+        if(count == groupSize)
+        {
+            count = 0;
+            ret.push_back(esop);
+            esop = Vec_WecAlloc(groupSize);
+        }
+
+        Vec_Int_t *cube = Vec_WecPushLevel(esop);
+        Vec_IntGrow(cube, nVars + 2);
+
+        for(auto& lit: vec)
+            Vec_IntPush(cube, lit);
+
+        ++count;
+    }
+
+    ret.push_back(esop);
+    */
+}
+
+void printWecESOP(Vec_Wec_t* vEsop)
+{
+    std::cout << "--------" << std::endl;
+    Vec_Int_t * vCube;
+    int c, k, Lit;
+    
+    Vec_WecForEachLevel( vEsop, vCube, c )
+    {
+        Vec_IntForEachEntry( vCube, Lit, k )
+        {
+            std::cout << Lit << ' ';
+        }
+        std::cout << '\n';
+    }
+}
+
+static std::pair<Vec_Wec_t*, int> readPlaIntoESOP(char* pFileName)
 {
     std::fstream inFile;
     inFile.open(pFileName, std::ios::in);    
@@ -37,6 +137,11 @@ static Vec_Wec_t* readPlaIntoESOP(char* pFileName)
         }
         else
         {
+            std::string inStr2;
+            inFile >> inStr2;
+            assert(inStr2.size() == 1);
+            if(inStr2 == "0") continue;
+
             assert(vEsop != NULL);
             
             Vec_Int_t *vCube = Vec_WecPushLevel(vEsop);
@@ -51,27 +156,90 @@ static Vec_Wec_t* readPlaIntoESOP(char* pFileName)
             }
 
             Vec_IntPush(vCube, -1);
-            inFile >> inStr;
         }
     }
 
-    return vEsop;
+    return std::make_pair(vEsop, nVars);
 }
 
-void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut)
+static void writeESOPListIntoPla(std::vector<Vec_Wec_t*>& vEsopList, char* pFileName, int nVars)
 {
-    Vec_Wec_t *vEsop = readPlaIntoESOP(pFileNameIn);
-    
-    Vec_Int_t * vCube;
-    int Lit, c, k;
-    Vec_WecForEachLevel( vEsop, vCube, c )
-    {
-        Vec_IntForEachEntry( vCube, Lit, k )
-        {
-            printf("%d", Lit);
-        }
-        printf("\n");
-    }
+    std::fstream outFile;
+    outFile.open(pFileName, std::ios::out);
 
+    if(!outFile.is_open())
+        std::cerr << "Output file cannot be opened." << std::endl;
+    else
+    {
+        Vec_Int_t * vCube;
+        int c, k, Lit;
+
+        outFile << ".i " << nVars << '\n';
+        outFile << ".o 1\n";
+        outFile << ".type esop\n";
+        
+        for(Vec_Wec_t* esop: vEsopList)
+        {
+            Vec_WecForEachLevel( esop, vCube, c )
+            {
+                std::string s(nVars, '-');
+                Vec_IntForEachEntry( vCube, Lit, k )
+                {
+                    if(Lit < 0) continue;
+                    if(Lit%2 == 0)
+                        s[Lit/2] = '1';
+                    else
+                        s[Lit/2] = '0';
+                }
+                outFile << s << " 1\n";
+            }
+        }
+
+        outFile << ".e\n";
+        outFile.close();
+    }
+}
+
+static int countNumberOfCubes(std::vector<Vec_Wec_t*> vEsopList)
+{
+    int ret = 0;
+    for(Vec_Wec_t* esop: vEsopList)
+        ret += Vec_WecSize(esop);
+
+    return ret;
+
+}
+
+void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut, int fGroupSize, int fIteration)
+{
+    Vec_Wec_t *vEsop;
+    int nVars;
+    std::tie(vEsop, nVars) = readPlaIntoESOP(pFileNameIn);
+
+    std::vector<Vec_Wec_t*> vEsopList;
+    vEsopList.push_back(vEsop);
+    
+    abctime clk = Abc_Clock();
+
+    for(int i = 0; i < fIteration; ++i)
+    {
+        std::vector<Vec_Wec_t*> vEsopList_tem;
+
+        splitESOPList(vEsopList, vEsopList_tem, nVars, fGroupSize);
+        
+        freeESOPList(vEsopList);
+        vEsopList.clear();
+
+        for(Vec_Wec_t* esop: vEsopList_tem)
+            vEsopList.push_back(MyExorcism(esop, nVars));
+
+    }
+    
+	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
+    std::cout << "Time used: " << runtime << " sec" << std::endl;
+    std::cout << "Number of cubes: " << countNumberOfCubes(vEsopList) << std::endl;
+
+    if(pFileNameOut)
+        writeESOPListIntoPla(vEsopList, pFileNameOut, nVars);
     return;
 }

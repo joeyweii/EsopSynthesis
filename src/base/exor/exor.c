@@ -58,6 +58,8 @@ ABC_NAMESPACE_IMPL_START
 cinfo g_CoverInfo;
 
 extern int s_fDecreaseLiterals;
+extern Vec_Wec_t* WriteExorcismResultIntoWec();
+extern void printWecESOP(Vec_Wec_t* vEsop);
 
 ////////////////////////////////////////////////////////////////////////
 ///                       EXTERNAL FUNCTIONS                         ///
@@ -783,18 +785,6 @@ int Exorcism( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut )
     int TotalWords;
     int MemTemp, MemTotal;
 
-    // ************
-    Vec_Int_t * vCube;
-    int Lit, c, k;
-    Vec_WecForEachLevel( vEsop, vCube, c )
-    {
-        Vec_IntForEachEntry( vCube, Lit, k )
-        {
-            printf("%d", Lit);
-        }
-        printf("\n");
-    }
-
     // **************
     ///////////////////////////////////////////////////////////////////////
     // STEPS of HEURISTIC ESOP MINIMIZATION
@@ -925,7 +915,134 @@ int Exorcism( Vec_Wec_t * vEsop, int nIns, int nOuts, char * pFileNameOut )
     return 1;
 }
 
+/**Function*************************************************************
 
+  Synopsis    [Performs heuristic minimization of ESOPs.]
+
+  Description [Returns 1 on success, 0 on failure.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Vec_Wec_t* MyExorcism( Vec_Wec_t * vEsop, int nIns)
+{
+    abctime clk1;
+    int RemainderBits;
+    int TotalWords;
+    int MemTemp, MemTotal;
+    int nOuts = 1;
+
+    memset( &g_CoverInfo, 0, sizeof(cinfo) );
+    g_CoverInfo.Quality = 2;
+    g_CoverInfo.Verbosity = 0;
+    g_CoverInfo.nCubesMax = 10000;
+    g_CoverInfo.fUseQCost = 0;
+    
+    PrepareBitSetModule();
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 1: determine the size of the starting cover
+    ///////////////////////////////////////////////////////////////////////
+    assert( nIns > 0 );
+    // inputs
+    RemainderBits = (nIns*2)%(sizeof(unsigned)*8);
+    TotalWords    = (nIns*2)/(sizeof(unsigned)*8) + (RemainderBits > 0);
+    g_CoverInfo.nVarsIn  = nIns;
+    g_CoverInfo.nWordsIn = TotalWords;
+    // outputs
+    RemainderBits = (nOuts)%(sizeof(unsigned)*8);
+    TotalWords    = (nOuts)/(sizeof(unsigned)*8) + (RemainderBits > 0);
+    g_CoverInfo.nVarsOut  = nOuts;
+    g_CoverInfo.nWordsOut = TotalWords;
+    g_CoverInfo.cIDs = 1;
+
+    // cubes
+    clk1 = Abc_Clock();
+    g_CoverInfo.nCubesBefore = Vec_WecSize(vEsop);
+    g_CoverInfo.TimeStart = Abc_Clock() - clk1;
+
+    if ( g_CoverInfo.nCubesBefore > g_CoverInfo.nCubesMax )
+    {
+        printf( "\nThe size of the starting cover is more than %d cubes. Quitting...\n", g_CoverInfo.nCubesMax );
+        return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 2: prepare internal data structures
+    ///////////////////////////////////////////////////////////////////////
+    g_CoverInfo.nCubesAlloc = g_CoverInfo.nCubesBefore + ADDITIONAL_CUBES; 
+
+    // allocate cube cover
+    MemTotal = 0;
+    MemTemp = AllocateCover( g_CoverInfo.nCubesAlloc, g_CoverInfo.nWordsIn, g_CoverInfo.nWordsOut );
+    if ( MemTemp == 0 )
+    {
+        printf( "Unexpected memory allocation problem. Quitting...\n" );
+        return 0;
+    }
+    else 
+        MemTotal += MemTemp;
+
+    // allocate cube sets
+    MemTemp = AllocateCubeSets( g_CoverInfo.nVarsIn, g_CoverInfo.nVarsOut );
+    if ( MemTemp == 0 )
+    {
+        printf( "Unexpected memory allocation problem. Quitting...\n" );
+        return 0;
+    }
+    else 
+        MemTotal += MemTemp;
+
+    // allocate adjacency queques
+    MemTemp = AllocateQueques( g_CoverInfo.nCubesAlloc*g_CoverInfo.nCubesAlloc/CUBE_PAIR_FACTOR );
+    if ( MemTemp == 0 )
+    {
+        printf( "Unexpected memory allocation problem. Quitting...\n" );
+        return 0;
+    }
+    else 
+        MemTotal += MemTemp;
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 3: write the cube cover into the allocated storage
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    clk1 = Abc_Clock();
+    if ( g_CoverInfo.Verbosity )
+        printf( "Generating the starting cover...\n" );
+    AddCubesToStartingCover( vEsop );
+    ///////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 4: iteratively improve the cover 
+    ///////////////////////////////////////////////////////////////////////
+    clk1 = Abc_Clock();
+    ReduceEsopCover();
+    g_CoverInfo.TimeMin = Abc_Clock() - clk1;
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 5: save the cover into file 
+    ///////////////////////////////////////////////////////////////////////
+    // if option is MULTI_OUTPUT, the output is written into the output file;
+    // if option is SINGLE_NODE, the output is added to the input file
+    // and written into the output file; in this case, the minimized nodes is
+    // also stored in the temporary file "temp.blif" for verification
+
+    Vec_Wec_t* ret = WriteExorcismResultIntoWec();
+
+
+    ///////////////////////////////////////////////////////////////////////
+    // STEP 6: delocate memory
+    ///////////////////////////////////////////////////////////////////////
+    DelocateCubeSets();
+    DelocateCover();
+    DelocateQueques();
+
+    // return success
+    return ret;
+}
 /**Function*************************************************************
 
   Synopsis    []
