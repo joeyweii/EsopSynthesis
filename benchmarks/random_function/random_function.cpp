@@ -8,7 +8,7 @@
 using namespace std;
 
 /***** Usage ***** 
-./random_function <out.pla> <num_PI> <num_PO> <random seed>
+./random_function <out.pla> <num_PI> <num_PO> <prob_onset> <prob_dcset> <random seed>
 ******************/
 
 int pow(int num){
@@ -29,17 +29,23 @@ void i2minterm(int num, int numPI, string& minterm){
 }
 
 int main(int argc, char* argv[]){
-    assert(argc == 5);
+    assert(argc == 7);
 
     int numPI = atoi(argv[2]);
     int numPO = atoi(argv[3]);
+
+    assert(numPO == 1 || numPO == 2);
 
     fstream f;
     f.open(argv[1], ios::out);
     f << ".i " << numPI << endl;
     f << ".o " << numPO << endl;
 
-    int seed = atoi(argv[4]);
+    double p1, p2;
+    p1 = stof(argv[4]);
+    p2 = stof(argv[5]);
+
+    int seed = atoi(argv[6]);
     srand(seed);
 
     int nMinterms = pow(numPI); 
@@ -49,12 +55,18 @@ int main(int argc, char* argv[]){
         bool outAllZero = true;
         string output;
         for(int j = 0; j < numPO; ++j)
-        {   
-            char outvalue = '0' + rand()%2;
+        {    
+            double prob = ((double) rand() / (RAND_MAX));
+            double pp = (j == 0)? p1: p2;
+            char outvalue;
+            if(prob < pp)
+                outvalue = '0';
+            else
+                outvalue = '1';
             if(outvalue == '1') outAllZero = false;  
             output += outvalue;
         }
-        if(outAllZero) continue;
+        //if(outAllZero) continue;
         f << minterm << ' ' << output << '\n';
     }
 
