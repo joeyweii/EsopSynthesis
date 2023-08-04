@@ -1,6 +1,6 @@
-#include "arExtract.h"
+#include "rdExtract.h"
 
-ArExtractManager::ArExtractManager
+RdExtractManager::RdExtractManager
 (
     DdManager* ddManager, 
     int level, 
@@ -12,7 +12,7 @@ ArExtractManager::ArExtractManager
 	: _ddManager(ddManager), _FRoot(FRoot), _level(level), _bound(bound), _nVars(nVars), _refine(refine), _values(nVars, VarValue::DONTCARE)
 { }
 
-void ArExtractManager::extract()
+void RdExtractManager::extract()
 {
     if(!_FRoot) return;
 
@@ -22,7 +22,7 @@ void ArExtractManager::extract()
     genPSDKRO(_FRoot);
 }
 
-void ArExtractManager::genPSDKRO(DdNode *F)
+void RdExtractManager::genPSDKRO(DdNode *F)
 {
 	// Reach constant 0/1
 	if (F == Cudd_ReadLogicZero(_ddManager))
@@ -78,7 +78,7 @@ void ArExtractManager::genPSDKRO(DdNode *F)
 	_values[varIdx] = VarValue::DONTCARE;
 }
 
-int ArExtractManager::refine(DdNode *F)
+int RdExtractManager::refine(DdNode *F)
 {
 	// Reach constant 0/1
 	if (F == Cudd_ReadLogicZero(_ddManager))
@@ -193,7 +193,7 @@ int ArExtractManager::refine(DdNode *F)
 	return 0;
 }
 
-int ArExtractManager::partialExpand(DdNode *F)
+int RdExtractManager::partialExpand(DdNode *F)
 {
 	// Reach constant 0/1
 	if (F == Cudd_ReadLogicZero(_ddManager))
@@ -245,7 +245,7 @@ int ArExtractManager::partialExpand(DdNode *F)
 	return std::get<1>(ret);
 }
 
-int ArExtractManager::fullExpand(DdNode *F)
+int RdExtractManager::fullExpand(DdNode *F)
 {
 	if (F == Cudd_ReadLogicZero(_ddManager))
 		return 0u;
@@ -280,12 +280,12 @@ int ArExtractManager::fullExpand(DdNode *F)
 	return std::get<1>(ret);
 }
 
-int ArExtractManager::CostEstimate(DdNode* F)
+int RdExtractManager::CostEstimate(DdNode* F)
 { 
     return CostLookAhead(F, _level);
 }
 
-int ArExtractManager::CostLookAhead(DdNode* F, int level)
+int RdExtractManager::CostLookAhead(DdNode* F, int level)
 { 
 	if (F == Cudd_ReadLogicZero(_ddManager))
 		return 0;
@@ -308,19 +308,19 @@ int ArExtractManager::CostLookAhead(DdNode* F, int level)
 	return cost0 + cost1 + cost2 - std::max(cost0, std::max(cost1, cost2));
 }
 
-void ArExtractManager::getESOP(std::vector<std::string>& ret) const
+void RdExtractManager::getESOP(std::vector<std::string>& ret) const
 {
     for(auto &cube : _esop) 
         ret.push_back(cube.str(_nVars));
 }
 
-int ArExtractManager::getNumTerms() const
+int RdExtractManager::getNumTerms() const
 {
     return _esop.size();
 }
 
-// extract ESOP using ArExtract algorithm and store the resulting ESOP into ret 
-void ArExtractSingleOutput(Abc_Ntk_t* pNtk, int fLevel, int fBound, int fRefine, std::vector<std::string> &ESOP)
+// extract ESOP using RdExtract algorithm and store the resulting ESOP into ret 
+void RdExtractSingleOutput(Abc_Ntk_t* pNtk, int fLevel, int fBound, int fRefine, std::vector<std::string> &ESOP)
 {   
     int fReorder = 1;               // Use reordering or not
     int fBddMaxSize = ABC_INFINITY; // The maximum #node in BDD
@@ -339,7 +339,7 @@ void ArExtractSingleOutput(Abc_Ntk_t* pNtk, int fLevel, int fBound, int fRefine,
 		return;
 	}
 
-    ArExtractManager m(ddManager, fLevel, fBound, fRefine, rootNode, nVars); 
+    RdExtractManager m(ddManager, fLevel, fBound, fRefine, rootNode, nVars); 
 
     m.extract();	
 
@@ -349,13 +349,13 @@ void ArExtractSingleOutput(Abc_Ntk_t* pNtk, int fLevel, int fBound, int fRefine,
     Cudd_Quit(ddManager);
 }
 
-void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose)
+void RdExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose)
 {
     std::vector<std::string> ESOP;
 
     abctime clk = Abc_Clock();
 
-    ArExtractSingleOutput(pNtk, fLevel, fBound, fRefine, ESOP);
+    RdExtractSingleOutput(pNtk, fLevel, fBound, fRefine, ESOP);
 
 	double runtime = static_cast<double>(Abc_Clock() - clk)/CLOCKS_PER_SEC;
 	double memory = getPeakRSS( ) / (1024.0 * 1024.0 * 1024.0);

@@ -8,7 +8,7 @@
 
 extern int NtkXorBidecMain(Abc_Ntk_t* pNtk, int fPrintParti, int fSynthesis, int fOutput);
 extern void BddExtractMain(Abc_Ntk_t* pNtk, char* filename, int fVerbose);
-extern void ArExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
+extern void RdExtractMain(Abc_Ntk_t* pNtk, char* filename, int fLevel, int fBound, int fRefine, int fVerbose);
 extern void DcExtractMain(Abc_Ntk_t* pNtk, int fNumCofVar, int fVerbose, char* filename);
 extern void IsfExtractMain(Abc_Ntk_t* pNtk, int fVerbose, int fNaive, char* filename);
 extern void DcMinimizeMain(char* pFileNameIn, char* pFileNameOut, int fGroupSize, int fIteration);
@@ -219,7 +219,7 @@ usage:
 
 /**Function*************************************************************
 
-  Synopsis    [ArExtract command function.]
+  Synopsis    [RdExtract command function.]
 
   Description []
                
@@ -228,7 +228,7 @@ usage:
   SeeAlso     []
 
 ***********************************************************************/
-int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
+int EsopSyn_CommandRdExtract(Abc_Frame_t* pAbc, int argc, char** argv)
 {
     Abc_Ntk_t* pNtk = Abc_FrameReadNtk(pAbc);
     Abc_Obj_t* pPo;
@@ -331,7 +331,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------Obj[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
+            RdExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
             Abc_NtkDelete(pSubNtk);
         }
     }
@@ -353,7 +353,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
             std::cout << "--------PO[" << iPo << "] " << Abc_ObjName(Abc_NtkPo(pSubNtk, 0)) << "--------" << std::endl;
             std::cout << "numPI: " << Abc_NtkPiNum(pSubNtk) << std::endl;
 
-            ArExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
+            RdExtractMain(pSubNtk, pFileNameOut, fLevel, fBound, fRefine, fVerbose);
 
             Abc_NtkDelete(pSubNtk);
         }
@@ -361,7 +361,7 @@ int EsopSyn_CommandArExtract(Abc_Frame_t* pAbc, int argc, char** argv)
     return 0;
 
 usage:
-    Abc_Print(-2, "usage: arextract [-h][-l <level>] [-t <0/1/2>] [-b <bound>] [-o <ith PO>] [-v [0/1]] [-ru]\n");
+    Abc_Print(-2, "usage: rdextract [-h][-l <level>] [-t <0/1/2>] [-b <bound>] [-o <ith PO>] [-v [0/1]] [-ru]\n");
     Abc_Print(-2, "\t        synthesis ESOP with ArExtract\n");
     Abc_Print(-2, "\t-o    : specify the output to be processed\n");
     Abc_Print(-2, "\t-v    : specify the level of verbose. Default: 0\n");
@@ -650,7 +650,7 @@ void init(Abc_Frame_t* pAbc)
 {
     Cmd_CommandAdd( pAbc, "esopsyn", "xorbidec", EsopSyn_CommandXorBidec, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "bddextract", EsopSyn_CommandBddExtract, 0);
-    Cmd_CommandAdd( pAbc, "esopsyn", "arextract", EsopSyn_CommandArExtract, 0);
+    Cmd_CommandAdd( pAbc, "esopsyn", "rdextract", EsopSyn_CommandRdExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcextract", EsopSyn_CommandDcExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "isfextract", EsopSyn_CommandIsfExtract, 0);
     Cmd_CommandAdd( pAbc, "esopsyn", "dcmin", EsopSyn_CommandDcMinimize, 0);

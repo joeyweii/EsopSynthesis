@@ -15,12 +15,12 @@
 
 using namespace psdkro;
 
-class ArExtractManager
+class RdExtractManager
 {
 public:
 
     // Constructor and Destructor
-	ArExtractManager
+	RdExtractManager
     (
         DdManager *ddManager, 
         int level, 
@@ -29,7 +29,7 @@ public:
         DdNode* FRoot, 
         int nVars
     );
-    ~ArExtractManager() {}
+    ~RdExtractManager() {}
 
     void extract();
 

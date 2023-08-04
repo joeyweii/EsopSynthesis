@@ -49,44 +49,6 @@ static void splitESOPList(std::vector<Vec_Wec_t*>& vEsopList, std::vector<Vec_We
         }
     }
     ret.push_back(esop);
-    /*
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::vector<std::vector<int>> vecVec;
-
-    for(Vec_Wec_t* vEsop: vEsopList)
-    {
-        Vec_WecForEachLevel( vEsop, vCube, c)
-        {
-            std::vector<int> vec;
-            Vec_IntForEachEntry(vCube, Lit, k)
-            {
-                vec.push_back(Lit);
-            }
-            vecVec.push_back(vec);
-        }
-    }
-
-    for(auto& vec: vecVec)
-    {
-        if(count == groupSize)
-        {
-            count = 0;
-            ret.push_back(esop);
-            esop = Vec_WecAlloc(groupSize);
-        }
-
-        Vec_Int_t *cube = Vec_WecPushLevel(esop);
-        Vec_IntGrow(cube, nVars + 2);
-
-        for(auto& lit: vec)
-            Vec_IntPush(cube, lit);
-
-        ++count;
-    }
-
-    ret.push_back(esop);
-    */
 }
 
 void printWecESOP(Vec_Wec_t* vEsop)
