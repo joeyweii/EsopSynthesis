@@ -10,7 +10,7 @@
 using namespace std;
 
 /********* Usage
- ./random_esop <outfile> <#variable> <#cube> <#max_literals_per_cube> <random_seed>
+ ./random_esop <outfile> <#variable> <#cube> <random_seed>
 ********/
 int numVar;
 int numCube;
@@ -58,12 +58,12 @@ void ExpandCube(vector<char> C, vector<vector<char> >& Cs){
 }
 
 int main(int argc, char* argv[]){
-    assert(argc == 6);
+    assert(argc == 5);
 
     numVar = atoi(argv[2]);
     numCube = atoi(argv[3]);
-    maxLit = atoi(argv[4]);
-    seed = atoi(argv[5]);
+    maxLit = numVar;
+    seed = atoi(argv[4]);
 
     srand(seed);
 

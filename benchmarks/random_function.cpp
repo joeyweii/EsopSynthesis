@@ -66,7 +66,6 @@ int main(int argc, char* argv[]){
             if(outvalue == '1') outAllZero = false;  
             output += outvalue;
         }
-        //if(outAllZero) continue;
         f << minterm << ' ' << output << '\n';
     }
 
