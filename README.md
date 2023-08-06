@@ -12,7 +12,7 @@ $ make
 ```
 compile scripts
 ```
-$ ./compile.sh
+$ ./compile_scripts.sh
 ```
 
 ## Files Discription
