@@ -15,7 +15,7 @@ compile scripts
 $ ./compile.sh
 ```
 
-## Files Discription
+## Files Description
 - ```benchmarks/EPFL_suite/*```: EPFL combinational benchmarks
 - ```benchmarks/*.cpp```: benchmark scripts
 - ```src/ext-esopsyn/*.cpp```: source codes of algorithms
