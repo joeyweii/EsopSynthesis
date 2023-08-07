@@ -108,7 +108,7 @@ $ abc> read <pla file>
 ```
 Extract the ESOP
 ```
-$ abc> bddextract
+$ abc> bddextract -o 0
 $ abc> isfextract
 ```
 
@@ -118,7 +118,7 @@ To generate a imcompletely-specified function with 10 variables, onset probabili
 $ ./random_function in.pla 10 2 0.5 0.25 0
 $ ./abc
 $ abc> read in.pla
-$ abc> bddextract
+$ abc> isfextract
 ```
 
 ## Table IV
