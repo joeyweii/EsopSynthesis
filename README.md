@@ -4,7 +4,8 @@ This repository helps you reproduce the experiments in [1].
 ## Build Project
 clone the project
 ```
-$ git clone https://github.com/joeyweii/EsopSynthesis.git
+$ git clone https://github.com/joeyweii/EsopSynthesis.git <path>
+$ cd <path>
 ```
 compile abc
 ```
